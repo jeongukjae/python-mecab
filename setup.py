@@ -11,7 +11,7 @@ mecab = Extension(
     ],
     libraries=["mecab"],
     library_dirs=["./lib"],
-    include_directories=["Sources"],
+    include_directories=["Includes"],
 )
 
 setup(
