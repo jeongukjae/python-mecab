@@ -33,6 +33,8 @@ mecab = Extension(
         ("VERSION", '"0.996"'),
         ("MECAB_DEFAULT_RC", '"/usr/local/etc/mecabrc"'),
     ],
+    libraries=["mecab"],
+    library_dirs=["./lib"],
 )
 
 setup(
