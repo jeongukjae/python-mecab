@@ -95,12 +95,11 @@ void enum_csv_dictionaries(const char* path, std::vector<std::string>* dics);
 
 int progress_bar(const char* message, size_t current, size_t total);
 
-bool toLower(std::string*);
-
 std::string create_filename(const std::string& path, const std::string& file);
-void remove_filename(std::string* s);
-void remove_pathname(std::string* s);
-void replace_string(std::string* s, const std::string& src, const std::string& dst);
+std::string remove_filename(std::string path);
+std::string remove_pathname(std::string path);
+std::string replace_string(std::string string, const std::string& source, const std::string& destination);
+std::string to_lower(std::string text);
 
 template <class Iterator>
 inline size_t tokenizeCSV(char* str, Iterator out, size_t max) {

@@ -19,7 +19,7 @@ namespace MeCab {
 
 int decode_charset(const char* charset) {
   std::string tmp = charset;
-  toLower(&tmp);
+  tmp = to_lower(tmp);
   if (tmp == "sjis" || tmp == "shift-jis" || tmp == "shift_jis" || tmp == "cp932")
     return CP932;
   else if (tmp == "euc" || tmp == "euc_jp" || tmp == "euc-jp")
@@ -46,41 +46,35 @@ std::string create_filename(const std::string& path, const std::string& file) {
   return s;
 }
 
-void remove_filename(std::string* s) {
-  int len = static_cast<int>(s->size()) - 1;
-  bool ok = false;
-  for (; len >= 0; --len) {
-    if ((*s)[len] == '/') {
-      ok = true;
-      break;
-    }
-  }
-  if (ok)
-    *s = s->substr(0, len);
-  else
-    *s = ".";
+std::string remove_filename(std::string path) {
+  int len = static_cast<int>(path.size()) - 1;
+  for (; len >= 0 && path.at(len) != '/'; --len)
+    ;
+
+  if (len > 0)
+    return path.substr(0, len);
+
+  return ".";
 }
 
-void remove_pathname(std::string* s) {
-  int len = static_cast<int>(s->size()) - 1;
-  bool ok = false;
-  for (; len >= 0; --len) {
-    if ((*s)[len] == '/') {
-      ok = true;
-      break;
-    }
-  }
-  if (ok)
-    *s = s->substr(len + 1, s->size() - len);
-  else
-    *s = ".";
+std::string remove_pathname(std::string path) {
+  int len = static_cast<int>(path.size()) - 1;
+  for (; len >= 0 && path.at(len) != '/'; --len)
+    ;
+
+  if (len > 0)
+    return path.substr(len + 1, path.size() - len);
+
+  return ".";
 }
 
-void replace_string(std::string* s, const std::string& src, const std::string& dst) {
-  const std::string::size_type pos = s->find(src);
+std::string replace_string(std::string string, const std::string& source, const std::string& destination) {
+  const std::string::size_type pos = string.find(source);
+  std::string result(string);
   if (pos != std::string::npos) {
-    s->replace(pos, src.size(), dst);
+    result.replace(pos, source.size(), destination);
   }
+  return result;
 }
 
 void enum_csv_dictionaries(const char* path, std::vector<std::string>* dics) {
@@ -93,8 +87,7 @@ void enum_csv_dictionaries(const char* path, std::vector<std::string>* dics) {
     const std::string tmp = dp->d_name;
     if (tmp.size() >= 5) {
       std::string ext = tmp.substr(tmp.size() - 4, 4);
-      toLower(&ext);
-      if (ext == ".csv") {
+      if (to_lower(ext) == ".csv") {
         dics->push_back(create_filename(path, tmp));
       }
     }
@@ -102,15 +95,14 @@ void enum_csv_dictionaries(const char* path, std::vector<std::string>* dics) {
   closedir(dir);
 }
 
-bool toLower(std::string* s) {
-  for (size_t i = 0; i < s->size(); ++i) {
-    char c = (*s)[i];
-    if ((c >= 'A') && (c <= 'Z')) {
-      c += 'a' - 'A';
-      (*s)[i] = c;
-    }
+std::string to_lower(std::string text) {
+  std::string result{text};
+  for (size_t i = 0; i < text.size(); ++i) {
+    char c = result[i];
+    if ((c >= 'A') && (c <= 'Z'))
+      result[i] = c + 'a' - 'A';
   }
-  return true;
+  return result;
 }
 
 bool escape_csv_element(std::string* w) {
@@ -221,8 +213,8 @@ bool load_dictionary_resource(Param* param) {
   if (dicdir.empty()) {
     dicdir = ".";  // current
   }
-  remove_filename(&rcfile);
-  replace_string(&dicdir, "$(rcpath)", rcfile);
+  std::string rcpath = remove_filename(rcfile);
+  dicdir = replace_string(dicdir, "$(rcpath)", rcpath);
   param->set<std::string>("dicdir", dicdir, true);
   dicdir = create_filename(dicdir, DICRC);
 

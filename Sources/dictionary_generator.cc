@@ -234,7 +234,7 @@ class DictionaryGenerator {
 
     for (std::vector<std::string>::const_iterator it = dic.begin(); it != dic.end(); ++it) {
       std::string file = *it;
-      remove_pathname(&file);
+      file = remove_pathname(file);
       gendic(it->c_str(), OCONF(file.c_str()), property, &rewrite, cid, &fi, false, factor);
     }
 
