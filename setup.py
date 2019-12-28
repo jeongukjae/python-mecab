@@ -2,7 +2,7 @@ from setuptools import setup, Extension
 
 mecab = Extension(
     "mecab._C",
-    sources=["mecab/mecab.cc"],
+    sources=["mecab/_C/mecab.cc", "mecab/_C/tagger.cc"],
     libraries=["mecab"],
     library_dirs=["./lib"],
     include_dirs=["Includes"],
@@ -10,7 +10,7 @@ mecab = Extension(
 
 setup(
     name="python-mecab",
-    version="1.0.0a0",
+    version="1.0.0a1",
     python_requires=">=3.5",
     packages=["mecab"],
     ext_modules=[mecab],
