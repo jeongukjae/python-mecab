@@ -6,19 +6,21 @@
 #ifndef MECAB_FREELIST_H
 #define MECAB_FREELIST_H
 
-#include <vector>
 #include <algorithm>
-#include "utils.h"
+#include <vector>
+
 #include "common.h"
+#include "utils.h"
 
 namespace MeCab {
 
-template <class T> class FreeList {
+template <class T>
+class FreeList {
  private:
-  std::vector<T *> freeList;
-  size_t           pi_;
-  size_t           li_;
-  size_t           size;
+  std::vector<T*> freeList;
+  size_t pi_;
+  size_t li_;
+  size_t size;
 
  public:
   void free() { li_ = pi_ = 0; }
@@ -28,21 +30,23 @@ template <class T> class FreeList {
       li_++;
       pi_ = 0;
     }
-    if (li_ == freeList.size()) freeList.push_back(new T[size]);
+    if (li_ == freeList.size())
+      freeList.push_back(new T[size]);
     return freeList[li_] + (pi_++);
   }
 
-  explicit FreeList(size_t _size): pi_(0), li_(0), size(_size) {}
+  explicit FreeList(size_t _size) : pi_(0), li_(0), size(_size) {}
 
   virtual ~FreeList() {
     for (li_ = 0; li_ < freeList.size(); li_++)
-      delete [] freeList[li_];
+      delete[] freeList[li_];
   }
 };
 
-template <class T> class ChunkFreeList {
+template <class T>
+class ChunkFreeList {
  private:
-  std::vector<std::pair<size_t, T *> > freelist_;
+  std::vector<std::pair<size_t, T*>> freelist_;
   size_t pi_;
   size_t li_;
   size_t default_size;
@@ -50,7 +54,7 @@ template <class T> class ChunkFreeList {
  public:
   void free() { li_ = pi_ = 0; }
 
-  T* alloc(T *src) {
+  T* alloc(T* src) {
     T* n = alloc(1);
     *n = *src;
     return n;
@@ -59,7 +63,7 @@ template <class T> class ChunkFreeList {
   T* alloc(size_t req = 1) {
     while (li_ < freelist_.size()) {
       if ((pi_ + req) < freelist_[li_].first) {
-        T *r = freelist_[li_].second + pi_;
+        T* r = freelist_[li_].second + pi_;
         pi_ += req;
         return r;
       }
@@ -73,13 +77,12 @@ template <class T> class ChunkFreeList {
     return freelist_[li_].second;
   }
 
-  explicit ChunkFreeList(size_t _size):
-      pi_(0), li_(0), default_size(_size) {}
+  explicit ChunkFreeList(size_t _size) : pi_(0), li_(0), default_size(_size) {}
 
   virtual ~ChunkFreeList() {
     for (li_ = 0; li_ < freelist_.size(); li_++)
-      delete [] freelist_[li_].second;
+      delete[] freelist_[li_].second;
   }
 };
-}
+}  // namespace MeCab
 #endif

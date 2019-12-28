@@ -8,33 +8,32 @@
 #include <iostream>
 #include <map>
 #include <vector>
+
 #include "common.h"
 #include "mecab.h"
 #include "param.h"
-#include "stream_wrapper.h"
 #include "scoped_ptr.h"
+#include "stream_wrapper.h"
 #include "utils.h"
 
 namespace MeCab {
 
 class Eval {
  private:
-  static bool read(std::istream *is,
-                   std::vector<std::vector<std::string> > *r,
-                   const std::vector<int> &level) {
+  static bool read(std::istream* is, std::vector<std::vector<std::string>>* r, const std::vector<int>& level) {
     if (!*is) {
       return false;
     }
 
-    char *col[2];
+    char* col[2];
     scoped_fixed_array<char, BUF_SIZE> buf;
-    scoped_fixed_array<char *, BUF_SIZE> csv;
+    scoped_fixed_array<char*, BUF_SIZE> csv;
     r->clear();
     while (is->getline(buf.get(), buf.size())) {
       if (std::strcmp(buf.get(), "EOS") == 0) {
         break;
       }
-      CHECK_DIE(tokenize(buf.get(), "\t", col,  2) == 2) << "format error";
+      CHECK_DIE(tokenize(buf.get(), "\t", col, 2) == 2) << "format error";
       csv[0] = col[0];
       size_t n = tokenizeCSV(col[1], csv.get() + 1, csv.size() - 1);
       std::vector<std::string> tmp;
@@ -56,10 +55,9 @@ class Eval {
     return true;
   }
 
-  static bool parseLevel(const char *level_str,
-                         std::vector<int> *level) {
+  static bool parseLevel(const char* level_str, std::vector<int>* level) {
     scoped_fixed_array<char, BUF_SIZE> buf;
-    scoped_fixed_array<char *, 512> col;
+    scoped_fixed_array<char*, 512> col;
     std::strncpy(buf.get(), level_str, buf.size());
     level->clear();
     size_t n = tokenize2(buf.get(), "\t ", col.get(), col.size());
@@ -69,52 +67,44 @@ class Eval {
     return true;
   }
 
-  static void printeval(std::ostream *os, size_t c, size_t p, size_t r) {
-    double pr = (p == 0) ? 0 : 100.0 * c/p;
-    double re = (r == 0) ? 0 : 100.0 * c/r;
-    double F = ((pr + re) == 0.0) ? 0 : 2 * pr * re /(pr + re);
+  static void printeval(std::ostream* os, size_t c, size_t p, size_t r) {
+    double pr = (p == 0) ? 0 : 100.0 * c / p;
+    double re = (r == 0) ? 0 : 100.0 * c / r;
+    double F = ((pr + re) == 0.0) ? 0 : 2 * pr * re / (pr + re);
     scoped_fixed_array<char, BUF_SIZE> buf;
-    sprintf(buf.get(), "%4.4f(%d/%d) %4.4f(%d/%d) %4.4f\n",
-            pr,
-            static_cast<int>(c),
-            static_cast<int>(p),
-            re,
-            static_cast<int>(c),
-            static_cast<int>(r),
-            F);
+    sprintf(buf.get(), "%4.4f(%d/%d) %4.4f(%d/%d) %4.4f\n", pr, static_cast<int>(c), static_cast<int>(p), re,
+            static_cast<int>(c), static_cast<int>(r), F);
     *os << buf.get();
   }
 
  public:
-  static bool eval(int argc, char **argv) {
-    static const MeCab::Option long_options[] = {
-      { "level",  'l',  "0 -1",    "STR",    "set level of evaluations" },
-      { "output", 'o',  0,         "FILE",   "set the output file name" },
-      { "version",  'v',  0,   0,    "show the version and exit"   },
-      { "help",  'h',  0,   0,    "show this help and exit."   },
-      { 0, 0, 0, 0 }
-    };
+  static bool eval(int argc, char** argv) {
+    static const MeCab::Option long_options[] = {{"level", 'l', "0 -1", "STR", "set level of evaluations"},
+                                                 {"output", 'o', 0, "FILE", "set the output file name"},
+                                                 {"version", 'v', 0, 0, "show the version and exit"},
+                                                 {"help", 'h', 0, 0, "show this help and exit."},
+                                                 {0, 0, 0, 0}};
 
     MeCab::Param param;
     param.open(argc, argv, long_options);
 
     if (!param.open(argc, argv, long_options)) {
-      std::cout << param.what() << "\n\n" <<  COPYRIGHT
-                << "\ntry '--help' for more information." << std::endl;
+      std::cout << param.what() << "\n\n" << COPYRIGHT << "\ntry '--help' for more information." << std::endl;
       return -1;
     }
 
-    if (!param.help_version()) return 0;
+    if (!param.help_version())
+      return 0;
 
-    const std::vector<std::string> &files = param.rest_args();
+    const std::vector<std::string>& files = param.rest_args();
     if (files.size() < 2) {
-      std::cout << "Usage: " <<
-          param.program_name() << " output answer" << std::endl;
+      std::cout << "Usage: " << param.program_name() << " output answer" << std::endl;
       return -1;
     }
 
     std::string output = param.get<std::string>("output");
-    if (output.empty()) output = "-";
+    if (output.empty())
+      output = "-";
     MeCab::ostream_wrapper ofs(output.c_str());
     CHECK_DIE(*ofs) << "no such file or directory: " << output;
 
@@ -139,8 +129,8 @@ class Eval {
     size_t prec = 0;
     size_t recall = 0;
 
-    std::vector<std::vector<std::string> > r1;
-    std::vector<std::vector<std::string> > r2;
+    std::vector<std::vector<std::string>> r1;
+    std::vector<std::vector<std::string>> r2;
 
     while (true) {
       if (!read(&ifs1, &r1, level) || !read(&ifs2, &r2, level))
@@ -186,8 +176,7 @@ class Eval {
       }
     }
 
-    *ofs <<  "              precision          recall         F"
-         << std::endl;
+    *ofs << "              precision          recall         F" << std::endl;
     for (size_t i = 0; i < result_tbl.size(); ++i) {
       if (level[i] == -1) {
         *ofs << "LEVEL ALL: ";
@@ -203,20 +192,17 @@ class Eval {
 
 class TestSentenceGenerator {
  public:
-  static int run(int argc, char **argv) {
-    static const MeCab::Option long_options[] = {
-      { "output",   'o',  0,   "FILE", "set the output filename" },
-      { "version",  'v',  0,   0,    "show the version and exit"   },
-      { "help",  'h',  0,   0,    "show this help and exit."   },
-      { 0, 0, 0, 0 }
-    };
+  static int run(int argc, char** argv) {
+    static const MeCab::Option long_options[] = {{"output", 'o', 0, "FILE", "set the output filename"},
+                                                 {"version", 'v', 0, 0, "show the version and exit"},
+                                                 {"help", 'h', 0, 0, "show this help and exit."},
+                                                 {0, 0, 0, 0}};
 
     MeCab::Param param;
     param.open(argc, argv, long_options);
 
     if (!param.open(argc, argv, long_options)) {
-      std::cout << param.what() << "\n\n" <<  COPYRIGHT
-                << "\ntry '--help' for more information." << std::endl;
+      std::cout << param.what() << "\n\n" << COPYRIGHT << "\ntry '--help' for more information." << std::endl;
       return -1;
     }
 
@@ -224,19 +210,20 @@ class TestSentenceGenerator {
       return 0;
     }
 
-    const std::vector<std::string> &tmp = param.rest_args();
+    const std::vector<std::string>& tmp = param.rest_args();
     std::vector<std::string> files = tmp;
     if (files.empty()) {
       files.push_back("-");
     }
 
     std::string output = param.get<std::string>("output");
-    if (output.empty()) output = "-";
+    if (output.empty())
+      output = "-";
     MeCab::ostream_wrapper ofs(output.c_str());
     CHECK_DIE(*ofs) << "permission denied: " << output;
 
     scoped_fixed_array<char, BUF_SIZE> buf;
-    char *col[2];
+    char* col[2];
     std::string str;
     for (size_t i = 0; i < files.size(); ++i) {
       MeCab::istream_wrapper ifs(files[i].c_str());
@@ -256,13 +243,13 @@ class TestSentenceGenerator {
     return 0;
   }
 };
-}
+}  // namespace MeCab
 
 // exports
-int mecab_system_eval(int argc, char **argv) {
+int mecab_system_eval(int argc, char** argv) {
   return MeCab::Eval::eval(argc, argv);
 }
 
-int mecab_test_gen(int argc, char **argv) {
+int mecab_test_gen(int argc, char** argv) {
   return MeCab::TestSentenceGenerator::run(argc, argv);
 }

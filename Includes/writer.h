@@ -7,11 +7,12 @@
 #define MECAB_WRITER_H_
 
 #include <string>
+
 #include "common.h"
 #include "mecab.h"
-#include "utils.h"
 #include "scoped_ptr.h"
 #include "string_buffer.h"
+#include "utils.h"
 
 namespace MeCab {
 
@@ -21,19 +22,15 @@ class Writer {
  public:
   Writer();
   virtual ~Writer();
-  bool open(const Param &param);
+  bool open(const Param& param);
   void close();
 
-  bool writeNode(Lattice *lattice,
-                 const char *format,
-                 const Node *node, StringBuffer *s) const;
-  bool writeNode(Lattice *lattice,
-                 const Node *node,
-                 StringBuffer *s) const;
+  bool writeNode(Lattice* lattice, const char* format, const Node* node, StringBuffer* s) const;
+  bool writeNode(Lattice* lattice, const Node* node, StringBuffer* s) const;
 
-  bool write(Lattice *lattice, StringBuffer *node) const;
+  bool write(Lattice* lattice, StringBuffer* node) const;
 
-  const char *what() { return what_.str(); }
+  const char* what() { return what_.str(); }
 
  private:
   scoped_string node_format_;
@@ -43,15 +40,15 @@ class Writer {
   scoped_string eon_format_;
   whatlog what_;
 
-  bool writeLattice(Lattice *lattice, StringBuffer *s) const;
-  bool writeWakati(Lattice *lattice, StringBuffer *s) const;
-  bool writeNone(Lattice *lattice, StringBuffer *s) const;
-  bool writeUser(Lattice *lattice, StringBuffer *s) const;
-  bool writeDump(Lattice *lattice, StringBuffer *s) const;
-  bool writeEM(Lattice *lattice, StringBuffer *s) const;
+  bool writeLattice(Lattice* lattice, StringBuffer* s) const;
+  bool writeWakati(Lattice* lattice, StringBuffer* s) const;
+  bool writeNone(Lattice* lattice, StringBuffer* s) const;
+  bool writeUser(Lattice* lattice, StringBuffer* s) const;
+  bool writeDump(Lattice* lattice, StringBuffer* s) const;
+  bool writeEM(Lattice* lattice, StringBuffer* s) const;
 
-  bool (Writer::*write_)(Lattice *lattice, StringBuffer *s) const;
+  bool (Writer::*write_)(Lattice* lattice, StringBuffer* s) const;
 };
-}
+}  // namespace MeCab
 
 #endif  // WRITER_H_

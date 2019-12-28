@@ -6,6 +6,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
+
 #include "common.h"
 #include "feature_index.h"
 #include "freelist.h"
@@ -22,7 +23,7 @@ namespace {
 #define DCONF(file) create_filename(dicdir, std::string(file)).c_str()
 
 #ifdef MECAB_USE_THREAD
-class learner_thread: public thread {
+class learner_thread : public thread {
  public:
   unsigned short start_i;
   unsigned short thread_num;
@@ -32,7 +33,7 @@ class learner_thread: public thread {
   size_t micro_c;
   size_t err;
   double f;
-  EncoderLearnerTagger **x;
+  EncoderLearnerTagger** x;
   std::vector<double> expected;
   void run() {
     micro_p = micro_r = micro_c = err = 0;
@@ -48,15 +49,13 @@ class learner_thread: public thread {
 
 class CRFLearner {
  public:
-  static int run(Param *param) {
+  static int run(Param* param) {
     const std::string dicdir = param->get<std::string>("dicdir");
-    CHECK_DIE(param->load(DCONF(DICRC)))
-        << "no such file or directory: " << DCONF(DICRC);
+    CHECK_DIE(param->load(DCONF(DICRC))) << "no such file or directory: " << DCONF(DICRC);
 
-    const std::vector<std::string> &files = param->rest_args();
+    const std::vector<std::string>& files = param->rest_args();
     if (files.size() != 2) {
-      std::cout << "Usage: " <<
-          param->program_name() << " corpus model" << std::endl;
+      std::cout << "Usage: " << param->program_name() << " corpus model" << std::endl;
       return -1;
     }
 
@@ -69,7 +68,7 @@ class CRFLearner {
     std::vector<double> observed;
     std::vector<double> alpha;
     std::vector<double> old_alpha;
-    std::vector<EncoderLearnerTagger *> x;
+    std::vector<EncoderLearnerTagger*> x;
     Tokenizer<LearnerNode, LearnerPath> tokenizer;
     Allocator<LearnerNode, LearnerPath> allocator;
 
@@ -78,12 +77,10 @@ class CRFLearner {
 
     if (!old_model.empty()) {
       std::cout << "Using previous model: " << old_model << std::endl;
-      std::cout << "--cost --freq and --eta options are overwritten."
-                << std::endl;
+      std::cout << "--cost --freq and --eta options are overwritten." << std::endl;
       CHECK_DIE(tokenizer.dictionary_info());
-      const char *dic_charset = tokenizer.dictionary_info()->charset;
-      feature_index.reopen(old_model.c_str(),
-                           dic_charset, &old_alpha, param);
+      const char* dic_charset = tokenizer.dictionary_info()->charset;
+      feature_index.reopen(old_model.c_str(), dic_charset, &old_alpha, param);
     }
 
     const double C = param->get<double>("cost");
@@ -96,12 +93,9 @@ class CRFLearner {
     CHECK_DIE(C > 0) << "cost parameter is out of range: " << C;
     CHECK_DIE(eta > 0) "eta is out of range: " << eta;
     CHECK_DIE(eval_size > 0) << "eval-size is out of range: " << eval_size;
-    CHECK_DIE(unk_eval_size > 0) <<
-        "unk-eval-size is out of range: " << unk_eval_size;
-    CHECK_DIE(freq > 0) <<
-        "freq is out of range: " << unk_eval_size;
-    CHECK_DIE(thread_num > 0 && thread_num <= 512)
-        << "# thread is invalid: " << thread_num;
+    CHECK_DIE(unk_eval_size > 0) << "unk-eval-size is out of range: " << unk_eval_size;
+    CHECK_DIE(freq > 0) << "freq is out of range: " << unk_eval_size;
+    CHECK_DIE(thread_num > 0 && thread_num <= 512) << "# thread is invalid: " << thread_num;
 
     std::cout.setf(std::ios::fixed, std::ios::floatfield);
     std::cout.precision(5);
@@ -112,13 +106,9 @@ class CRFLearner {
     CHECK_DIE(ifs) << "no such file or directory: " << ifile;
 
     while (ifs) {
-      EncoderLearnerTagger *tagger = new EncoderLearnerTagger();
+      EncoderLearnerTagger* tagger = new EncoderLearnerTagger();
 
-      CHECK_DIE(tagger->open(&tokenizer,
-                             &allocator,
-                             &feature_index,
-                             eval_size,
-                             unk_eval_size));
+      CHECK_DIE(tagger->open(&tokenizer, &allocator, &feature_index, eval_size, unk_eval_size));
 
       CHECK_DIE(tagger->read(&ifs, &observed));
 
@@ -146,19 +136,17 @@ class CRFLearner {
     feature_index.set_alpha(&alpha[0]);
 
     std::cout << std::endl;
-    std::cout << "Number of sentences: " << x.size()  << std::endl;
-    std::cout << "Number of features:  " << psize     << std::endl;
-    std::cout << "eta:                 " << eta       << std::endl;
-    std::cout << "freq:                " << freq      << std::endl;
+    std::cout << "Number of sentences: " << x.size() << std::endl;
+    std::cout << "Number of features:  " << psize << std::endl;
+    std::cout << "eta:                 " << eta << std::endl;
+    std::cout << "freq:                " << freq << std::endl;
     std::cout << "eval-size:           " << eval_size << std::endl;
     std::cout << "unk-eval-size:       " << unk_eval_size << std::endl;
 #ifdef MECAB_USE_THREAD
     std::cout << "threads:             " << thread_num << std::endl;
 #endif
-    std::cout << "charset:             " <<
-        tokenizer.dictionary_info()->charset << std::endl;
-    std::cout << "C(sigma^2):          " << C          << std::endl
-              << std::endl;
+    std::cout << "charset:             " << tokenizer.dictionary_info()->charset << std::endl;
+    std::cout << "C(sigma^2):          " << C << std::endl << std::endl;
 
 #ifdef MECAB_USE_THREAD
     std::vector<learner_thread> thread;
@@ -178,7 +166,7 @@ class CRFLearner {
     double prev_obj = 0.0;
     LBFGS lbfgs;
 
-    for (size_t itr = 0; ;  ++itr) {
+    for (size_t itr = 0;; ++itr) {
       std::fill(expected.begin(), expected.end(), 0.0);
       double obj = 0.0;
       size_t err = 0;
@@ -225,13 +213,9 @@ class CRFLearner {
         expected[i] = expected[i] - observed[i] + penalty / C;
       }
 
-      const double diff = (itr == 0 ? 1.0 :
-                           std::fabs(1.0 * (prev_obj - obj)) / prev_obj);
-      std::cout << "iter="    << itr
-                << " err="    << 1.0 * err/x.size()
-                << " F="      << micro_f
-                << " target=" << obj
-                << " diff="   << diff << std::endl;
+      const double diff = (itr == 0 ? 1.0 : std::fabs(1.0 * (prev_obj - obj)) / prev_obj);
+      std::cout << "iter=" << itr << " err=" << 1.0 * err / x.size() << " F=" << micro_f << " target=" << obj
+                << " diff=" << diff << std::endl;
       prev_obj = obj;
 
       if (diff < eta) {
@@ -244,9 +228,7 @@ class CRFLearner {
         break;  // 3 is ad-hoc
       }
 
-      const int ret = lbfgs.optimize(psize,
-                                     &alpha[0], obj,
-                                     &expected[0], false, C);
+      const int ret = lbfgs.optimize(psize, &alpha[0], obj, &expected[0], false, C);
 
       CHECK_DIE(ret >= 0) << "unexpected error in LBFGS routin";
 
@@ -259,19 +241,18 @@ class CRFLearner {
 
     std::ostringstream oss;
 
-    oss << "eta: "  << eta   << std::endl;
-    oss << "freq: " << freq  << std::endl;
-    oss << "C: "    << C     << std::endl;
+    oss << "eta: " << eta << std::endl;
+    oss << "freq: " << freq << std::endl;
+    oss << "C: " << C << std::endl;
     oss.setf(std::ios::fixed, std::ios::floatfield);
     oss.precision(16);
     oss << "eval-size: " << eval_size << std::endl;
     oss << "unk-eval-size: " << unk_eval_size << std::endl;
-    oss << "charset: " <<  tokenizer.dictionary_info()->charset << std::endl;
+    oss << "charset: " << tokenizer.dictionary_info()->charset << std::endl;
 
     const std::string header = oss.str();
 
-    CHECK_DIE(feature_index.save(model.c_str(), header.c_str()))
-        << "permission denied: " << model;
+    CHECK_DIE(feature_index.save(model.c_str(), header.c_str())) << "permission denied: " << model;
 
     return 0;
   }
@@ -279,29 +260,22 @@ class CRFLearner {
 
 class Learner {
  public:
-  static bool run(int argc, char **argv) {
+  static bool run(int argc, char** argv) {
     static const MeCab::Option long_options[] = {
-      { "dicdir",   'd',  ".",     "DIR",
-        "set DIR as dicdir(default \".\" )" },
-      { "old-model",   'M',  0,     "FILE",
-        "set FILE as old CRF model file" },
-      { "cost",     'c',  "1.0",   "FLOAT",
-        "set FLOAT for cost C for constraints violatoin" },
-      { "freq",     'f',  "1",     "INT",
-        "set the frequency cut-off (default 1)" },
-      { "eta",      'e',  "0.00005", "DIR",
-        "set FLOAT for tolerance of termination criterion" },
-      { "thread",   'p',  "1",     "INT",    "number of threads(default 1)" },
-      { "version",  'v',  0,   0,  "show the version and exit"  },
-      { "help",     'h',  0,   0,  "show this help and exit."      },
-      { 0, 0, 0, 0 }
-    };
+        {"dicdir", 'd', ".", "DIR", "set DIR as dicdir(default \".\" )"},
+        {"old-model", 'M', 0, "FILE", "set FILE as old CRF model file"},
+        {"cost", 'c', "1.0", "FLOAT", "set FLOAT for cost C for constraints violatoin"},
+        {"freq", 'f', "1", "INT", "set the frequency cut-off (default 1)"},
+        {"eta", 'e', "0.00005", "DIR", "set FLOAT for tolerance of termination criterion"},
+        {"thread", 'p', "1", "INT", "number of threads(default 1)"},
+        {"version", 'v', 0, 0, "show the version and exit"},
+        {"help", 'h', 0, 0, "show this help and exit."},
+        {0, 0, 0, 0}};
 
     Param param;
 
     if (!param.open(argc, argv, long_options)) {
-      std::cout << param.what() << "\n\n" <<  COPYRIGHT
-                << "\ntry '--help' for more information." << std::endl;
+      std::cout << param.what() << "\n\n" << COPYRIGHT << "\ntry '--help' for more information." << std::endl;
       return -1;
     }
 
@@ -312,9 +286,9 @@ class Learner {
     return CRFLearner::run(&param);
   }
 };
-}
-}
+}  // namespace
+}  // namespace MeCab
 
-int mecab_cost_train(int argc, char **argv) {
+int mecab_cost_train(int argc, char** argv) {
   return MeCab::Learner::run(argc, argv);
 }

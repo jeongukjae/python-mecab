@@ -6,8 +6,9 @@
 #include <fstream>
 #include <iostream>
 #include <map>
-#include <vector>
 #include <string>
+#include <vector>
+
 #include "char_property.h"
 #include "common.h"
 #include "context_id.h"
@@ -21,11 +22,11 @@
 
 namespace MeCab {
 
-void copy(const char *src, const char *dst) {
-  std::cout << "copying " << src << " to " <<  dst << std::endl;
+void copy(const char* src, const char* dst) {
+  std::cout << "copying " << src << " to " << dst << std::endl;
   Mmap<char> mmap;
   CHECK_DIE(mmap.open(src)) << mmap.what();
-  std::ofstream ofs(WPATH(dst), std::ios::binary|std::ios::out);
+  std::ofstream ofs(WPATH(dst), std::ios::binary | std::ios::out);
   CHECK_DIE(ofs) << "permission denied: " << dst;
   ofs.write(reinterpret_cast<char*>(mmap.begin()), mmap.size());
   ofs.close();
@@ -33,24 +34,20 @@ void copy(const char *src, const char *dst) {
 
 class DictionaryGenerator {
  private:
-  static void gencid_bos(const std::string &bos_feature,
-                         DictionaryRewriter *rewrite,
-                         ContextID *cid) {
+  static void gencid_bos(const std::string& bos_feature, DictionaryRewriter* rewrite, ContextID* cid) {
     std::string ufeature, lfeature, rfeature;
     rewrite->rewrite2(bos_feature, &ufeature, &lfeature, &rfeature);
     cid->addBOS(lfeature.c_str(), rfeature.c_str());
   }
 
-  static void gencid(const char *filename,
-                     DictionaryRewriter *rewrite,
-                     ContextID *cid) {
+  static void gencid(const char* filename, DictionaryRewriter* rewrite, ContextID* cid) {
     std::ifstream ifs(WPATH(filename));
     CHECK_DIE(ifs) << "no such file or directory: " << filename;
     scoped_fixed_array<char, BUF_SIZE> line;
     std::cout << "reading " << filename << " ... " << std::flush;
     size_t num = 0;
     std::string feature, ufeature, lfeature, rfeature;
-    char *col[8];
+    char* col[8];
     while (ifs.getline(line.get(), line.size())) {
       const size_t n = tokenizeCSV(line.get(), col, 5);
       CHECK_DIE(n == 5) << "format error: " << line.get();
@@ -63,10 +60,7 @@ class DictionaryGenerator {
     ifs.close();
   }
 
-  static bool genmatrix(const char *filename,
-                        const ContextID &cid,
-                        DecoderFeatureIndex *fi,
-                        int factor) {
+  static bool genmatrix(const char* filename, const ContextID& cid, DecoderFeatureIndex* fi, int factor) {
     std::ofstream ofs(WPATH(filename));
     CHECK_DIE(ofs) << "permission denied: " << filename;
 
@@ -79,28 +73,23 @@ class DictionaryGenerator {
     path.lnode = &lnode;
     path.rnode = &rnode;
 
-    const std::map<std::string, int> &left =  cid.left_ids();
-    const std::map<std::string, int> &right = cid.right_ids();
+    const std::map<std::string, int>& left = cid.left_ids();
+    const std::map<std::string, int>& right = cid.right_ids();
 
-    CHECK_DIE(left.size() > 0)  << "left id size is empty";
+    CHECK_DIE(left.size() > 0) << "left id size is empty";
     CHECK_DIE(right.size() > 0) << "right id size is empty";
 
     ofs << right.size() << ' ' << left.size() << std::endl;
 
     size_t l = 0;
-    for (std::map<std::string, int>::const_iterator rit = right.begin();
-         rit != right.end();
-         ++rit) {
+    for (std::map<std::string, int>::const_iterator rit = right.begin(); rit != right.end(); ++rit) {
       ++l;
-      progress_bar("emitting matrix      ", l+1, right.size());
-      for (std::map<std::string, int>::const_iterator lit = left.begin();
-           lit != left.end();
-           ++lit) {
+      progress_bar("emitting matrix      ", l + 1, right.size());
+      for (std::map<std::string, int>::const_iterator lit = left.begin(); lit != left.end(); ++lit) {
         path.rnode->wcost = 0;
         fi->buildBigramFeature(&path, rit->first.c_str(), lit->first.c_str());
         fi->calcCost(&path);
-        ofs << rit->second << ' ' << lit->second << ' '
-            << tocost(path.cost, factor) << '\n';
+        ofs << rit->second << ' ' << lit->second << ' ' << tocost(path.cost, factor) << '\n';
       }
     }
 
@@ -109,10 +98,10 @@ class DictionaryGenerator {
 
   static void gendic(const char* ifile,
                      const char* ofile,
-                     const CharProperty &property,
-                     DictionaryRewriter *rewrite,
-                     const ContextID &cid,
-                     DecoderFeatureIndex *fi,
+                     const CharProperty& property,
+                     DictionaryRewriter* rewrite,
+                     const ContextID& cid,
+                     DecoderFeatureIndex* fi,
                      bool unk,
                      int factor) {
     std::ifstream ifs(WPATH(ifile));
@@ -121,19 +110,19 @@ class DictionaryGenerator {
     std::ofstream ofs(WPATH(ofile));
     CHECK_DIE(ofs) << "permission denied: " << ofile;
 
-    std::cout <<  "emitting " << ofile << " ... " << std::flush;
+    std::cout << "emitting " << ofile << " ... " << std::flush;
 
     LearnerPath path;
     LearnerNode rnode;
     LearnerNode lnode;
-    rnode.stat  = lnode.stat = MECAB_NOR_NODE;
+    rnode.stat = lnode.stat = MECAB_NOR_NODE;
     rnode.rpath = &path;
     lnode.lpath = &path;
-    path.lnode  = &lnode;
-    path.rnode  = &rnode;
+    path.lnode = &lnode;
+    path.rnode = &rnode;
 
     scoped_fixed_array<char, BUF_SIZE> line;
-    char *col[8];
+    char* col[8];
     size_t num = 0;
 
     while (ifs.getline(line.get(), line.size())) {
@@ -157,9 +146,7 @@ class DictionaryGenerator {
         path.rnode->char_type = static_cast<unsigned char>(c);
       } else {
         size_t mblen = 0;
-        const CharInfo cinfo = property.getCharInfo(w.c_str(),
-                                                    w.c_str() + w.size(),
-                                                    &mblen);
+        const CharInfo cinfo = property.getCharInfo(w.c_str(), w.c_str() + w.size(), &mblen);
         path.rnode->char_type = cinfo.default_type;
       }
 
@@ -167,9 +154,7 @@ class DictionaryGenerator {
       fi->calcCost(&rnode);
       CHECK_DIE(escape_csv_element(&w)) << "invalid character found: " << w;
 
-      ofs << w << ',' << lid << ',' << rid << ','
-          << tocost(rnode.wcost, factor)
-          << ',' << feature << '\n';
+      ofs << w << ',' << lid << ',' << rid << ',' << tocost(rnode.wcost, factor) << ',' << feature << '\n';
       ++num;
     }
 
@@ -177,26 +162,23 @@ class DictionaryGenerator {
   }
 
  public:
-
-  static int run(int argc, char **argv) {
-    static const MeCab::Option long_options[] = {
-      { "dicdir",  'd',  ".",   "DIR", "set DIR as dicdir(default \".\" )" },
-      { "outdir",  'o',  ".",   "DIR", "set DIR as output dir" },
-      { "model",   'm',  0,     "FILE",   "use FILE as model file" },
-      { "version", 'v',  0,   0,  "show the version and exit"  },
-      { "help",    'h',  0,   0,  "show this help and exit."      },
-      { 0, 0, 0, 0 }
-    };
+  static int run(int argc, char** argv) {
+    static const MeCab::Option long_options[] = {{"dicdir", 'd', ".", "DIR", "set DIR as dicdir(default \".\" )"},
+                                                 {"outdir", 'o', ".", "DIR", "set DIR as output dir"},
+                                                 {"model", 'm', 0, "FILE", "use FILE as model file"},
+                                                 {"version", 'v', 0, 0, "show the version and exit"},
+                                                 {"help", 'h', 0, 0, "show this help and exit."},
+                                                 {0, 0, 0, 0}};
 
     Param param;
 
     if (!param.open(argc, argv, long_options)) {
-      std::cout << param.what() << "\n\n" <<  COPYRIGHT
-                << "\ntry '--help' for more information." << std::endl;
+      std::cout << param.what() << "\n\n" << COPYRIGHT << "\ntry '--help' for more information." << std::endl;
       return -1;
     }
 
-    if (!param.help_version()) return 0;
+    if (!param.help_version())
+      return 0;
 
     ContextID cid;
     DecoderFeatureIndex fi;
@@ -209,8 +191,7 @@ class DictionaryGenerator {
 #define DCONF(file) create_filename(dicdir, std::string(file)).c_str()
 #define OCONF(file) create_filename(outdir, std::string(file)).c_str()
 
-    CHECK_DIE(param.load(DCONF(DICRC)))
-        << "no such file or directory: " << DCONF(DICRC);
+    CHECK_DIE(param.load(DCONF(DICRC))) << "no such file or directory: " << DCONF(DICRC);
 
     std::string charset;
     {
@@ -231,13 +212,12 @@ class DictionaryGenerator {
     enum_csv_dictionaries(dicdir.c_str(), &dic);
 
     {
-      CHECK_DIE(dicdir != outdir) <<
-          "output directory = dictionary directory! "
-          "Please specify different directory.";
+      CHECK_DIE(dicdir != outdir) << "output directory = dictionary directory! "
+                                     "Please specify different directory.";
       CHECK_DIE(!outdir.empty()) << "output directory is empty";
       CHECK_DIE(!model.empty()) << "model file is empty";
       CHECK_DIE(fi.open(param)) << "cannot open feature index";
-      CHECK_DIE(factor > 0)   << "cost factor needs to be positive value";
+      CHECK_DIE(factor > 0) << "cost factor needs to be positive value";
       CHECK_DIE(!bos.empty()) << "bos-feature is empty";
       CHECK_DIE(dic.size()) << "no dictionary is found in " << dicdir;
       CHECK_DIE(rewrite.open(DCONF(REWRITE_FILE)));
@@ -246,29 +226,21 @@ class DictionaryGenerator {
     gencid_bos(bos, &rewrite, &cid);
     gencid(DCONF(UNK_DEF_FILE), &rewrite, &cid);
 
-    for (std::vector<std::string>::const_iterator it = dic.begin();
-         it != dic.end();
-         ++it) {
+    for (std::vector<std::string>::const_iterator it = dic.begin(); it != dic.end(); ++it) {
       gencid(it->c_str(), &rewrite, &cid);
     }
 
-    std::cout << "emitting "
-              << OCONF(LEFT_ID_FILE) << "/ "
-              << OCONF(RIGHT_ID_FILE) << std::endl;
+    std::cout << "emitting " << OCONF(LEFT_ID_FILE) << "/ " << OCONF(RIGHT_ID_FILE) << std::endl;
 
     cid.build();
     cid.save(OCONF(LEFT_ID_FILE), OCONF(RIGHT_ID_FILE));
 
-    gendic(DCONF(UNK_DEF_FILE), OCONF(UNK_DEF_FILE), property,
-           &rewrite, cid, &fi, true, factor);
+    gendic(DCONF(UNK_DEF_FILE), OCONF(UNK_DEF_FILE), property, &rewrite, cid, &fi, true, factor);
 
-    for (std::vector<std::string>::const_iterator it = dic.begin();
-         it != dic.end();
-         ++it) {
-      std::string file =  *it;
+    for (std::vector<std::string>::const_iterator it = dic.begin(); it != dic.end(); ++it) {
+      std::string file = *it;
       remove_pathname(&file);
-      gendic(it->c_str(), OCONF(file.c_str()), property,
-             &rewrite, cid, &fi, false, factor);
+      gendic(it->c_str(), OCONF(file.c_str()), property, &rewrite, cid, &fi, false, factor);
     }
 
     genmatrix(OCONF(MATRIX_DEF_FILE), cid, &fi, factor);
@@ -282,14 +254,14 @@ class DictionaryGenerator {
 #undef OCONF
 #undef DCONF
 
-    std::cout <<  "\ndone!\n";
+    std::cout << "\ndone!\n";
 
     return 0;
   }
 };
-}
+}  // namespace MeCab
 
 // export functions
-int mecab_dict_gen(int argc, char **argv) {
+int mecab_dict_gen(int argc, char** argv) {
   return MeCab::DictionaryGenerator::run(argc, argv);
 }

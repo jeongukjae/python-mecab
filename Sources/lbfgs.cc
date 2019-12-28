@@ -21,16 +21,18 @@
 //   - D.C. Liu and J. Nocedal. On the Limited Memory Method for
 //   Large Scale Optimization(1989),
 //   Mathematical Programming B, 45, 3, pp. 503-528.
+#include "lbfgs.h"
+
 #include <cmath>
 #include <iostream>
 #include <numeric>
-#include "lbfgs.h"
+
 #include "common.h"
 
 namespace {
 static const double ftol = 1e-4;
 static const double xtol = 1e-16;
-static const double eps  = 1e-7;
+static const double eps = 1e-7;
 static const double lb3_1_gtol = 0.9;
 static const double lb3_1_stpmin = 1e-20;
 static const double lb3_1_stpmax = 1e20;
@@ -48,29 +50,35 @@ inline double pi(double x, double y) {
   return sigma(x) == sigma(y) ? x : 0.0;
 }
 
-inline void daxpy_(int n, double da, const double *dx, double *dy) {
+inline void daxpy_(int n, double da, const double* dx, double* dy) {
   for (int i = 0; i < n; ++i) {
     dy[i] += da * dx[i];
   }
 }
 
-inline double ddot_(int size, const double *dx, const double *dy) {
+inline double ddot_(int size, const double* dx, const double* dy) {
   return std::inner_product(dx, dx + size, dy, 0.0);
 }
 
-void mcstep(double *stx, double *fx, double *dx,
-            double *sty, double *fy, double *dy,
-            double *stp, double fp, double dp,
-            int *brackt,
-            double stpmin, double stpmax,
-            int *info) {
+void mcstep(double* stx,
+            double* fx,
+            double* dx,
+            double* sty,
+            double* fy,
+            double* dy,
+            double* stp,
+            double fp,
+            double dp,
+            int* brackt,
+            double stpmin,
+            double stpmax,
+            int* info) {
   bool bound = true;
   double p, q, s, d1, d2, d3, r, gamma, theta, stpq, stpc, stpf;
   *info = 0;
 
-  if (*brackt && ((*stp <= std::min(*stx, *sty) ||
-                   *stp >= std::max(*stx, *sty)) ||
-                  *dx * (*stp - *stx) >= 0.0 || stpmax < stpmin)) {
+  if (*brackt && ((*stp <= std::min(*stx, *sty) || *stp >= std::max(*stx, *sty)) || *dx * (*stp - *stx) >= 0.0 ||
+                  stpmax < stpmin)) {
     return;
   }
 
@@ -79,14 +87,14 @@ void mcstep(double *stx, double *fx, double *dx,
   if (fp > *fx) {
     *info = 1;
     bound = true;
-    theta =(*fx - fp) * 3 / (*stp - *stx) + *dx + dp;
+    theta = (*fx - fp) * 3 / (*stp - *stx) + *dx + dp;
     d1 = std::abs(theta);
     d2 = std::abs(*dx);
     d1 = std::max(d1, d2);
     d2 = std::abs(dp);
     s = std::max(d1, d2);
     d1 = theta / s;
-    gamma = s * std::sqrt(d1 * d1 - *dx / s *(dp / s));
+    gamma = s * std::sqrt(d1 * d1 - *dx / s * (dp / s));
     if (*stp < *stx) {
       gamma = -gamma;
     }
@@ -94,8 +102,7 @@ void mcstep(double *stx, double *fx, double *dx,
     q = gamma - *dx + gamma + dp;
     r = p / q;
     stpc = *stx + r * (*stp - *stx);
-    stpq = *stx + *dx / ((*fx - fp) /
-                         (*stp - *stx) + *dx) / 2 * (*stp - *stx);
+    stpq = *stx + *dx / ((*fx - fp) / (*stp - *stx) + *dx) / 2 * (*stp - *stx);
     if ((d1 = stpc - *stx, std::abs(d1)) < (d2 = stpq - *stx, std::abs(d2))) {
       stpf = stpc;
     } else {
@@ -119,8 +126,8 @@ void mcstep(double *stx, double *fx, double *dx,
     p = gamma - dp + theta;
     q = gamma - dp + gamma + *dx;
     r = p / q;
-    stpc = *stp + r *(*stx - *stp);
-    stpq = *stp + dp /(dp - *dx) * (*stx - *stp);
+    stpc = *stp + r * (*stx - *stp);
+    stpq = *stp + dp / (dp - *dx) * (*stx - *stp);
     if ((d1 = stpc - *stp, std::abs(d1)) > (d2 = stpq - *stp, std::abs(d2))) {
       stpf = stpc;
     } else {
@@ -138,7 +145,7 @@ void mcstep(double *stx, double *fx, double *dx,
     s = std::max(d1, d2);
     d3 = theta / s;
     d1 = 0.0;
-    d2 = d3 * d3 - *dx / s *(dp / s);
+    d2 = d3 * d3 - *dx / s * (dp / s);
     gamma = s * std::sqrt((std::max(d1, d2)));
     if (*stp > *stx) {
       gamma = -gamma;
@@ -147,23 +154,21 @@ void mcstep(double *stx, double *fx, double *dx,
     q = gamma + (*dx - dp) + gamma;
     r = p / q;
     if (r < 0.0 && gamma != 0.0) {
-      stpc = *stp + r *(*stx - *stp);
+      stpc = *stp + r * (*stx - *stp);
     } else if (*stp > *stx) {
       stpc = stpmax;
     } else {
       stpc = stpmin;
     }
-    stpq = *stp + dp /(dp - *dx) * (*stx - *stp);
+    stpq = *stp + dp / (dp - *dx) * (*stx - *stp);
     if (*brackt) {
-      if ((d1 = *stp - stpc, std::abs(d1)) <
-          (d2 = *stp - stpq, std::abs(d2))) {
+      if ((d1 = *stp - stpc, std::abs(d1)) < (d2 = *stp - stpq, std::abs(d2))) {
         stpf = stpc;
       } else {
         stpf = stpq;
       }
     } else {
-      if ((d1 = *stp - stpc, std::abs(d1)) >
-          (d2 = *stp - stpq, std::abs(d2))) {
+      if ((d1 = *stp - stpc, std::abs(d1)) > (d2 = *stp - stpq, std::abs(d2))) {
         stpf = stpc;
       } else {
         stpf = stpq;
@@ -173,7 +178,7 @@ void mcstep(double *stx, double *fx, double *dx,
     *info = 4;
     bound = false;
     if (*brackt) {
-      theta =(fp - *fy) * 3 / (*sty - *stp) + *dy + dp;
+      theta = (fp - *fy) * 3 / (*sty - *stp) + *dy + dp;
       d1 = std::abs(theta);
       d2 = std::abs(*dy);
       d1 = std::max(d1, d2);
@@ -226,7 +231,7 @@ void mcstep(double *stx, double *fx, double *dx,
 
   return;
 }
-}
+}  // namespace
 
 namespace MeCab {
 
@@ -237,19 +242,35 @@ class LBFGS::Mcsrch {
   double stx, fx, dgx, sty, fy, dgy, stmin, stmax;
 
  public:
-  Mcsrch():
-      infoc(0),
-      stage1(0),
-      brackt(0),
-      finit(0.0), dginit(0.0), dgtest(0.0), width(0.0), width1(0.0),
-      stx(0.0), fx(0.0), dgx(0.0), sty(0.0), fy(0.0), dgy(0.0),
-      stmin(0.0), stmax(0.0) {}
+  Mcsrch()
+      : infoc(0),
+        stage1(0),
+        brackt(0),
+        finit(0.0),
+        dginit(0.0),
+        dgtest(0.0),
+        width(0.0),
+        width1(0.0),
+        stx(0.0),
+        fx(0.0),
+        dgx(0.0),
+        sty(0.0),
+        fy(0.0),
+        dgy(0.0),
+        stmin(0.0),
+        stmax(0.0) {}
 
   void mcsrch(int size,
-              double *x,
-              double f, const double *g, double *s,
-              double *stp,
-              int *info, int *nfev, double *wa, bool orthant, double C) {
+              double* x,
+              double f,
+              const double* g,
+              double* s,
+              double* stp,
+              int* info,
+              int* nfev,
+              double* wa,
+              bool orthant,
+              double C) {
     const double p5 = 0.5;
     const double p66 = 0.66;
     const double xtrapf = 4.0;
@@ -305,8 +326,7 @@ class LBFGS::Mcsrch {
       *stp = std::max(*stp, lb3_1_stpmin);
       *stp = std::min(*stp, lb3_1_stpmax);
 
-      if ((brackt && ((*stp <= stmin || *stp >= stmax) ||
-                      *nfev >= maxfev - 1 || infoc == 0)) ||
+      if ((brackt && ((*stp <= stmin || *stp >= stmax) || *nfev >= maxfev - 1 || infoc == 0)) ||
           (brackt && (stmax - stmin <= xtol * stmax))) {
         *stp = stx;
       }
@@ -341,7 +361,7 @@ class LBFGS::Mcsrch {
       *info = -1;
       return;
 
-   L45:
+    L45:
       *info = 0;
       ++(*nfev);
       double dg = ddot_(size, &g[1], &s[1]);
@@ -381,15 +401,13 @@ class LBFGS::Mcsrch {
         double dgm = dg - dgtest;
         double dgxm = dgx - dgtest;
         double dgym = dgy - dgtest;
-        mcstep(&stx, &fxm, &dgxm, &sty, &fym, &dgym, stp, fm, dgm, &brackt,
-               stmin, stmax, &infoc);
+        mcstep(&stx, &fxm, &dgxm, &sty, &fym, &dgym, stp, fm, dgm, &brackt, stmin, stmax, &infoc);
         fx = fxm + stx * dgtest;
         fy = fym + sty * dgtest;
         dgx = dgxm + dgtest;
         dgy = dgym + dgtest;
       } else {
-        mcstep(&stx, &fx, &dgx, &sty, &fy, &dgy, stp, f, dg, &brackt,
-               stmin, stmax, &infoc);
+        mcstep(&stx, &fx, &dgx, &sty, &fy, &dgy, stp, f, dg, &brackt, stmin, stmax, &infoc);
       }
 
       if (brackt) {
@@ -407,8 +425,7 @@ class LBFGS::Mcsrch {
 };
 
 void LBFGS::clear() {
-  iflag_ = iscn = nfev = iycn = point = npt =
-      iter = info = ispt = isyt = iypt = 0;
+  iflag_ = iscn = nfev = iycn = point = npt = iter = info = ispt = isyt = iypt = 0;
   stp = stp1 = 0.0;
   diag_.clear();
   w_.clear();
@@ -418,14 +435,14 @@ void LBFGS::clear() {
 
 void LBFGS::lbfgs_optimize(int size,
                            int msize,
-                           double *x,
+                           double* x,
                            double f,
-                           const double *g,
-                           double *diag,
-                           double *w,
+                           const double* g,
+                           double* diag,
+                           double* w,
                            bool orthant,
                            double C,
-                           int *iflag) {
+                           int* iflag) {
   double yy = 0.0;
   double ys = 0.0;
   int bound = 0;
@@ -465,8 +482,10 @@ void LBFGS::lbfgs_optimize(int size,
   while (true) {
     ++iter;
     info = 0;
-    if (iter == 1) goto L165;
-    if (iter > size) bound = size;
+    if (iter == 1)
+      goto L165;
+    if (iter > size)
+      bound = size;
 
     // COMPUTE -H*G USING THE FORMULA GIVEN IN: Nocedal, J. 1980,
     // "Updating quasi-Newton matrices with limited storage",
@@ -477,9 +496,10 @@ void LBFGS::lbfgs_optimize(int size,
       diag[i] = ys / yy;
     }
 
- L100:
+  L100:
     cp = point;
-    if (point == 0) cp = msize;
+    if (point == 0)
+      cp = msize;
     w[size + cp] = 1.0 / ys;
 
     for (int i = 1; i <= size; ++i) {
@@ -491,7 +511,8 @@ void LBFGS::lbfgs_optimize(int size,
     cp = point;
     for (int i = 1; i <= bound; ++i) {
       --cp;
-      if (cp == -1) cp = msize - 1;
+      if (cp == -1)
+        cp = msize - 1;
       double sq = ddot_(size, &w[ispt + cp * size + 1], &w[1]);
       int inmc = size + msize + cp + 1;
       iycn = iypt + cp * size;
@@ -522,7 +543,7 @@ void LBFGS::lbfgs_optimize(int size,
       w[ispt + point * size + i] = w[i];
     }
 
- L165:
+  L165:
     // OBTAIN THE ONE-DIMENSIONAL MINIMIZER OF THE FUNCTION
     // BY USING THE LINE SEARCH ROUTINE MCSRCH
     nfev = 0;
@@ -534,16 +555,14 @@ void LBFGS::lbfgs_optimize(int size,
       w[i] = g[i];
     }
 
- L172:
-    mcsrch_->mcsrch(size, &x[1], f, &g[1], &w[ispt + point * size + 1],
-                    &stp, &info, &nfev, &diag[1], orthant, C);
+  L172:
+    mcsrch_->mcsrch(size, &x[1], f, &g[1], &w[ispt + point * size + 1], &stp, &info, &nfev, &diag[1], orthant, C);
     if (info == -1) {
       *iflag = 1;  // next value
       return;
     }
     if (info != 1) {
-      std::cerr << "The line search routine mcsrch failed: error code:"
-                << info << std::endl;
+      std::cerr << "The line search routine mcsrch failed: error code:" << info << std::endl;
       *iflag = -1;
       return;
     }
@@ -567,4 +586,4 @@ void LBFGS::lbfgs_optimize(int size,
     }
   }
 }
-}
+}  // namespace MeCab

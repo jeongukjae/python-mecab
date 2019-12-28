@@ -7,8 +7,9 @@
 #define MECAB_MMAP_H
 
 #include <errno.h>
-#include <string>
 #include <sys/stat.h>
+
+#include <string>
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -49,35 +50,36 @@ extern "C" {
 
 namespace MeCab {
 
-template <class T> class Mmap {
+template <class T>
+class Mmap {
  private:
-  T            *text;
-  size_t       length;
-  std::string  fileName;
+  T* text;
+  size_t length;
+  std::string fileName;
   whatlog what_;
 
 #if defined(_WIN32) && !defined(__CYGWIN__)
   HANDLE hFile;
   HANDLE hMap;
 #else
-  FILE*          fd;
-  std::string    flag;
+  FILE* fd;
+  std::string flag;
 #endif
 
  public:
-  T&       operator[](size_t n)       { return *(text + n); }
+  T& operator[](size_t n) { return *(text + n); }
   const T& operator[](size_t n) const { return *(text + n); }
-  T*       begin()           { return text; }
-  const T* begin()    const  { return text; }
-  T*       end()           { return text + size(); }
-  const T* end()    const  { return text + size(); }
-  size_t size()               { return length/sizeof(T); }
-  const char *what()          { return what_.str(); }
-  const char *file_name()     { return fileName.c_str(); }
-  size_t file_size()          { return length; }
-  bool empty()                { return(length == 0); }
+  T* begin() { return text; }
+  const T* begin() const { return text; }
+  T* end() { return text + size(); }
+  const T* end() const { return text + size(); }
+  size_t size() { return length / sizeof(T); }
+  const char* what() { return what_.str(); }
+  const char* file_name() { return fileName.c_str(); }
+  size_t file_size() { return length; }
+  bool empty() { return (length == 0); }
 
-  bool open(const char *filename, const char *mode = "r") {
+  bool open(const char* filename, const char* mode = "r") {
     this->close();
     struct stat st;
     int fileDescriptor;
@@ -89,13 +91,10 @@ template <class T> class Mmap {
 
     flag += "b";
 
-    CHECK_FALSE((fd = ::fopen(filename, flag.c_str())) != NULL)
-        << "open failed: " << filename;
+    CHECK_FALSE((fd = ::fopen(filename, flag.c_str())) != NULL) << "open failed: " << filename;
 
-    CHECK_FALSE((fileDescriptor = ::fileno(fd)) >= 0)
-        << "cannot get file descriptor: " << filename;
-    CHECK_FALSE(::fstat(fileDescriptor, &st) >= 0)
-        << "failed to get file size: " << filename;
+    CHECK_FALSE((fileDescriptor = ::fileno(fd)) >= 0) << "cannot get file descriptor: " << filename;
+    CHECK_FALSE(::fstat(fileDescriptor, &st) >= 0) << "failed to get file size: " << filename;
 
     length = st.st_size;
 
@@ -121,7 +120,7 @@ template <class T> class Mmap {
           ::fclose(fd2);
         }
       }
-      delete [] text;
+      delete[] text;
     }
 
     text = 0;
@@ -131,5 +130,5 @@ template <class T> class Mmap {
 
   virtual ~Mmap() { this->close(); }
 };
-}
+}  // namespace MeCab
 #endif

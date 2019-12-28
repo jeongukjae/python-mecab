@@ -14,8 +14,8 @@
 #include <pthread.h>
 #else
 #ifdef _WIN32
-#include <windows.h>
 #include <process.h>
+#include <windows.h>
 #endif
 #endif
 
@@ -33,10 +33,9 @@
 
 #if (defined(_WIN32) && !defined(__CYGWIN__))
 #define MECAB_USE_THREAD 1
-#define BEGINTHREAD(src, stack, func, arg, flag, id)                    \
-  (HANDLE)_beginthreadex((void *)(src), (unsigned)(stack),              \
-                         (unsigned(_stdcall *)(void *))(func), (void *)(arg), \
-                         (unsigned)(flag), (unsigned *)(id))
+#define BEGINTHREAD(src, stack, func, arg, flag, id)                                                         \
+  (HANDLE) _beginthreadex((void*)(src), (unsigned)(stack), (unsigned(_stdcall*)(void*))(func), (void*)(arg), \
+                          (unsigned)(flag), (unsigned*)(id))
 #endif
 
 namespace MeCab {
@@ -46,7 +45,7 @@ namespace MeCab {
 #undef compare_and_swap
 #undef yield_processor
 #define atomic_add(a, b) ::InterlockedExchangeAdd(a, b)
-#define compare_and_swap(a, b, c)  ::InterlockedCompareExchange(a, c, b)
+#define compare_and_swap(a, b, c) ::InterlockedCompareExchange(a, c, b)
 #define yield_processor() YieldProcessor()
 #define HAVE_ATOMIC_OPS 1
 #endif
@@ -56,7 +55,7 @@ namespace MeCab {
 #undef compare_and_swap
 #undef yield_processor
 #define atomic_add(a, b) __sync_add_and_fetch(a, b)
-#define compare_and_swap(a, b, c)  __sync_val_compare_and_swap(a, b, c)
+#define compare_and_swap(a, b, c) __sync_val_compare_and_swap(a, b, c)
 #define yield_processor() sched_yield()
 #define HAVE_ATOMIC_OPS 1
 #endif
@@ -97,11 +96,9 @@ class read_write_mutex {
     atomic_add(&l_, -kWaFlag);
     atomic_add(&write_pending_, -1);
   }
-  inline void read_unlock() {
-    atomic_add(&l_, -kRcIncr);
-  }
+  inline void read_unlock() { atomic_add(&l_, -kRcIncr); }
 
-  read_write_mutex(): l_(0), write_pending_(0) {}
+  read_write_mutex() : l_(0), write_pending_(0) {}
 
  private:
   static const int kWaFlag = 0x1;
@@ -117,26 +114,20 @@ class read_write_mutex {
 
 class scoped_writer_lock {
  public:
-  scoped_writer_lock(read_write_mutex *mutex) : mutex_(mutex) {
-    mutex_->write_lock();
-  }
-  ~scoped_writer_lock() {
-    mutex_->write_unlock();
-  }
+  scoped_writer_lock(read_write_mutex* mutex) : mutex_(mutex) { mutex_->write_lock(); }
+  ~scoped_writer_lock() { mutex_->write_unlock(); }
+
  private:
-  read_write_mutex *mutex_;
+  read_write_mutex* mutex_;
 };
 
 class scoped_reader_lock {
  public:
-  scoped_reader_lock(read_write_mutex *mutex) : mutex_(mutex) {
-    mutex_->read_lock();
-  }
-  ~scoped_reader_lock() {
-    mutex_->read_unlock();
-  }
+  scoped_reader_lock(read_write_mutex* mutex) : mutex_(mutex) { mutex_->read_lock(); }
+  ~scoped_reader_lock() { mutex_->read_unlock(); }
+
  private:
-  read_write_mutex *mutex_;
+  read_write_mutex* mutex_;
 };
 #endif  // HAVE_ATOMIC_OPS
 
@@ -146,13 +137,13 @@ class thread {
   pthread_t hnd;
 #else
 #ifdef _WIN32
-  HANDLE  hnd;
+  HANDLE hnd;
 #endif
 #endif
 
  public:
-  static void* wrapper(void *ptr) {
-    thread *p = static_cast<thread *>(ptr);
+  static void* wrapper(void* ptr) {
+    thread* p = static_cast<thread*>(ptr);
     p->run();
     return 0;
   }
@@ -161,8 +152,7 @@ class thread {
 
   void start() {
 #ifdef HAVE_PTHREAD_H
-    pthread_create(&hnd, 0, &thread::wrapper,
-                   static_cast<void *>(this));
+    pthread_create(&hnd, 0, &thread::wrapper, static_cast<void*>(this));
 
 #else
 #ifdef _WIN32
@@ -185,5 +175,5 @@ class thread {
 
   virtual ~thread() {}
 };
-}
+}  // namespace MeCab
 #endif

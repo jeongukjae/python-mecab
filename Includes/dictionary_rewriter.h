@@ -6,12 +6,13 @@
 #ifndef MECAB_DICTIONARY_REWRITER_H
 #define MECAB_DICTIONARY_REWRITER_H
 
-#include <vector>
-#include <string>
 #include <map>
+#include <string>
+#include <vector>
+
 #include "common.h"
-#include "mecab.h"
 #include "freelist.h"
+#include "mecab.h"
 
 namespace MeCab {
 
@@ -21,17 +22,15 @@ class RewritePattern {
  private:
   std::vector<std::string> spat_;
   std::vector<std::string> dpat_;
+
  public:
-  bool set_pattern(const char *src, const char *dst);
-  bool rewrite(size_t size,
-               const char **input,
-               std::string *output) const;
+  bool set_pattern(const char* src, const char* dst);
+  bool rewrite(size_t size, const char** input, std::string* output) const;
 };
 
-class RewriteRules: public std::vector<RewritePattern> {
+class RewriteRules : public std::vector<RewritePattern> {
  public:
-  bool rewrite(size_t size, const char **input,
-               std::string *output) const;
+  bool rewrite(size_t size, const char** input, std::string* output) const;
 };
 
 struct FeatureSet {
@@ -48,28 +47,21 @@ class DictionaryRewriter {
   std::map<std::string, FeatureSet> cache_;
 
  public:
-  bool open(const char *filename,
-            Iconv *iconv = 0);
+  bool open(const char* filename, Iconv* iconv = 0);
   void clear();
-  bool rewrite(const std::string &feature,
-               std::string *ufeature,
-               std::string *lfeature,
-               std::string *rfeature) const;
+  bool rewrite(const std::string& feature, std::string* ufeature, std::string* lfeature, std::string* rfeature) const;
 
-  bool rewrite2(const std::string &feature,
-                std::string *ufeature,
-                std::string *lfeature,
-                std::string *rfeature);
+  bool rewrite2(const std::string& feature, std::string* ufeature, std::string* lfeature, std::string* rfeature);
 };
 
 class POSIDGenerator {
  private:
   RewriteRules rewrite_;
+
  public:
-  bool open(const char *filename,
-            Iconv *iconv = 0);
+  bool open(const char* filename, Iconv* iconv = 0);
   void clear() { rewrite_.clear(); }
-  int id(const char *key) const;
+  int id(const char* key) const;
 };
-}
+}  // namespace MeCab
 #endif

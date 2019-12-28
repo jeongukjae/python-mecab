@@ -32,9 +32,9 @@ class Iconv {
  public:
   explicit Iconv();
   virtual ~Iconv();
-  bool open(const char *from, const char *to);
-  bool convert(std::string *);
+  bool open(const char* from, const char* to);
+  bool convert(std::string*);
 };
-}
+}  // namespace MeCab
 
 #endif

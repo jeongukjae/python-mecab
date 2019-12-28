@@ -1,0 +1,7 @@
+---
+BasedOnStyle: Chromium
+Standard: Cpp11
+IndentWidth: 2
+ColumnLimit: 120
+---
+...

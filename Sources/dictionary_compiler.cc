@@ -4,8 +4,9 @@
 //  Copyright(C) 2004-2006 Nippon Telegraph and Telephone Corporation
 #include <iostream>
 #include <map>
-#include <vector>
 #include <string>
+#include <vector>
+
 #include "char_property.h"
 #include "connector.h"
 #include "dictionary.h"
@@ -22,42 +23,40 @@ namespace MeCab {
 
 class DictionaryComplier {
  public:
-  static int run(int argc, char **argv) {
+  static int run(int argc, char** argv) {
     static const MeCab::Option long_options[] = {
-      { "dicdir",   'd',   ".",   "DIR", "set DIR as dic dir (default \".\")" },
-      { "outdir",   'o',   ".",   "DIR",
-        "set DIR as output dir (default \".\")"  },
-      { "model",   'm',  0,     "FILE", "use FILE as model file" },
-      { "userdic",  'u',   0,   "FILE",   "build user dictionary" },
-      { "assign-user-dictionary-costs", 'a', 0, 0,
-        "only assign costs/ids to user dictionary" },
-      { "build-unknown",  'U',   0,   0,
-        "build parameters for unknown words" },
-      { "build-model", 'M', 0, 0,   "build model file" },
-      { "build-charcategory", 'C', 0, 0,   "build character category maps" },
-      { "build-sysdic",  's', 0, 0,   "build system dictionary" },
-      { "build-matrix",    'm',  0,   0,   "build connection matrix" },
-      { "charset",   'c',  MECAB_DEFAULT_CHARSET, "ENC",
-        "make charset of binary dictionary ENC (default "
-        MECAB_DEFAULT_CHARSET ")"  },
-      { "charset",   't',  MECAB_DEFAULT_CHARSET, "ENC", "alias of -c"  },
-      { "dictionary-charset",  'f',  MECAB_DEFAULT_CHARSET,
-        "ENC", "assume charset of input CSVs as ENC (default "
-        MECAB_DEFAULT_CHARSET ")"  },
-      { "wakati",    'w',  0,   0,   "build wakati-gaki only dictionary", },
-      { "posid",     'p',  0,   0,   "assign Part-of-speech id" },
-      { "node-format", 'F', 0,  "STR",
-        "use STR as the user defined node format" },
-      { "version",   'v',  0,   0,   "show the version and exit."  },
-      { "help",      'h',  0,   0,   "show this help and exit."  },
-      { 0, 0, 0, 0 }
-    };
+        {"dicdir", 'd', ".", "DIR", "set DIR as dic dir (default \".\")"},
+        {"outdir", 'o', ".", "DIR", "set DIR as output dir (default \".\")"},
+        {"model", 'm', 0, "FILE", "use FILE as model file"},
+        {"userdic", 'u', 0, "FILE", "build user dictionary"},
+        {"assign-user-dictionary-costs", 'a', 0, 0, "only assign costs/ids to user dictionary"},
+        {"build-unknown", 'U', 0, 0, "build parameters for unknown words"},
+        {"build-model", 'M', 0, 0, "build model file"},
+        {"build-charcategory", 'C', 0, 0, "build character category maps"},
+        {"build-sysdic", 's', 0, 0, "build system dictionary"},
+        {"build-matrix", 'm', 0, 0, "build connection matrix"},
+        {"charset", 'c', MECAB_DEFAULT_CHARSET, "ENC",
+         "make charset of binary dictionary ENC (default " MECAB_DEFAULT_CHARSET ")"},
+        {"charset", 't', MECAB_DEFAULT_CHARSET, "ENC", "alias of -c"},
+        {"dictionary-charset", 'f', MECAB_DEFAULT_CHARSET, "ENC",
+         "assume charset of input CSVs as ENC (default " MECAB_DEFAULT_CHARSET ")"},
+        {
+            "wakati",
+            'w',
+            0,
+            0,
+            "build wakati-gaki only dictionary",
+        },
+        {"posid", 'p', 0, 0, "assign Part-of-speech id"},
+        {"node-format", 'F', 0, "STR", "use STR as the user defined node format"},
+        {"version", 'v', 0, 0, "show the version and exit."},
+        {"help", 'h', 0, 0, "show this help and exit."},
+        {0, 0, 0, 0}};
 
     Param param;
 
     if (!param.open(argc, argv, long_options)) {
-      std::cout << param.what() << "\n\n" <<  COPYRIGHT
-                << "\ntry '--help' for more information." << std::endl;
+      std::cout << param.what() << "\n\n" << COPYRIGHT << "\ntry '--help' for more information." << std::endl;
       return -1;
     }
 
@@ -72,15 +71,13 @@ class DictionaryComplier {
     bool opt_charcategory = param.get<bool>("build-charcategory");
     bool opt_sysdic = param.get<bool>("build-sysdic");
     bool opt_model = param.get<bool>("build-model");
-    bool opt_assign_user_dictionary_costs = param.get<bool>
-        ("assign-user-dictionary-costs");
+    bool opt_assign_user_dictionary_costs = param.get<bool>("assign-user-dictionary-costs");
     const std::string userdic = param.get<std::string>("userdic");
 
 #define DCONF(file) create_filename(dicdir, std::string(file)).c_str()
 #define OCONF(file) create_filename(outdir, std::string(file)).c_str()
 
-    CHECK_DIE(param.load(DCONF(DICRC)))
-        << "no such file or directory: " << DCONF(DICRC);
+    CHECK_DIE(param.load(DCONF(DICRC))) << "no such file or directory: " << DCONF(DICRC);
 
     std::vector<std::string> dic;
     if (userdic.empty()) {
@@ -93,22 +90,17 @@ class DictionaryComplier {
       CHECK_DIE(dic.size()) << "no dictionaries are specified";
       param.set("type", static_cast<int>(MECAB_USR_DIC));
       if (opt_assign_user_dictionary_costs) {
-        Dictionary::assignUserDictionaryCosts(param, dic,
-                                              userdic.c_str());
+        Dictionary::assignUserDictionaryCosts(param, dic, userdic.c_str());
       } else {
         Dictionary::compile(param, dic, userdic.c_str());
       }
     } else {
-      if (!opt_unknown && !opt_matrix && !opt_charcategory &&
-          !opt_sysdic && !opt_model) {
-        opt_unknown = opt_matrix = opt_charcategory =
-            opt_sysdic = opt_model = true;
+      if (!opt_unknown && !opt_matrix && !opt_charcategory && !opt_sysdic && !opt_model) {
+        opt_unknown = opt_matrix = opt_charcategory = opt_sysdic = opt_model = true;
       }
 
       if (opt_charcategory || opt_unknown) {
-        CharProperty::compile(DCONF(CHAR_PROPERTY_DEF_FILE),
-                              DCONF(UNK_DEF_FILE),
-                              OCONF(CHAR_PROPERTY_FILE));
+        CharProperty::compile(DCONF(CHAR_PROPERTY_DEF_FILE), DCONF(UNK_DEF_FILE), OCONF(CHAR_PROPERTY_FILE));
       }
 
       if (opt_unknown) {
@@ -120,12 +112,9 @@ class DictionaryComplier {
 
       if (opt_model) {
         if (file_exists(DCONF(MODEL_DEF_FILE))) {
-          FeatureIndex::compile(param,
-                                DCONF(MODEL_DEF_FILE),
-                                OCONF(MODEL_FILE));
+          FeatureIndex::compile(param, DCONF(MODEL_DEF_FILE), OCONF(MODEL_FILE));
         } else {
-          std::cout << DCONF(MODEL_DEF_FILE)
-                    << " is not found. skipped." << std::endl;
+          std::cout << DCONF(MODEL_DEF_FILE) << " is not found. skipped." << std::endl;
         }
       }
 
@@ -136,8 +125,7 @@ class DictionaryComplier {
       }
 
       if (opt_matrix) {
-        Connector::compile(DCONF(MATRIX_DEF_FILE),
-                           OCONF(MATRIX_FILE));
+        Connector::compile(DCONF(MATRIX_DEF_FILE), OCONF(MATRIX_FILE));
       }
     }
 
@@ -149,8 +137,8 @@ class DictionaryComplier {
 
 #undef DCONF
 #undef OCONF
-}
+}  // namespace MeCab
 
-int mecab_dict_index(int argc, char **argv) {
+int mecab_dict_index(int argc, char** argv) {
   return MeCab::DictionaryComplier::run(argc, argv);
 }
