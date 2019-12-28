@@ -1,7 +1,7 @@
 #define PY_SSIZE_T_CLEAN
 #include <Python.h>
 #include <iostream>
-#include "_C/mecab.h"
+#include "mecab.h"
 
 static PyObject *mecab_parse(PyObject *self, PyObject *args)
 {
