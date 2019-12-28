@@ -2,13 +2,7 @@ from setuptools import setup, Extension
 
 mecab = Extension(
     "mecab._C",
-    sources=["mecab/mecab.cc",],
-    define_macros=[
-        ("DIC_VERSION", "102"),
-        ("PACKAGE", '"mecab"'),
-        ("VERSION", '"0.996"'),
-        ("MECAB_DEFAULT_RC", '"/usr/local/etc/mecabrc"'),
-    ],
+    sources=["mecab/mecab.cc"],
     libraries=["mecab"],
     library_dirs=["./lib"],
     include_dirs=["Includes"],
