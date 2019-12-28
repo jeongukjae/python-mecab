@@ -241,7 +241,7 @@ namespace {
 // Microsoft Visual Studio
 #if defined(_MSC_VER)
 
-#define FORCE_INLINE __forceinline
+#define inline __forceinline
 
 #define ROTL32(x, y) _rotl(x, y)
 
@@ -250,8 +250,6 @@ namespace {
 // Other compilers
 
 #else  // defined(_MSC_VER)
-
-#define FORCE_INLINE inline __attribute__((always_inline))
 
 inline uint32_t rotl32(uint32_t x, uint8_t r) {
   return (x << r) | (x >> (32 - r));
@@ -265,14 +263,14 @@ inline uint32_t rotl32(uint32_t x, uint8_t r) {
 // Block read - if your platform needs to do endian-swapping or can only
 // handle aligned reads, do the conversion here
 
-FORCE_INLINE uint32_t getblock(const uint32_t* p, int i) {
+inline uint32_t getblock(const uint32_t* p, int i) {
   return p[i];
 }
 
 //-----------------------------------------------------------------------------
 // Finalization mix - force all bits of a hash block to avalanche
 
-FORCE_INLINE uint32_t fmix(uint32_t h) {
+inline uint32_t fmix(uint32_t h) {
   h ^= h >> 16;
   h *= 0x85ebca6b;
   h ^= h >> 13;
