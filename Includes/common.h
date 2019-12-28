@@ -15,14 +15,6 @@
 #include <sstream>
 #include <string>
 
-#ifdef __CYGWIN__
-#define _GLIBCXX_EXPORT_TEMPLATE
-#endif
-
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 #if defined(_MSC_VER) || defined(__CYGWIN__)
 #define NOMINMAX
 #define snprintf _snprintf

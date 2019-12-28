@@ -12,10 +12,6 @@
 #include "string_buffer.h"
 #include "utils.h"
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 namespace MeCab {
 namespace {
 void init_param(std::string* help, std::string* version, const std::string& system_name, const Option* opts) {

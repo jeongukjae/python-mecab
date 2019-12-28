@@ -20,10 +20,6 @@
 #include "viterbi.h"
 #include "writer.h"
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 const char* getGlobalError();
 void setGlobalError(const char* str);
 

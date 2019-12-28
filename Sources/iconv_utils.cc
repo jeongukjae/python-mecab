@@ -12,10 +12,6 @@
 #include "scoped_ptr.h"
 #include "utils.h"
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 #include "char_property.h"
 #include "iconv_utils.h"
 

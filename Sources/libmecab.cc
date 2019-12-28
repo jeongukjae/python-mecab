@@ -11,10 +11,6 @@
 #include "tokenizer.h"
 #include "utils.h"
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 namespace {
 const size_t kErrorBufferSize = 256;
 }
