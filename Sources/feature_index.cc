@@ -86,7 +86,7 @@ void FeatureIndex::set_alpha(const double* alpha) {
 
 bool FeatureIndex::openTemplate(const Param& param) {
   std::string filename = create_filename(param.get<std::string>("dicdir"), FEATURE_FILE);
-  std::ifstream ifs(WPATH(filename.c_str()));
+  std::ifstream ifs(filename.c_str());
   CHECK_DIE(ifs) << "no such file or directory: " << filename;
 
   scoped_fixed_array<char, BUF_SIZE> buf;
@@ -517,14 +517,14 @@ void EncoderFeatureIndex::shrink(size_t freq, std::vector<double>* observed) {
 bool FeatureIndex::compile(const Param& param, const char* txtfile, const char* binfile) {
   std::string buf;
   FeatureIndex::convert(param, txtfile, &buf);
-  std::ofstream ofs(WPATH(binfile), std::ios::binary | std::ios::out);
+  std::ofstream ofs(binfile, std::ios::binary | std::ios::out);
   CHECK_DIE(ofs) << "permission denied: " << binfile;
   ofs.write(buf.data(), buf.size());
   return true;
 }
 
 bool FeatureIndex::convert(const Param& param, const char* txtfile, std::string* output) {
-  std::ifstream ifs(WPATH(txtfile));
+  std::ifstream ifs(txtfile);
   CHECK_DIE(ifs) << "no such file or directory: " << txtfile;
   scoped_fixed_array<char, BUF_SIZE> buf;
   char* column[4];
@@ -598,7 +598,7 @@ bool EncoderFeatureIndex::reopen(const char* filename,
                                  std::vector<double>* alpha,
                                  Param* param) {
   close();
-  std::ifstream ifs(WPATH(filename));
+  std::ifstream ifs(filename);
   if (!ifs) {
     return false;
   }
@@ -646,7 +646,7 @@ bool EncoderFeatureIndex::save(const char* filename, const char* header) const {
   CHECK_DIE(header);
   CHECK_DIE(alpha_);
 
-  std::ofstream ofs(WPATH(filename));
+  std::ofstream ofs(filename);
   if (!ofs) {
     return false;
   }

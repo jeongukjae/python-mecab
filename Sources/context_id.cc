@@ -10,7 +10,7 @@ namespace {
 using namespace MeCab;
 
 bool open_map(const char* filename, std::map<std::string, int>* cmap, Iconv* iconv) {
-  std::ifstream ifs(WPATH(filename));
+  std::ifstream ifs(filename);
   CHECK_DIE(ifs) << "no such file or directory: " << filename;
   cmap->clear();
   char* col[2];
@@ -35,7 +35,7 @@ bool build(std::map<std::string, int>* cmap, const std::string& bos) {
 }
 
 bool save(const char* filename, std::map<std::string, int>* cmap) {
-  std::ofstream ofs(WPATH(filename));
+  std::ofstream ofs(filename);
   CHECK_DIE(ofs) << "permission denied: " << filename;
   for (std::map<std::string, int>::const_iterator it = cmap->begin(); it != cmap->end(); ++it) {
     ofs << it->second << " " << it->first << std::endl;

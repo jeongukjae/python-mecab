@@ -269,7 +269,7 @@ bool load_dictionary_resource(Param* param) {
     const char* homedir = getenv("HOME");
     if (homedir) {
       const std::string s = MeCab::create_filename(std::string(homedir), ".mecabrc");
-      std::ifstream ifs(WPATH(s.c_str()));
+      std::ifstream ifs(s.c_str());
       if (ifs) {
         rcfile = s;
       }
@@ -575,7 +575,7 @@ uint64_t fingerprint(const std::string& str) {
 }
 
 bool file_exists(const char* filename) {
-  std::ifstream ifs(WPATH(filename));
+  std::ifstream ifs(filename);
   if (!ifs) {
     return false;
   }

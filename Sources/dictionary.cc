@@ -173,7 +173,7 @@ bool Dictionary::assignUserDictionaryCosts(const Param& param,
   CHECK_DIE(ofs) << "permission denied: " << output;
 
   for (size_t i = 0; i < dics.size(); ++i) {
-    std::ifstream ifs(WPATH(dics[i].c_str()));
+    std::ifstream ifs(dics[i].c_str());
     CHECK_DIE(ifs) << "no such file or directory: " << dics[i];
     std::cout << "reading " << dics[i] << " ... ";
     scoped_fixed_array<char, BUF_SIZE> line;
@@ -267,7 +267,7 @@ bool Dictionary::compile(const Param& param, const std::vector<std::string>& dic
   std::istringstream iss(UNK_DEF_DEFAULT);
 
   for (size_t i = 0; i < dics.size(); ++i) {
-    std::ifstream ifs(WPATH(dics[i].c_str()));
+    std::ifstream ifs(dics[i].c_str());
     std::istream* is = &ifs;
     if (!ifs) {
       if (type == MECAB_UNK_DIC) {
@@ -453,7 +453,7 @@ bool Dictionary::compile(const Param& param, const std::vector<std::string>& dic
   std::fill(charset, charset + sizeof(charset), '\0');
   std::strncpy(charset, to.c_str(), 31);
 
-  std::ofstream bofs(WPATH(output), std::ios::binary | std::ios::out);
+  std::ofstream bofs(output, std::ios::binary | std::ios::out);
   CHECK_DIE(bofs) << "permission denied: " << output;
 
   unsigned int magic = 0;

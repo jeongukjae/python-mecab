@@ -37,7 +37,7 @@ void Connector::close() {
 }
 
 bool Connector::openText(const char* filename) {
-  std::ifstream ifs(WPATH(filename));
+  std::ifstream ifs(filename);
   if (!ifs) {
     WHAT << "no such file or directory: " << filename;
     return false;
@@ -52,7 +52,7 @@ bool Connector::openText(const char* filename) {
 }
 
 bool Connector::compile(const char* ifile, const char* ofile) {
-  std::ifstream ifs(WPATH(ifile));
+  std::ifstream ifs(ifile);
   std::istringstream iss(MATRIX_DEF_DEFAULT);
   std::istream* is = &ifs;
 
@@ -85,7 +85,7 @@ bool Connector::compile(const char* ifile, const char* ofile) {
     matrix[(l + lsize * r)] = static_cast<short>(c);
   }
 
-  std::ofstream ofs(WPATH(ofile), std::ios::binary | std::ios::out);
+  std::ofstream ofs(ofile, std::ios::binary | std::ios::out);
   CHECK_DIE(ofs) << "permission denied: " << ofile;
   ofs.write(reinterpret_cast<const char*>(&lsize), sizeof(unsigned short));
   ofs.write(reinterpret_cast<const char*>(&rsize), sizeof(unsigned short));

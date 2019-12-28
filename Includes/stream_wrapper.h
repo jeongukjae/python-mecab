@@ -20,7 +20,7 @@ class istream_wrapper {
     if (std::strcmp(filename, "-") == 0) {
       is_ = &std::cin;
     } else {
-      is_ = new std::ifstream(WPATH(filename));
+      is_ = new std::ifstream(filename);
     }
   }
 
@@ -41,7 +41,7 @@ class ostream_wrapper {
     if (std::strcmp(filename, "-") == 0) {
       os_ = &std::cout;
     } else {
-      os_ = new std::ofstream(WPATH(filename));
+      os_ = new std::ofstream(filename);
     }
   }
 

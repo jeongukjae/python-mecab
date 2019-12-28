@@ -97,7 +97,7 @@ class CRFLearner {
 
     std::cout << "reading corpus ..." << std::flush;
 
-    std::ifstream ifs(WPATH(ifile.c_str()));
+    std::ifstream ifs(ifile.c_str());
     CHECK_DIE(ifs) << "no such file or directory: " << ifile;
 
     while (ifs) {
