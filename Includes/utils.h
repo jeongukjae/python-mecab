@@ -235,10 +235,5 @@ inline char getEscapedChar(const char p) {
 // return 64 bit hash
 uint64_t fingerprint(const char* str, size_t size);
 uint64_t fingerprint(const std::string& str);
-
-#if defined(_WIN32) && !defined(__CYGWIN__)
-std::wstring Utf8ToWide(const std::string& input);
-std::string WideToUtf8(const std::wstring& input);
-#endif
 }  // namespace MeCab
 #endif

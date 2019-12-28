@@ -10,11 +10,6 @@
 #include <sstream>
 #include <string>
 
-#if defined(_MSC_VER) || defined(__CYGWIN__)
-#define NOMINMAX
-#define snprintf _snprintf
-#endif
-
 #define COPYRIGHT \
   "MeCab: Yet Another Part-of-Speech and Morphological Analyzer\n\
 \nCopyright(C) 2001-2012 Taku Kudo \nCopyright(C) 2004-2008 Nippon Telegraph and Telephone Corporation\n"
@@ -42,17 +37,7 @@
 #define UNK_DEF_DEFAULT "DEFAULT,0,0,0,*\nSPACE,0,0,0,*\n"
 #define MATRIX_DEF_DEFAULT "1 1\n0 0 0\n"
 
-#ifdef MECAB_USE_UTF8_ONLY
 #define MECAB_DEFAULT_CHARSET "UTF-8"
-#endif
-
-#ifndef MECAB_DEFAULT_CHARSET
-#if defined(_WIN32) && !defined(__CYGWIN__)
-#define MECAB_DEFAULT_CHARSET "SHIFT-JIS"
-#else
-#define MECAB_DEFAULT_CHARSET "EUC-JP"
-#endif
-#endif
 
 #define NBEST_MAX 512
 #define NODE_FREELIST_SIZE 512

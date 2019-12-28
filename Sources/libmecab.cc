@@ -1,7 +1,3 @@
-#if defined(_WIN32) && !defined(__CYGWIN__)
-#include <windows.h>
-#endif
-
 #include "mecab.h"
 #include "tokenizer.h"
 #include "utils.h"
@@ -10,66 +6,6 @@ namespace {
 const size_t kErrorBufferSize = 256;
 }
 
-#if defined(_WIN32) && !defined(__CYGWIN__)
-namespace {
-DWORD g_tls_index = TLS_OUT_OF_INDEXES;
-}
-
-const char* getGlobalError() {
-  LPVOID data = ::TlsGetValue(g_tls_index);
-  return data == NULL ? kUnknownError : reinterpret_cast<const char*>(data);
-}
-
-void setGlobalError(const char* str) {
-  char* data = reinterpret_cast<char*>(::TlsGetValue(g_tls_index));
-  if (data == NULL) {
-    return;
-  }
-  strncpy(data, str, kErrorBufferSize - 1);
-  data[kErrorBufferSize - 1] = '\0';
-}
-
-HINSTANCE DllInstance = 0;
-
-extern "C" {
-BOOL WINAPI DllMain(HINSTANCE hinst, DWORD dwReason, LPVOID) {
-  LPVOID data = 0;
-  if (!DllInstance) {
-    DllInstance = hinst;
-  }
-  switch (dwReason) {
-    case DLL_PROCESS_ATTACH:
-      if ((g_tls_index = ::TlsAlloc()) == TLS_OUT_OF_INDEXES) {
-        return FALSE;
-      }
-      // Not break in order to initialize the TLS.
-    case DLL_THREAD_ATTACH:
-      data = (LPVOID)::LocalAlloc(LPTR, kErrorBufferSize);
-      if (data) {
-        ::TlsSetValue(g_tls_index, data);
-      }
-      break;
-    case DLL_THREAD_DETACH:
-      data = ::TlsGetValue(g_tls_index);
-      if (data) {
-        ::LocalFree((HLOCAL)data);
-      }
-      break;
-    case DLL_PROCESS_DETACH:
-      data = ::TlsGetValue(g_tls_index);
-      if (data) {
-        ::LocalFree((HLOCAL)data);
-      }
-      ::TlsFree(g_tls_index);
-      g_tls_index = TLS_OUT_OF_INDEXES;
-      break;
-    default:
-      break;
-  }
-  return TRUE;
-}
-}
-#else  // _WIN32
 namespace {
 #ifdef HAVE_TLS_KEYWORD
 __thread char kErrorBuffer[kErrorBufferSize];
@@ -86,7 +22,6 @@ void setGlobalError(const char* str) {
   strncpy(kErrorBuffer, str, kErrorBufferSize - 1);
   kErrorBuffer[kErrorBufferSize - 1] = '\0';
 }
-#endif
 
 mecab_t* mecab_new(int argc, char** argv) {
   MeCab::Tagger* tagger = MeCab::createTagger(argc, argv);

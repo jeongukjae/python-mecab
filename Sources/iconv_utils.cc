@@ -10,10 +10,6 @@
 #include "char_property.h"
 #include "iconv_utils.h"
 
-#if defined(_WIN32) && !defined(__CYGWIN__)
-#include "windows.h"
-#endif
-
 namespace {
 
 #ifdef HAVE_ICONV
@@ -39,31 +35,6 @@ const char* decode_charset_iconv(const char* str) {
   return MECAB_DEFAULT_CHARSET;
 }
 #endif
-
-#if defined(_WIN32) && !defined(__CYGWIN__)
-DWORD decode_charset_win32(const char* str) {
-  const int charset = MeCab::decode_charset(str);
-  switch (charset) {
-    case MeCab::UTF8:
-      return CP_UTF8;
-    case MeCab::UTF16:
-      return 1200;
-    case MeCab::UTF16LE:
-      return 1200;
-    case MeCab::UTF16BE:
-      return 1201;
-    case MeCab::EUC_JP:
-      //      return 51932;
-      return 20932;
-    case MeCab::CP932:
-      return 932;
-    default:
-      std::cerr << "charset " << str << " is not defined, use 'CP_THREAD_ACP'";
-      return CP_THREAD_ACP;
-  }
-  return 0;
-}
-#endif
 }  // namespace
 
 namespace MeCab {
@@ -82,16 +53,7 @@ bool Iconv::open(const char* from, const char* to) {
     return false;
   }
 #else
-#if defined(_WIN32) && !defined(__CYGWIN__)
-  from_cp_ = decode_charset_win32(from);
-  to_cp_ = decode_charset_win32(to);
-  if (from_cp_ == to_cp_) {
-    return true;
-  }
-  ic_ = from_cp_;
-#else
   std::cerr << "iconv_open is not supported" << std::endl;
-#endif
 #endif
 
   return true;
@@ -124,50 +86,6 @@ bool Iconv::convert(std::string* str) {
     }
   }
   str->assign(obuf_org, olen_org - olen);
-#else
-#if defined(_WIN32) && !defined(__CYGWIN__)
-  // covert it to wide character first
-  const size_t wide_len = ::MultiByteToWideChar(from_cp_, 0, str->c_str(), -1, NULL, 0);
-  if (wide_len == 0) {
-    return false;
-  }
-
-  scoped_array<wchar_t> wide_str(new wchar_t[wide_len + 1]);
-
-  if (!wide_str.get()) {
-    return false;
-  };
-
-  if (::MultiByteToWideChar(from_cp_, 0, str->c_str(), -1, wide_str.get(), wide_len + 1) == 0) {
-    return false;
-  }
-
-  if (to_cp_ == 1200 || to_cp_ == 1201) {
-    str->resize(2 * wide_len);
-    std::memcpy(const_cast<char*>(str->data()), reinterpret_cast<char*>(wide_str.get()), wide_len * 2);
-    if (to_cp_ == 1201) {
-      char* buf = const_cast<char*>(str->data());
-      for (size_t i = 0; i < 2 * wide_len; i += 2) {
-        std::swap(buf[i], buf[i + 1]);
-      }
-    }
-    return true;
-  }
-
-  const size_t output_len = ::WideCharToMultiByte(to_cp_, 0, wide_str.get(), -1, NULL, 0, NULL, NULL);
-
-  if (output_len == 0) {
-    return false;
-  }
-
-  scoped_array<char> encoded(new char[output_len + 1]);
-  if (::WideCharToMultiByte(to_cp_, 0, wide_str.get(), wide_len, encoded.get(), output_len + 1, NULL, NULL) == 0) {
-    return false;
-  }
-
-  str->assign(encoded.get());
-
-#endif
 #endif
 
   return true;

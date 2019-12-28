@@ -5,10 +5,6 @@
 #include <iconv.h>
 #endif
 
-#if defined(_WIN32) && !defined(__CYGWIN__)
-#include "windows.h"
-#endif
-
 namespace MeCab {
 
 class Iconv {
@@ -17,11 +13,6 @@ class Iconv {
   iconv_t ic_;
 #else
   int ic_;
-#endif
-
-#if defined(_WIN32) && !defined(__CYGWIN__)
-  DWORD from_cp_;
-  DWORD to_cp_;
 #endif
 
  public:

@@ -16,12 +16,6 @@ extern "C" {
 #include <fcntl.h>
 #endif
 
-#if defined(_WIN32) && !defined(__CYGWIN__)
-#ifdef HAVE_WINDOWS_H
-#include <windows.h>
-#endif
-#else
-
 #ifdef HAVE_SYS_MMAN_H
 #include <sys/mman.h>
 #endif
@@ -29,15 +23,10 @@ extern "C" {
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
-#endif
 }
 
 #include "common.h"
 #include "utils.h"
-
-#ifndef O_BINARY
-#define O_BINARY 0
-#endif
 
 namespace MeCab {
 
@@ -49,13 +38,8 @@ class Mmap {
   std::string fileName;
   whatlog what_;
 
-#if defined(_WIN32) && !defined(__CYGWIN__)
-  HANDLE hFile;
-  HANDLE hMap;
-#else
   FILE* fd;
   std::string flag;
-#endif
 
  public:
   T& operator[](size_t n) { return *(text + n); }

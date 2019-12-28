@@ -3,11 +3,6 @@
 
 #ifdef HAVE_PTHREAD_H
 #include <pthread.h>
-#else
-#ifdef _WIN32
-#include <process.h>
-#include <windows.h>
-#endif
 #endif
 
 #if defined HAVE_GCC_ATOMIC_OPS || defined HAVE_OSX_ATOMIC_OPS
@@ -22,24 +17,7 @@
 #define MECAB_USE_THREAD 1
 #endif
 
-#if (defined(_WIN32) && !defined(__CYGWIN__))
-#define MECAB_USE_THREAD 1
-#define BEGINTHREAD(src, stack, func, arg, flag, id)                                                         \
-  (HANDLE) _beginthreadex((void*)(src), (unsigned)(stack), (unsigned(_stdcall*)(void*))(func), (void*)(arg), \
-                          (unsigned)(flag), (unsigned*)(id))
-#endif
-
 namespace MeCab {
-
-#if (defined(_WIN32) && !defined(__CYGWIN__))
-#undef atomic_add
-#undef compare_and_swap
-#undef yield_processor
-#define atomic_add(a, b) ::InterlockedExchangeAdd(a, b)
-#define compare_and_swap(a, b, c) ::InterlockedCompareExchange(a, c, b)
-#define yield_processor() YieldProcessor()
-#define HAVE_ATOMIC_OPS 1
-#endif
 
 #ifdef HAVE_GCC_ATOMIC_OPS
 #undef atomic_add
@@ -126,10 +104,6 @@ class thread {
  private:
 #ifdef HAVE_PTHREAD_H
   pthread_t hnd;
-#else
-#ifdef _WIN32
-  HANDLE hnd;
-#endif
 #endif
 
  public:
@@ -144,23 +118,12 @@ class thread {
   void start() {
 #ifdef HAVE_PTHREAD_H
     pthread_create(&hnd, 0, &thread::wrapper, static_cast<void*>(this));
-
-#else
-#ifdef _WIN32
-    DWORD id;
-    hnd = BEGINTHREAD(0, 0, &thread::wrapper, this, 0, &id);
-#endif
 #endif
   }
 
   void join() {
 #ifdef HAVE_PTHREAD_H
     pthread_join(hnd, 0);
-#else
-#ifdef _WIN32
-    WaitForSingleObject(hnd, INFINITE);
-    CloseHandle(hnd);
-#endif
 #endif
   }
 
