@@ -130,8 +130,8 @@ class wlog {
 
 #define CHECK_FALSE(condition) \
  if (condition) {} else return \
-   wlog(&what_) & what_.stream_ <<              \
-      __FILE__ << "(" << __LINE__ << ") [" << #condition << "] "
+    wlog(&what_) & std::cout <<              \
+          __FILE__ << "(" << __LINE__ << ") [" << #condition << "] "
 
 #define CHECK_DIE(condition) \
 (condition) ? 0 : die() & std::cerr << __FILE__ << \

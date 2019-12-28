@@ -6,6 +6,7 @@
 #include <cstring>
 #include <fstream>
 #include <iostream>
+#include <dirent.h>
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -13,10 +14,6 @@
 
 #ifdef HAVE_SYS_TYPES_H
 #include <sys/types.h>
-#endif
-
-#ifdef HAVE_DIRENT_H
-#include <dirent.h>
 #endif
 
 #ifdef HAVE_WINDOWS_H

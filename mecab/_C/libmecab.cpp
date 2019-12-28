@@ -16,7 +16,6 @@
 #endif
 
 namespace {
-const char kUnknownError[] = "Unknown Error";
 const size_t kErrorBufferSize = 256;
 }
 

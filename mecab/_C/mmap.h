@@ -8,6 +8,7 @@
 
 #include <errno.h>
 #include <string>
+#include <sys/stat.h>
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,16 +20,8 @@ extern "C" {
 #include <sys/types.h>
 #endif
 
-#ifdef HAVE_SYS_STAT_H
-#include <sys/stat.h>
-#endif
-
 #ifdef HAVE_FCNTL_H
 #include <fcntl.h>
-#endif
-
-#ifdef HAVE_STRING_H
-#include <string.h>
 #endif
 
 #if defined(_WIN32) && !defined(__CYGWIN__)
@@ -67,8 +60,8 @@ template <class T> class Mmap {
   HANDLE hFile;
   HANDLE hMap;
 #else
-  int    fd;
-  int    flag;
+  FILE*          fd;
+  std::string    flag;
 #endif
 
  public:
@@ -84,127 +77,57 @@ template <class T> class Mmap {
   size_t file_size()          { return length; }
   bool empty()                { return(length == 0); }
 
-  // This code is imported from sufary, develoved by
-  //  TATUO Yamashita <yto@nais.to> Thanks!
-#if defined(_WIN32) && !defined(__CYGWIN__)
-  bool open(const char *filename, const char *mode = "r") {
-    this->close();
-    unsigned long mode1, mode2, mode3;
-    fileName = std::string(filename);
-
-    if (std::strcmp(mode, "r") == 0) {
-      mode1 = GENERIC_READ;
-      mode2 = PAGE_READONLY;
-      mode3 = FILE_MAP_READ;
-    } else if (std::strcmp(mode, "r+") == 0) {
-      mode1 = GENERIC_READ | GENERIC_WRITE;
-      mode2 = PAGE_READWRITE;
-      mode3 = FILE_MAP_ALL_ACCESS;
-    } else {
-      CHECK_FALSE(false) << "unknown open mode:" << filename;
-    }
-
-    hFile = ::CreateFileW(WPATH_FORCE(filename), mode1, FILE_SHARE_READ, 0,
-                          OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
-    CHECK_FALSE(hFile != INVALID_HANDLE_VALUE)
-        << "CreateFile() failed: " << filename;
-
-    length = ::GetFileSize(hFile, 0);
-
-    hMap = ::CreateFileMapping(hFile, 0, mode2, 0, 0, 0);
-    CHECK_FALSE(hMap) << "CreateFileMapping() failed: " << filename;
-
-    text = reinterpret_cast<T *>(::MapViewOfFile(hMap, mode3, 0, 0, 0));
-    CHECK_FALSE(text) << "MapViewOfFile() failed: " << filename;
-
-    return true;
-  }
-
-  void close() {
-    if (text) { ::UnmapViewOfFile(text); }
-    if (hFile != INVALID_HANDLE_VALUE) {
-      ::CloseHandle(hFile);
-      hFile = INVALID_HANDLE_VALUE;
-    }
-    if (hMap) {
-      ::CloseHandle(hMap);
-      hMap = 0;
-    }
-    text = 0;
-  }
-
-  Mmap(): text(0), hFile(INVALID_HANDLE_VALUE), hMap(0) {}
-
-#else
-
   bool open(const char *filename, const char *mode = "r") {
     this->close();
     struct stat st;
+    int fileDescriptor;
     fileName = std::string(filename);
+    flag = std::string(mode);
 
-    if      (std::strcmp(mode, "r") == 0)
-      flag = O_RDONLY;
-    else if (std::strcmp(mode, "r+") == 0)
-      flag = O_RDWR;
-    else
-      CHECK_FALSE(false) << "unknown open mode: " << filename;
+    CHECK_FALSE(flag.compare("r") == 0 || flag.compare("r+") == 0)
+        << "unknown open mode: " << filename << " mode: " << flag << std::endl;
 
-    CHECK_FALSE((fd = ::open(filename, flag | O_BINARY)) >= 0)
+    flag += "b";
+
+    CHECK_FALSE((fd = ::fopen(filename, flag.c_str())) != NULL)
         << "open failed: " << filename;
 
-    CHECK_FALSE(::fstat(fd, &st) >= 0)
+    CHECK_FALSE((fileDescriptor = ::fileno(fd)) >= 0)
+        << "cannot get file descriptor: " << filename;
+    CHECK_FALSE(::fstat(fileDescriptor, &st) >= 0)
         << "failed to get file size: " << filename;
 
     length = st.st_size;
 
-#ifdef HAVE_MMAP
-    int prot = PROT_READ;
-    if (flag == O_RDWR) prot |= PROT_WRITE;
-    char *p;
-    CHECK_FALSE((p = reinterpret_cast<char *>
-                 (::mmap(0, length, prot, MAP_SHARED, fd, 0)))
-                != MAP_FAILED)
-        << "mmap() failed: " << filename;
-
-    text = reinterpret_cast<T *>(p);
-#else
     text = new T[length];
-    CHECK_FALSE(::read(fd, text, length) >= 0)
-        << "read() failed: " << filename;
-#endif
-    ::close(fd);
-    fd = -1;
+    CHECK_FALSE(::fread(text, sizeof(T), length, fd) >= 0) << "read() failed: " << filename;
+    ::fclose(fd);
+    fd = NULL;
 
     return true;
   }
 
   void close() {
-    if (fd >= 0) {
-      ::close(fd);
-      fd = -1;
+    if (fd != NULL) {
+      ::fclose(fd);
+      fd = NULL;
     }
 
     if (text) {
-#ifdef HAVE_MMAP
-      ::munmap(reinterpret_cast<char *>(text), length);
-      text = 0;
-#else
-      if (flag == O_RDWR) {
-        int fd2;
-        if ((fd2 = ::open(fileName.c_str(), O_RDWR)) >= 0) {
-          ::write(fd2, text, length);
-          ::close(fd2);
+      if (flag.compare("r+b")) {
+        FILE* fd2;
+        if ((fd2 = ::fopen(fileName.c_str(), "r+")) == NULL) {
+          ::fwrite(text, sizeof(T), length, fd2);
+          ::fclose(fd2);
         }
       }
       delete [] text;
-#endif
     }
 
     text = 0;
   }
 
-  Mmap() : text(0), fd(-1) {}
-#endif
+  Mmap() : text(NULL), fd(NULL) {}
 
   virtual ~Mmap() { this->close(); }
 };
