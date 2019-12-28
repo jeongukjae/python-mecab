@@ -34,5 +34,9 @@ set(SOURCE_CODE
       Sources/utils.cc
       Sources/viterbi.cc
       Sources/writer.cc)
+set(TEST_CODE
+      tests/cc/test_utils.cc)
+
+include(./cmake/Testing.cmake)
 
 add_library(mecab SHARED ${SOURCE_CODE})
