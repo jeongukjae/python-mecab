@@ -1,5 +1,5 @@
 #include <iostream>
-#include "common.h"
+#include "PythonCommon.h"
 
 typedef struct {
   PyObject_HEAD
@@ -8,7 +8,7 @@ typedef struct {
   MeCab::Tagger* tagger;
 } Tagger;
 
-static PyObject* tagger_create(PyObject* self);
+static PyObject* tagger_create(PyObject* self, PyObject* args);
 static void mecab_destruct_tagger(PyObject* self);
 static PyObject* tagger_parse(PyObject* self, PyObject* args);
 
@@ -54,17 +54,34 @@ static PyTypeObject taggerType = {
     (newfunc)tagger_create,
 };
 
-static PyObject* tagger_create(PyObject* self) {
+static PyObject* tagger_create(PyObject* self, PyObject* args) {
   Tagger* tagger = PyObject_NEW(Tagger, &taggerType);
   if (tagger == NULL)
     return NULL;
 
-  tagger->tagger = MeCab::createTagger("-C");
+  PyObject* string = NULL;
+  if (!PyArg_UnpackTuple(args, "args", 0, 1, &string))
+    return NULL;
+
+  if (string != NULL && !PyUnicode_Check(string)) {
+    PyErr_SetString(PyExc_TypeError, "arg must be str type");
+    return NULL;
+  }
+
+  if (string != NULL) {
+    string = PyUnicode_AsUTF8String(string);
+    const char* dicdir = PyBytes_AsString(string);
+
+    std::string args = "-C -d ";
+    args += dicdir;
+    tagger->tagger = MeCab::createTagger(args.c_str());
+  } else {
+    tagger->tagger = MeCab::createTagger("-C");
+  }
 
   if (!tagger->tagger) {
-    const char* error = MeCab::getLastError();
-    std::cerr << "mecab tagger throws error: " << error << std::endl;
-    throw error;
+    PyErr_SetString(PyExc_Exception, "cannot create tagger");
+    return NULL;
   }
   return (PyObject*)tagger;
 }

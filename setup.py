@@ -6,6 +6,7 @@ mecab = Extension(
     libraries=["mecab"],
     library_dirs=["./lib"],
     include_dirs=["Includes"],
+    extra_compile_args=["-std=c++11"],
 )
 
 setup(
@@ -17,4 +18,5 @@ setup(
     url="https://github.com/jeongukjae/python-mecab",
     author="Jeong Ukjae",
     author_email="jeongukjae@gmail.com",
+    entry_points={"console_scripts": ["mecab-dict-index=mecab.cli:run_mecab_dict_index"],},
 )

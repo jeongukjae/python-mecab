@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 
+#include "PythonCommon.h"
 #include "char_property.h"
 #include "connector.h"
 #include "dictionary.h"
@@ -131,6 +132,34 @@ class DictionaryComplier {
 #undef OCONF
 }  // namespace MeCab
 
-int mecab_dict_index(int argc, char** argv) {
-  return MeCab::DictionaryComplier::run(argc, argv);
+PyObject* mecab_dict_index(PyObject* self, PyObject* args) {
+  PyObject* list = NULL;
+
+  if (!PyArg_UnpackTuple(args, "args", 1, 1, &list)) {
+    PyErr_SetString(PyExc_ValueError, "mecab_dict_index takes only 1 argument");
+    return NULL;
+  }
+
+  if (!PyList_Check(list)) {
+    PyErr_SetString(PyExc_TypeError, "argument must be list of str");
+    return NULL;
+  }
+  size_t size = PyList_Size(list);
+  char** argv = new char*[size];
+  for (size_t i = 0; i < size; ++i) {
+    PyObject* item = PyList_GetItem(list, i);
+    if (!PyUnicode_Check(item)) {
+      PyErr_SetString(PyExc_ValueError, "argument must be list of str");
+      return NULL;
+    }
+    item = PyUnicode_AsUTF8String(item);
+    argv[i] = PyBytes_AsString(item);
+  }
+
+  MeCab::DictionaryComplier::run(size, argv);
+
+  delete[] argv;
+
+  Py_INCREF(Py_None);
+  return Py_None;
 }

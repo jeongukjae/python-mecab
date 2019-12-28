@@ -1,8 +1,10 @@
 #include <iostream>
-#include "common.h"
+#include "PythonCommon.h"
+
+#include "dictionary_compiler.cc"
 #include "tagger.cc"
 
-static PyMethodDef mecabMethods[] = {{NULL}};
+static PyMethodDef mecabMethods[] = {{"mecab_dict_index", (PyCFunction)mecab_dict_index, METH_VARARGS, ""}, {NULL}};
 static PyModuleDef mecabModule = {PyModuleDef_HEAD_INIT, "mecab._C", "", -1, mecabMethods};
 
 PyMODINIT_FUNC PyInit__C(void) {

@@ -16,7 +16,6 @@ set(SOURCE_CODE
       Sources/connector.cc
       Sources/context_id.cc
       Sources/dictionary.cc
-      Sources/dictionary_compiler.cc
       Sources/dictionary_generator.cc
       Sources/dictionary_rewriter.cc
       Sources/eval.cc
