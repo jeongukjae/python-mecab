@@ -2,7 +2,7 @@
 
 > Yet another Japanese morphological analyzer
 
-A repository for binding mecab for Python 3.5+. Not using swig nor pybind.
+A repository to bind mecab for Python 3.5+. Not using swig nor pybind.
 
 To write C Extension for Python reliably,
 
