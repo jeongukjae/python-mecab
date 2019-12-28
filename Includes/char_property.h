@@ -40,7 +40,7 @@ class CharProperty {
                                      CharInfo* fail,
                                      size_t* mblen,
                                      size_t* clen) const {
-    register const char* p = begin;
+    const char* p = begin;
     *clen = 0;
     while (p != end && c.isKindOf(*fail = getCharInfo(p, end, mblen))) {
       p += *mblen;
