@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.1)
 project(mecab VERSION 1.0.0 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/mecab/lib)
 
 add_compile_definitions(DIC_VERSION=102)
 add_compile_definitions(PACKAGE="mecab")
@@ -16,7 +16,6 @@ set(SOURCE_CODE
       Sources/connector.cc
       Sources/context_id.cc
       Sources/dictionary.cc
-      Sources/dictionary_generator.cc
       Sources/dictionary_rewriter.cc
       Sources/eval.cc
       Sources/feature_index.cc

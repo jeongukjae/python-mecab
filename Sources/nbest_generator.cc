@@ -1,4 +1,4 @@
-#include "nbest_generator.h"
+#include "mecab/nbest_generator.h"
 
 #include <queue>
 

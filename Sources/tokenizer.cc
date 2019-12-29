@@ -1,13 +1,13 @@
-#include "tokenizer.h"
+#include "mecab/tokenizer.h"
 
-#include "common.h"
-#include "connector.h"
-#include "darts.h"
-#include "learner_node.h"
-#include "param.h"
-#include "scoped_ptr.h"
-#include "utils.h"
-#include "viterbi.h"
+#include "mecab/common.h"
+#include "mecab/connector.h"
+#include "mecab/darts.h"
+#include "mecab/learner_node.h"
+#include "mecab/scoped_ptr.h"
+#include "mecab/param.h"
+#include "mecab/utils.h"
+#include "mecab/viterbi.h"
 
 namespace MeCab {
 namespace {

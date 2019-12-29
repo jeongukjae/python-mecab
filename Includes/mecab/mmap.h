@@ -25,7 +25,7 @@ extern "C" {
 #endif
 }
 
-#include "common.h"
+#include "mecab/common.h"
 #include "utils.h"
 
 namespace MeCab {
@@ -90,7 +90,7 @@ class Mmap {
     if (text) {
       if (flag.compare("r+b")) {
         FILE* fd2;
-        if ((fd2 = ::fopen(fileName.c_str(), "r+")) == NULL) {
+        if ((fd2 = ::fopen(fileName.c_str(), "r+")) != NULL) {
           ::fwrite(text, sizeof(T), length, fd2);
           ::fclose(fd2);
         }

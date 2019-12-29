@@ -1,20 +1,20 @@
-#include "dictionary.h"
+#include "mecab/dictionary.h"
 
 #include <climits>
 #include <fstream>
 
-#include "char_property.h"
-#include "common.h"
-#include "connector.h"
-#include "context_id.h"
-#include "dictionary_rewriter.h"
-#include "feature_index.h"
-#include "iconv_utils.h"
-#include "mmap.h"
-#include "param.h"
-#include "scoped_ptr.h"
-#include "utils.h"
-#include "writer.h"
+#include "mecab/char_property.h"
+#include "mecab/common.h"
+#include "mecab/connector.h"
+#include "mecab/context_id.h"
+#include "mecab/dictionary_rewriter.h"
+#include "mecab/feature_index.h"
+#include "mecab/iconv_utils.h"
+#include "mecab/mmap.h"
+#include "mecab/param.h"
+#include "mecab/scoped_ptr.h"
+#include "mecab/utils.h"
+#include "mecab/writer.h"
 
 namespace MeCab {
 namespace {

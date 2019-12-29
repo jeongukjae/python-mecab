@@ -1,17 +1,17 @@
-#include "feature_index.h"
+#include "mecab/feature_index.h"
 
 #include <algorithm>
 #include <cstring>
 #include <fstream>
 #include <string>
 
-#include "common.h"
-#include "iconv_utils.h"
-#include "learner_node.h"
-#include "param.h"
-#include "scoped_ptr.h"
-#include "string_buffer.h"
-#include "utils.h"
+#include "mecab/common.h"
+#include "mecab/iconv_utils.h"
+#include "mecab/learner_node.h"
+#include "mecab/param.h"
+#include "mecab/scoped_ptr.h"
+#include "mecab/string_buffer.h"
+#include "mecab/utils.h"
 
 #define BUFSIZE (2048)
 #define POSSIZE (64)

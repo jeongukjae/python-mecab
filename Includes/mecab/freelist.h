@@ -4,8 +4,8 @@
 #include <algorithm>
 #include <vector>
 
-#include "common.h"
-#include "utils.h"
+#include "mecab/common.h"
+#include "mecab/utils.h"
 
 namespace MeCab {
 

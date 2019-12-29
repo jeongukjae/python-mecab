@@ -1,10 +1,10 @@
 #ifndef MECAB_DICTIONARY_H_
 #define MECAB_DICTIONARY_H_
 
-#include "char_property.h"
-#include "darts.h"
 #include "mecab.h"
-#include "mmap.h"
+#include "mecab/char_property.h"
+#include "mecab/darts.h"
+#include "mecab/mmap.h"
 
 namespace MeCab {
 

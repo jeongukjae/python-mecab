@@ -4,14 +4,14 @@
 #include <map>
 #include <vector>
 
-#include "common.h"
-#include "darts.h"
-#include "dictionary_rewriter.h"
-#include "freelist.h"
-#include "learner_node.h"
 #include "mecab.h"
-#include "mmap.h"
-#include "string_buffer.h"
+#include "mecab/common.h"
+#include "mecab/darts.h"
+#include "mecab/dictionary_rewriter.h"
+#include "mecab/freelist.h"
+#include "mecab/learner_node.h"
+#include "mecab/mmap.h"
+#include "mecab/string_buffer.h"
 
 namespace MeCab {
 

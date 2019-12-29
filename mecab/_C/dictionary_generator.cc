@@ -4,16 +4,18 @@
 #include <string>
 #include <vector>
 
-#include "char_property.h"
-#include "common.h"
-#include "context_id.h"
-#include "dictionary.h"
-#include "dictionary_rewriter.h"
-#include "feature_index.h"
 #include "mecab.h"
-#include "mmap.h"
-#include "param.h"
-#include "utils.h"
+#include "mecab/char_property.h"
+#include "mecab/common.h"
+#include "mecab/context_id.h"
+#include "mecab/dictionary.h"
+#include "mecab/dictionary_rewriter.h"
+#include "mecab/feature_index.h"
+#include "mecab/mmap.h"
+#include "mecab/param.h"
+#include "mecab/utils.h"
+
+#include "cli.h"
 
 namespace MeCab {
 

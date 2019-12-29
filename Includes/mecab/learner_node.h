@@ -3,9 +3,9 @@
 
 #include <cstring>
 
-#include "common.h"
 #include "mecab.h"
-#include "utils.h"
+#include "mecab/common.h"
+#include "mecab/utils.h"
 
 struct mecab_learner_path_t {
   struct mecab_learner_node_t* rnode;

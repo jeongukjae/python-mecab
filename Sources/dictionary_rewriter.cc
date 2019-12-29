@@ -1,4 +1,4 @@
-#include "dictionary_rewriter.h"
+#include "mecab/dictionary_rewriter.h"
 
 #include <cstring>
 #include <fstream>
@@ -7,10 +7,10 @@
 #include <string>
 #include <vector>
 
-#include "common.h"
-#include "iconv_utils.h"
-#include "scoped_ptr.h"
-#include "utils.h"
+#include "mecab/common.h"
+#include "mecab/iconv_utils.h"
+#include "mecab/scoped_ptr.h"
+#include "mecab/utils.h"
 
 namespace {
 

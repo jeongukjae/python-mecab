@@ -2,7 +2,7 @@
 #define MECAB_UCS_H
 
 #ifndef MECAB_USE_UTF8_ONLY
-#include "ucstable.h"
+#include "mecab/ucstable.h"
 #endif
 
 namespace MeCab {

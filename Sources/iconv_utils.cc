@@ -3,12 +3,12 @@
 #include <iostream>
 #include <string>
 
-#include "common.h"
-#include "scoped_ptr.h"
-#include "utils.h"
+#include "mecab/common.h"
+#include "mecab/scoped_ptr.h"
+#include "mecab/utils.h"
 
-#include "char_property.h"
-#include "iconv_utils.h"
+#include "mecab/char_property.h"
+#include "mecab/iconv_utils.h"
 
 namespace {
 

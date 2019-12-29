@@ -1,10 +1,10 @@
 #ifndef MECAB_CONNECTOR_H_
 #define MECAB_CONNECTOR_H_
 
-#include "common.h"
 #include "mecab.h"
-#include "mmap.h"
-#include "scoped_ptr.h"
+#include "mecab/common.h"
+#include "mecab/mmap.h"
+#include "mecab/scoped_ptr.h"
 
 namespace MeCab {
 class Param;

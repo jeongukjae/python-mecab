@@ -4,9 +4,9 @@
 #include <vector>
 
 #include "mecab.h"
-#include "thread.h"
-#include "scoped_ptr.h"
-#include "common.h"
+#include "mecab/common.h"
+#include "mecab/scoped_ptr.h"
+#include "mecab/thread.h"
 
 namespace MeCab {
 

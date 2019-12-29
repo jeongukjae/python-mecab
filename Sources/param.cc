@@ -1,11 +1,11 @@
-#include "param.h"
+#include "mecab/param.h"
 
 #include <cstdio>
 #include <fstream>
 
-#include "common.h"
-#include "string_buffer.h"
-#include "utils.h"
+#include "mecab/common.h"
+#include "mecab/string_buffer.h"
+#include "mecab/utils.h"
 
 namespace MeCab {
 namespace {

@@ -1,14 +1,14 @@
-#include "writer.h"
+#include "mecab/writer.h"
 
 #include <cstdio>
 #include <cstring>
 #include <fstream>
 #include <iostream>
 
-#include "common.h"
-#include "param.h"
-#include "string_buffer.h"
-#include "utils.h"
+#include "mecab/common.h"
+#include "mecab/param.h"
+#include "mecab/string_buffer.h"
+#include "mecab/utils.h"
 
 namespace MeCab {
 

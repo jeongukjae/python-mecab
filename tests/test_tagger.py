@@ -1,4 +1,4 @@
-from mecab import Tagger
+from mecab._C import Tagger
 
 
 def test_tagger():

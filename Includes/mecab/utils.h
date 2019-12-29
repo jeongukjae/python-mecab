@@ -10,7 +10,7 @@
 #include <string>
 #include <vector>
 
-#include "common.h"
+#include "mecab/common.h"
 
 namespace MeCab {
 

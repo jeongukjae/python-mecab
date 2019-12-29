@@ -1,18 +1,18 @@
-#include "viterbi.h"
+#include "mecab/viterbi.h"
 
 #include <algorithm>
 #include <cmath>
 #include <cstring>
 #include <iterator>
 
-#include "common.h"
-#include "connector.h"
 #include "mecab.h"
-#include "nbest_generator.h"
-#include "param.h"
-#include "scoped_ptr.h"
-#include "string_buffer.h"
-#include "tokenizer.h"
+#include "mecab/common.h"
+#include "mecab/connector.h"
+#include "mecab/nbest_generator.h"
+#include "mecab/param.h"
+#include "mecab/scoped_ptr.h"
+#include "mecab/string_buffer.h"
+#include "mecab/tokenizer.h"
 
 namespace MeCab {
 

@@ -10,10 +10,10 @@
 
 #include <stdint.h>
 
-#include "common.h"
+#include "mecab/common.h"
 #include "mecab.h"
-#include "param.h"
-#include "utils.h"
+#include "mecab/param.h"
+#include "mecab/utils.h"
 
 namespace MeCab {
 

@@ -1,5 +1,5 @@
 #include "gtest/gtest.h"
-#include "utils.h"
+#include "mecab/utils.h"
 
 TEST(mecab_utils, test_decode_charset) {
   ASSERT_EQ(MeCab::decode_charset("euc"), MeCab::EUC_JP);

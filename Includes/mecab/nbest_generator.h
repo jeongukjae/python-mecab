@@ -3,8 +3,8 @@
 
 #include <queue>
 
-#include "freelist.h"
 #include "mecab.h"
+#include "mecab/freelist.h"
 
 namespace MeCab {
 

@@ -3,11 +3,11 @@
 
 #include <vector>
 
-#include "feature_index.h"
-#include "freelist.h"
 #include "mecab.h"
-#include "scoped_ptr.h"
-#include "tokenizer.h"
+#include "mecab/feature_index.h"
+#include "mecab/freelist.h"
+#include "mecab/scoped_ptr.h"
+#include "mecab/tokenizer.h"
 
 namespace MeCab {
 

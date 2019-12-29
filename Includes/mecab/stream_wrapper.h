@@ -5,7 +5,7 @@
 #include <fstream>
 #include <iostream>
 
-#include "utils.h"
+#include "mecab/utils.h"
 
 namespace MeCab {
 

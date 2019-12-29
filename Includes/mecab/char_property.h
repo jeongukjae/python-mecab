@@ -1,10 +1,10 @@
 #ifndef MECAB_CHARACTER_CATEGORY_H_
 #define MECAB_CHARACTER_CATEGORY_H_
 
-#include "mmap.h"
-#include "scoped_ptr.h"
-#include "ucs.h"
-#include "utils.h"
+#include "mecab/mmap.h"
+#include "mecab/scoped_ptr.h"
+#include "mecab/ucs.h"
+#include "mecab/utils.h"
 
 namespace MeCab {
 class Param;

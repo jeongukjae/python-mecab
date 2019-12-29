@@ -1,4 +1,4 @@
-#include "char_property.h"
+#include "mecab/char_property.h"
 
 #include <fstream>
 #include <map>
@@ -7,10 +7,10 @@
 #include <string>
 #include <vector>
 
-#include "common.h"
-#include "mmap.h"
-#include "param.h"
-#include "utils.h"
+#include "mecab/common.h"
+#include "mecab/mmap.h"
+#include "mecab/param.h"
+#include "mecab/utils.h"
 
 namespace MeCab {
 

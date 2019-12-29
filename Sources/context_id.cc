@@ -1,9 +1,9 @@
-#include "context_id.h"
+#include "mecab/context_id.h"
 
 #include <fstream>
 
-#include "iconv_utils.h"
-#include "utils.h"
+#include "mecab/iconv_utils.h"
+#include "mecab/utils.h"
 
 namespace {
 

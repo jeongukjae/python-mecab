@@ -1,4 +1,4 @@
-#include "learner_tagger.h"
+#include "mecab/learner_tagger.h"
 
 #include <algorithm>
 #include <functional>
@@ -6,9 +6,9 @@
 #include <iterator>
 #include <vector>
 
-#include "common.h"
-#include "learner_node.h"
-#include "utils.h"
+#include "mecab/common.h"
+#include "mecab/learner_node.h"
+#include "mecab/utils.h"
 
 namespace MeCab {
 namespace {

@@ -2,15 +2,15 @@
 #include <string>
 #include <vector>
 
-#include "common.h"
-#include "feature_index.h"
-#include "freelist.h"
-#include "lbfgs.h"
-#include "learner_tagger.h"
-#include "param.h"
-#include "string_buffer.h"
-#include "thread.h"
-#include "utils.h"
+#include "mecab/common.h"
+#include "mecab/feature_index.h"
+#include "mecab/freelist.h"
+#include "mecab/lbfgs.h"
+#include "mecab/learner_tagger.h"
+#include "mecab/param.h"
+#include "mecab/string_buffer.h"
+#include "mecab/thread.h"
+#include "mecab/utils.h"
 
 namespace MeCab {
 namespace {

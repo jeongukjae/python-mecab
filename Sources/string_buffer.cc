@@ -1,9 +1,9 @@
-#include "string_buffer.h"
+#include "mecab/string_buffer.h"
 
 #include <cstdio>
 #include <cstring>
 
-#include "common.h"
+#include "mecab/common.h"
 
 #define DEFAULT_ALLOC_SIZE BUF_SIZE
 

@@ -1,6 +1,6 @@
 #include "mecab.h"
-#include "tokenizer.h"
-#include "utils.h"
+#include "mecab/tokenizer.h"
+#include "mecab/utils.h"
 
 namespace {
 const size_t kErrorBufferSize = 256;

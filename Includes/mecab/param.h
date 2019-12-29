@@ -6,8 +6,8 @@
 #include <string>
 #include <vector>
 
-#include "common.h"
-#include "scoped_ptr.h"
+#include "mecab/common.h"
+#include "mecab/scoped_ptr.h"
 
 namespace {
 template <class Target, class Source>

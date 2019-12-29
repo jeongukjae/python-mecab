@@ -21,13 +21,13 @@
 //   - D.C. Liu and J. Nocedal. On the Limited Memory Method for
 //   Large Scale Optimization(1989),
 //   Mathematical Programming B, 45, 3, pp. 503-528.
-#include "lbfgs.h"
+#include "mecab/lbfgs.h"
 
 #include <cmath>
 #include <iostream>
 #include <numeric>
 
-#include "common.h"
+#include "mecab/common.h"
 
 namespace {
 static const double ftol = 1e-4;

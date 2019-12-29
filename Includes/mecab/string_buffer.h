@@ -3,7 +3,7 @@
 
 #include <string>
 
-#include "common.h"
+#include "mecab/common.h"
 #include "utils.h"
 
 namespace MeCab {

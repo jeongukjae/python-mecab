@@ -4,12 +4,12 @@
 #include <map>
 #include <vector>
 
-#include "common.h"
 #include "mecab.h"
-#include "param.h"
-#include "scoped_ptr.h"
-#include "stream_wrapper.h"
-#include "utils.h"
+#include "mecab/common.h"
+#include "mecab/param.h"
+#include "mecab/scoped_ptr.h"
+#include "mecab/stream_wrapper.h"
+#include "mecab/utils.h"
 
 namespace MeCab {
 

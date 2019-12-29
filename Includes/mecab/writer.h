@@ -3,11 +3,11 @@
 
 #include <string>
 
-#include "common.h"
 #include "mecab.h"
-#include "scoped_ptr.h"
-#include "string_buffer.h"
-#include "utils.h"
+#include "mecab/common.h"
+#include "mecab/scoped_ptr.h"
+#include "mecab/string_buffer.h"
+#include "mecab/utils.h"
 
 namespace MeCab {
 

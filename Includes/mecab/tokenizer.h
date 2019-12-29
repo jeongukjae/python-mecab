@@ -1,12 +1,12 @@
 #ifndef MECAB_TOKENIZER_H_
 #define MECAB_TOKENIZER_H_
 
-#include "char_property.h"
-#include "dictionary.h"
-#include "freelist.h"
 #include "mecab.h"
-#include "nbest_generator.h"
-#include "scoped_ptr.h"
+#include "mecab/char_property.h"
+#include "mecab/dictionary.h"
+#include "mecab/freelist.h"
+#include "mecab/nbest_generator.h"
+#include "mecab/scoped_ptr.h"
 
 namespace MeCab {
 

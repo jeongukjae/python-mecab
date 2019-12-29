@@ -1,12 +1,12 @@
-#include "connector.h"
+#include "mecab/connector.h"
 
 #include <fstream>
 #include <sstream>
 
-#include "common.h"
-#include "mmap.h"
-#include "param.h"
-#include "utils.h"
+#include "mecab/common.h"
+#include "mecab/mmap.h"
+#include "mecab/param.h"
+#include "mecab/utils.h"
 
 namespace MeCab {
 

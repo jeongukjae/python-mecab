@@ -5,8 +5,8 @@
 #include <string>
 #include <vector>
 
-#include "common.h"
-#include "freelist.h"
+#include "mecab/common.h"
+#include "mecab/freelist.h"
 #include "mecab.h"
 
 namespace MeCab {

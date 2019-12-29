@@ -1,23 +1,28 @@
 #include <iostream>
 #include "PythonCommon.h"
 
-#include "dictionary_compiler.cc"
-#include "tagger.cc"
+#include "cli.h"
+#include "tagger.h"
 
-static PyMethodDef mecabMethods[] = {{"mecab_dict_index", (PyCFunction)mecab_dict_index, METH_VARARGS, ""}, {NULL}};
+ADD_MECAB_CLI(mecab_dict_index_python, mecab_dict_index);
+ADD_MECAB_CLI(mecab_dict_gen_python, mecab_dict_gen);
+
+static PyMethodDef mecabMethods[] = {{"mecab_dict_index", mecab_dict_index_python, METH_VARARGS, ""},
+                                     {"mecab_dict_gen", mecab_dict_gen_python, METH_VARARGS, ""},
+                                     {NULL}};
 static PyModuleDef mecabModule = {PyModuleDef_HEAD_INIT, "mecab._C", "", -1, mecabMethods};
 
 PyMODINIT_FUNC PyInit__C(void) {
   PyObject* mecabExtension = PyModule_Create(&mecabModule);
 
-  if (mecabExtension == NULL)
+  if (mecabExtension == NULL) {
     return NULL;
+  }
 
-  if (PyType_Ready(&taggerType) < 0) {
+  if (!initializeTaggerClass(mecabExtension)) {
     Py_DECREF(mecabExtension);
     return NULL;
-  } else
-    PyModule_AddObject(mecabExtension, "Tagger", (PyObject*)&taggerType);
+  }
 
   return mecabExtension;
 }

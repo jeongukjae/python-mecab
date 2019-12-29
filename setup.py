@@ -2,11 +2,18 @@ from setuptools import setup, Extension
 
 mecab = Extension(
     "mecab._C",
-    sources=["mecab/_C/mecab.cc", "mecab/_C/tagger.cc"],
+    sources=[
+        "mecab/_C/mecab.cc",
+        "mecab/_C/tagger.cc",
+        "mecab/_C/dictionary_compiler.cc",
+        "mecab/_C/dictionary_generator.cc",
+    ],
     libraries=["mecab"],
-    library_dirs=["./lib"],
-    include_dirs=["Includes"],
+    library_dirs=["./mecab/lib/"],
+    include_dirs=["./Includes"],
     extra_compile_args=["-std=c++11"],
+    extra_link_args=["-Wl,-rpath,@loader_path/lib"],
+    language="c++",
 )
 
 setup(
@@ -18,5 +25,11 @@ setup(
     url="https://github.com/jeongukjae/python-mecab",
     author="Jeong Ukjae",
     author_email="jeongukjae@gmail.com",
-    entry_points={"console_scripts": ["mecab-dict-index=mecab.cli:run_mecab_dict_index"],},
+    entry_points={
+        "console_scripts": [
+            "mecab-dict-index=mecab.cli:run_mecab_dict_index",
+            "mecab-dict-gen=mecab.cli:run_mecab_dict_gen",
+        ],
+    },
+    package_data={"mecab": ["lib/*.dylib"]},
 )
