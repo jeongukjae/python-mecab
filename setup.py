@@ -5,8 +5,9 @@ mecab = Extension(
     sources=[
         "mecab/_C/mecab.cc",
         "mecab/_C/tagger.cc",
-        "mecab/_C/dictionary_compiler.cc",
-        "mecab/_C/dictionary_generator.cc",
+        "mecab/_C/cli/dictionary_compiler.cc",
+        "mecab/_C/cli/dictionary_generator.cc",
+        "mecab/_C/cli/cost_trainer.cc",
     ],
     libraries=["mecab"],
     library_dirs=["./mecab/lib/"],
@@ -29,6 +30,7 @@ setup(
         "console_scripts": [
             "mecab-dict-index=mecab.cli:run_mecab_dict_index",
             "mecab-dict-gen=mecab.cli:run_mecab_dict_gen",
+            "mecab-cost-train=mecab.cli:run_mecab_cost_train",
         ],
     },
     package_data={"mecab": ["lib/*.dylib"]},
