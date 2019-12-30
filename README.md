@@ -1,7 +1,6 @@
 # python-mecab
 
-![Test Python Status](https://github.com/jeongukjae/python-mecab/workflows/Test%20Python/badge.svg)
-![Test C++ Status](https://github.com/jeongukjae/python-mecab/workflows/Test%20C++/badge.svg)
+![Run Test Status](https://github.com/jeongukjae/python-mecab/workflows/Run%20Tests/badge.svg)
 
 > Yet another Japanese morphological analyzer
 
