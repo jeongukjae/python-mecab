@@ -12,7 +12,6 @@ set(SOURCE_CODE
       Sources/context_id.cc
       Sources/dictionary.cc
       Sources/dictionary_rewriter.cc
-      Sources/eval.cc
       Sources/feature_index.cc
       Sources/iconv_utils.cc
       Sources/lbfgs.cc

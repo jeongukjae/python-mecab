@@ -3,9 +3,12 @@
 
 #include "../PythonCommon.h"
 
+int mecab_main(int argc, char** argv);
 int mecab_dict_index(int argc, char** argv);
 int mecab_dict_gen(int argc, char** argv);
 int mecab_cost_train(int argc, char** argv);
+int mecab_system_eval(int argc, char** argv);
+int mecab_test_gen(int argc, char** argv);
 
 #define ADD_MECAB_CLI(function_name, function_to_run)                            \
   static PyObject* function_name(PyObject* self, PyObject* args) {               \
