@@ -49,21 +49,11 @@ jobs:
         python-version: [35, 36, 37]
     steps:
       - uses: actions/checkout@v1
-      - name: Set up CMake and Build a C++ Module
+      - name: Build Python Module
         uses: docker://jeongukjae/python-mecab-build-image:latest
-        run: |
-          mkdir build
-          cd build
-          cmake .. -DCMAKE_BUILD_TYPE=Release
-          make -j2
-      - name: Build python-mecab
-        uses: docker://jeongukjae/python-mecab-build-image:latest
-        run: |
-          /opt/python/cp${{ matrix.python-version }}-cp${{ matrix.python-version }}m/bin/pip install twine
-          /opt/python/cp${{ matrix.python-version }}-cp${{ matrix.python-version }}m/bin/python setup.py bdist_wheel
-          auditwheel repair dist/*
+        env:
+          PYTHON_VERSION: ${{ matrix.python-version }}
       - name: Publish a Python distribution to PyPI
-        uses: docker://jeongukjae/python-mecab-build-image:latest
         env:
           TWINE_USERNAME: jeongukjae
           TWINE_PASSWORD: ${{ secrets.pypi_password }}
