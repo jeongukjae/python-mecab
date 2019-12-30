@@ -5,13 +5,12 @@ on:
     types: [published]
 
 jobs:
-  run-test:
-    name: Release mecab-python for Python ${{ matrix.python-version }} and ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
+  release-macOS:
+    name: Release mecab-python for Python ${{ matrix.python-version }} and macOS-latest
+    runs-on: macOS-latest
     strategy:
       matrix:
         python-version: [3.5, 3.6, 3.7]
-        os: [ubuntu-latest, macOS-latest]
     steps:
       - uses: actions/checkout@v1
       - name: Set up Python ${{ matrix.python-version }}
@@ -19,14 +18,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Install Ninja for Linux
-        if: matrix.os == 'ubuntu-latest'
-        run: |
-          curl -LO https://github.com/ninja-build/ninja/releases/download/v1.9.0/ninja-linux.zip
-          sudo unzip ninja-linux.zip -d /usr/local/bin/
-
       - name: Install Ninja for macOS
-        if: matrix.os == 'macOS-latest'
         run: |
           curl -LO https://github.com/ninja-build/ninja/releases/download/v1.9.0/ninja-mac.zip
           sudo unzip ninja-mac.zip -d /usr/local/bin/
@@ -48,3 +40,31 @@ jobs:
           TWINE_USERNAME: jeongukjae
           TWINE_PASSWORD: ${{ secrets.pypi_password }}
         run: twine upload dist/*
+
+  release-manylinux:
+    name: Release mecab-python for Python ${{ matrix.python-version }} and linux-latest
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [35, 36, 37]
+    steps:
+      - uses: actions/checkout@v1
+      - name: Set up CMake and Build a C++ Module
+        uses: docker://jeongukjae/python-mecab-build-image:latest
+        run: |
+          mkdir build
+          cd build
+          cmake .. -DCMAKE_BUILD_TYPE=Release
+          make -j2
+      - name: Build python-mecab
+        uses: docker://jeongukjae/python-mecab-build-image:latest
+        run: |
+          /opt/python/cp${{ matrix.python-version }}-cp${{ matrix.python-version }}m/bin/pip install twine
+          /opt/python/cp${{ matrix.python-version }}-cp${{ matrix.python-version }}m/bin/python setup.py bdist_wheel
+          auditwheel repair dist/*
+      - name: Publish a Python distribution to PyPI
+        uses: docker://jeongukjae/python-mecab-build-image:latest
+        env:
+          TWINE_USERNAME: jeongukjae
+          TWINE_PASSWORD: ${{ secrets.pypi_password }}
+        run: twine upload wheelhouse/*

@@ -1,4 +1,4 @@
 from ._C import Tagger
 
 __all__ = ["Tagger"]
-__version__ = "1.0.0rc0"
+__version__ = "1.0.0rc2"
