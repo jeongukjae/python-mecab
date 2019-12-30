@@ -1,3 +1,8 @@
+"""
+equivalent test of run-cost-train.sh in
+https://github.com/taku910/mecab/blob/master/mecab/tests/run-cost-train.sh
+"""
+
 import os
 
 from mecab.cli import (
