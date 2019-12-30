@@ -12,7 +12,6 @@
 
 namespace {
 
-#ifdef HAVE_ICONV
 const char* decode_charset_iconv(const char* str) {
   const int charset = MeCab::decode_charset(str);
   switch (charset) {
@@ -34,13 +33,11 @@ const char* decode_charset_iconv(const char* str) {
   }
   return MECAB_DEFAULT_CHARSET;
 }
-#endif
 }  // namespace
 
 namespace MeCab {
 bool Iconv::open(const char* from, const char* to) {
   ic_ = 0;
-#if defined HAVE_ICONV
   const char* from2 = decode_charset_iconv(from);
   const char* to2 = decode_charset_iconv(to);
   if (std::strcmp(from2, to2) == 0) {
@@ -52,9 +49,6 @@ bool Iconv::open(const char* from, const char* to) {
     ic_ = 0;
     return false;
   }
-#else
-  std::cerr << "iconv_open is not supported" << std::endl;
-#endif
 
   return true;
 }
@@ -67,7 +61,6 @@ bool Iconv::convert(std::string* str) {
     return true;
   }
 
-#if defined HAVE_ICONV
   size_t ilen = 0;
   size_t olen = 0;
   ilen = str->size();
@@ -81,12 +74,11 @@ bool Iconv::convert(std::string* str) {
   size_t olen_org = olen;
   iconv(ic_, 0, &ilen, 0, &olen);  // reset iconv state
   while (ilen != 0) {
-    if (iconv(ic_, (ICONV_CONST char**)&ibuf, &ilen, &obuf, &olen) == (size_t)-1) {
+    if (iconv(ic_, (char**)&ibuf, &ilen, &obuf, &olen) == (size_t)-1) {
       return false;
     }
   }
   str->assign(obuf_org, olen_org - olen);
-#endif
 
   return true;
 }
@@ -94,9 +86,7 @@ bool Iconv::convert(std::string* str) {
 Iconv::Iconv() : ic_(0) {}
 
 Iconv::~Iconv() {
-#if defined HAVE_ICONV
   if (ic_ != 0)
     iconv_close(ic_);
-#endif
 }
 }  // namespace MeCab

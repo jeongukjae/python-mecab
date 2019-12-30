@@ -29,6 +29,9 @@ set(SOURCE_CODE
 set(TEST_CODE
       tests/cc/test_utils.cc)
 
+find_package(Iconv REQUIRED)
+
 include(./cmake/Testing.cmake)
 
 add_library(mecab SHARED ${SOURCE_CODE})
+target_link_libraries(mecab ${Iconv_LIBRARIES})
