@@ -33,5 +33,5 @@ setup(
             "mecab-cost-train=mecab.cli:run_mecab_cost_train",
         ],
     },
-    package_data={"mecab": ["lib/*.dylib"]},
+    package_data={"mecab": ["lib/*.dylib", "lib/*.so"]},
 )
