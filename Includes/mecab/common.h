@@ -14,6 +14,13 @@
   "MeCab: Yet Another Part-of-Speech and Morphological Analyzer\n\
 \nCopyright(C) 2001-2012 Taku Kudo \nCopyright(C) 2004-2008 Nippon Telegraph and Telephone Corporation\n"
 
+#define PACKAGE "mecab"
+#define VERSION "0.996"
+
+#define MECAB_DEFAULT_RC "/usr/local/etc/mecabrc"
+
+#define DIC_VERSION 102
+
 #define SYS_DIC_FILE "sys.dic"
 #define UNK_DEF_FILE "unk.def"
 #define UNK_DIC_FILE "unk.dic"

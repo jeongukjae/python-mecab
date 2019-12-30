@@ -5,11 +5,6 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/mecab/lib)
 
-add_compile_definitions(DIC_VERSION=102)
-add_compile_definitions(PACKAGE="mecab")
-add_compile_definitions(VERSION="0.996")
-add_compile_definitions(MECAB_DEFAULT_RC="/usr/local/etc/mecabrc")
-
 include_directories(./Includes)
 set(SOURCE_CODE
       Sources/char_property.cc
