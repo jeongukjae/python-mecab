@@ -1,0 +1,25 @@
+name: Test C++
+
+on: [push]
+
+jobs:
+  run-test:
+    name: Test C++ on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macOS-latest]
+    steps:
+      - uses: actions/checkout@v1
+      - name: git pull submodules
+        run: git submodule update --init --recursive
+      - name: setup cmake
+        run: |
+          mkdir build
+          cd build
+          cmake .. -DBUILD_TEST=ON
+      - name: run tests
+        run: |
+          cd build
+          make
+          ./run-test
