@@ -39,11 +39,11 @@ setup(
     author_email="jeongukjae@gmail.com",
     entry_points={
         "console_scripts": [
-            "mecab=mecab.cli:run_mecab_main" "mecab-dict-index=mecab.cli:run_mecab_dict_index",
+            "mecab=mecab.cli:run_mecab_main",
+            "mecab-dict-index=mecab.cli:run_mecab_dict_index",
             "mecab-dict-gen=mecab.cli:run_mecab_dict_gen",
             "mecab-cost-train=mecab.cli:run_mecab_cost_train",
             "mecab-system-eval=mecab.cli:run_mecab_system_eval",
-            "mecab-test-gen=mecab.cli:run_mecab_test_gen",
         ],
     },
     package_data={"mecab": ["lib/*.dylib", "lib/*.so"]},
