@@ -18,7 +18,6 @@ int mecab_dict_gen(int argc, char** argv);
       return NULL;                                                               \
     }                                                                            \
     size_t argc = PyList_Size(list);                                             \
-    std::cout << "len: " << argc << std::endl;                                   \
     char** argv = new char*[argc];                                               \
     for (size_t i = 0; i < argc; ++i) {                                          \
       PyObject* item = PyList_GetItem(list, i);                                  \
@@ -28,7 +27,6 @@ int mecab_dict_gen(int argc, char** argv);
       }                                                                          \
       item = PyUnicode_AsUTF8String(item);                                       \
       argv[i] = PyBytes_AsString(item);                                          \
-      std::cout << argv[i] << std::endl;                                         \
     }                                                                            \
     function_to_run(argc, argv);                                                 \
     delete[] argv;                                                               \
