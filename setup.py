@@ -34,9 +34,6 @@ setup(
     python_requires=">=3.5",
     packages=["mecab"],
     ext_modules=[mecab],
-    url="https://github.com/jeongukjae/python-mecab",
-    author="Jeong Ukjae",
-    author_email="jeongukjae@gmail.com",
     entry_points={
         "console_scripts": [
             "mecab=mecab.cli:run_mecab_main",
@@ -47,4 +44,19 @@ setup(
         ],
     },
     package_data={"mecab": ["lib/*.dylib", "lib/*.so"]},
+    url="https://github.com/jeongukjae/python-mecab",
+    author="Jeong Ukjae",
+    author_email="jeongukjae@gmail.com",
+    classifiers=[
+        "Development Status :: 4 - Beta",
+        "License :: OSI Approved :: BSD License",
+        "Programming Language :: C++",
+        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.5",
+        "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: Implementation :: CPython",
+        "Topic :: Software Development :: Libraries",
+        "Typing :: Typed",
+    ],
 )
