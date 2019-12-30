@@ -13,3 +13,9 @@ To write C Extension for Python reliably,
 - [ ] add CI
 
 Original source codes: [taku910/mecab](https://github.com/taku910/mecab)
+
+## References
+
+- https://github.com/taku910/mecab
+- https://bitbucket.org/eunjeon/mecab-ko-dic
+- https://bitbucket.org/eunjeon/mecab-ko
