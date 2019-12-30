@@ -1,4 +1,4 @@
-name: Release to PyPi
+name: Release to PyPI
 
 on:
   release:
@@ -40,11 +40,11 @@ jobs:
 
       - name: Build python-mecab
         run: |
-          pip install wheel
+          pip install wheel twine
           python setup.py bdist_wheel
 
       - name: Publish a Python distribution to PyPI
-        uses: pypa/gh-action-pypi-publish@master
-        with:
-          user: jeongukjae
-          password: ${{ secrets.pypi_password }}
+        env:
+          TWINE_USERNAME: jeongukjae
+          TWINE_PASSWORD: ${{ secrets.pypi_password }}
+        run: twine upload dist/*
