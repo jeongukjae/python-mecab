@@ -1,6 +1,6 @@
 option(BUILD_TEST "Build the tests" OFF)
 
-if(BUILD_TEST)
+if(BUILD_TEST AND CMAKE_BUILD_TYPE MATCHES Debug)
   enable_testing()
   add_subdirectory("${PROJECT_SOURCE_DIR}/third_party/googletest")
 

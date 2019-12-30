@@ -5,6 +5,11 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/mecab/lib)
 
+if(NOT CMAKE_BUILD_TYPE)
+  # Release or Debug
+  set(CMAKE_BUILD_TYPE Debug)
+endif()
+
 include_directories(./Includes)
 set(SOURCE_CODE
       Sources/char_property.cc

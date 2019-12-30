@@ -36,7 +36,7 @@ jobs:
         run: |
           mkdir build
           cd build
-          cmake .. -DBUILD_TEST=ON -GNinja
+          cmake .. -DBUILD_TEST=ON -DCMAKE_BUILD_TYPE=Debug -GNinja
 
       - name: Build C++ and Run C++ Tests
         run: |
