@@ -59,4 +59,4 @@ jobs:
           TWINE_PASSWORD: ${{ secrets.pypi_password }}
         run: |
           pip install twine
-          twine upload wheelhouse/*
+          python -m twine upload wheelhouse/*
