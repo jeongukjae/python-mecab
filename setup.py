@@ -30,7 +30,7 @@ mecab = Extension(
 
 setup(
     name="python-mecab",
-    version="1.0.0rc2",
+    version="1.0.0",
     python_requires=">=3.5",
     packages=["mecab"],
     ext_modules=[mecab],
