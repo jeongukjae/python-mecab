@@ -23,13 +23,13 @@ jobs:
       - name: Install Ninja for Linux
         if: matrix.os == 'ubuntu-latest'
         run: |
-          curl -O https://github.com/ninja-build/ninja/releases/download/v1.9.0/ninja-linux.zip
+          curl -LO https://github.com/ninja-build/ninja/releases/download/v1.9.0/ninja-linux.zip
           sudo unzip ninja-linux.zip -d /usr/local/bin/
 
       - name: Install Ninja for macOS
         if: matrix.os == 'macOS-latest'
         run: |
-          curl -O https://github.com/ninja-build/ninja/releases/download/v1.9.0/ninja-mac.zip
+          curl -LO https://github.com/ninja-build/ninja/releases/download/v1.9.0/ninja-mac.zip
           sudo unzip ninja-mac.zip -d /usr/local/bin/
 
       - name: Set up CMake
