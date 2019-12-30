@@ -39,7 +39,9 @@ jobs:
           ninja
 
       - name: Build python-mecab
-        run: python setup.py bdist_wheel
+        run: |
+          pip install wheel
+          python setup.py bdist_wheel
 
       - name: Publish a Python distribution to PyPI
         uses: pypa/gh-action-pypi-publish@master
