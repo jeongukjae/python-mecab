@@ -1,4 +1,13 @@
+import platform
 from setuptools import setup, Extension
+
+
+def get_link_args():
+    if platform.system() == "Darwin":
+        return ["-Wl,-rpath,@loader_path/lib"]
+    if platform.system() == "Linux":
+        return ["-Wl,-rpath,$ORIGIN/lib"]
+
 
 mecab = Extension(
     "mecab._C",
@@ -13,7 +22,7 @@ mecab = Extension(
     library_dirs=["./mecab/lib/"],
     include_dirs=["./Includes"],
     extra_compile_args=["-std=c++11"],
-    extra_link_args=["-Wl,-rpath,@loader_path/lib"],
+    extra_link_args=get_link_args(),
     language="c++",
 )
 
