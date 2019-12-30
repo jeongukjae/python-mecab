@@ -1,0 +1,48 @@
+name: Release to PyPi
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  run-test:
+    name: Release mecab-python for Python ${{ matrix.python-version }} and ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        python-version: [3.5, 3.6, 3.7]
+        os: [ubuntu-latest, macOS-latest]
+    steps:
+      - uses: actions/checkout@v1
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install Ninja for Linux
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          curl -LO https://github.com/ninja-build/ninja/releases/download/v1.9.0/ninja-linux.zip
+          sudo unzip ninja-linux.zip -d /usr/local/bin/
+
+      - name: Install Ninja for macOS
+        if: matrix.os == 'macOS-latest'
+        run: |
+          curl -LO https://github.com/ninja-build/ninja/releases/download/v1.9.0/ninja-mac.zip
+          sudo unzip ninja-mac.zip -d /usr/local/bin/
+
+      - name: Set up CMake and Build a C++ Module
+        run: |
+          mkdir build
+          cd build
+          cmake .. -DCMAKE_BUILD_TYPE=Release -GNinja
+          ninja
+
+      - name: Build python-mecab
+        run: python setup.py bdist_wheel
+
+      - name: Publish a Python distribution to PyPI
+        uses: pypa/gh-action-pypi-publish@master
+        with:
+          user: jeongukjae
+          password: ${{ secrets.pypi_password }}
