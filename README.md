@@ -1,6 +1,7 @@
 # python-mecab
 
 ![Run Test Status](https://github.com/jeongukjae/python-mecab/workflows/Run%20Test/badge.svg)
+[![codecov](https://codecov.io/gh/jeongukjae/python-mecab/branch/master/graph/badge.svg)](https://codecov.io/gh/jeongukjae/python-mecab)
 
 ![Py Versions](https://img.shields.io/pypi/pyversions/python-mecab)
 ![PyPi Versions](https://img.shields.io/pypi/v/python-mecab)
