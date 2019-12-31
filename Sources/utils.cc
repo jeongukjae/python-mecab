@@ -10,8 +10,8 @@
 
 #include <stdint.h>
 
-#include "mecab/common.h"
 #include "mecab.h"
+#include "mecab/common.h"
 #include "mecab/param.h"
 #include "mecab/utils.h"
 
