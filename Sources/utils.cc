@@ -4,10 +4,6 @@
 #include <fstream>
 #include <iostream>
 
-#ifdef HAVE_SYS_TYPES_H
-#include <sys/types.h>
-#endif
-
 #include <stdint.h>
 
 #include "mecab.h"

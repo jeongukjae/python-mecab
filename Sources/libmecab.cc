@@ -7,11 +7,7 @@ const size_t kErrorBufferSize = 256;
 }
 
 namespace {
-#ifdef HAVE_TLS_KEYWORD
-__thread char kErrorBuffer[kErrorBufferSize];
-#else
 char kErrorBuffer[kErrorBufferSize];
-#endif
 }  // namespace
 
 const char* getGlobalError() {
