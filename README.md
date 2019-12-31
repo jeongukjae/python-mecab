@@ -9,3 +9,9 @@
 A repository to bind mecab for Python 3.5+. Not using swig nor pybind.
 
 Original source codes: [taku910/mecab](https://github.com/taku910/mecab)
+
+## Installation
+
+```sh
+pip install python-mecab
+```
