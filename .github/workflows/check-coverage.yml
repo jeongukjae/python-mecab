@@ -16,6 +16,9 @@ jobs:
         with:
           python-version: 3.7
 
+      - name: install lcov
+        run: sudo apt-get install lcov
+
       - name: Install Ninja for Linux
         run: |
           curl -LO https://github.com/ninja-build/ninja/releases/download/v1.9.0/ninja-linux.zip
@@ -37,16 +40,16 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install pytest
-          python setup.py develop
+          BUILD_COVERAGE=ON python setup.py develop
 
       - name: Run Python Tests
-        run: pytest -v
+        run: pytest -v --cov mecab
 
       - name: Collect Code Coverage
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
         run: |
           lcov --directory . --capture --output-file coverage.info
-          lcov --remove coverage.info '/usr/*' '**/tests/**' '**/third_party/**' --output-file coverage.info
+          lcov --remove coverage.info '**/usr/**' '**/tests/**' '**/third_party/**' --output-file coverage.info
           lcov --list coverage.info
           bash <(curl -s https://codecov.io/bash) -f coverage.info

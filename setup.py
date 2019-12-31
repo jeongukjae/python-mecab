@@ -1,5 +1,9 @@
+import os
 import platform
 from setuptools import setup, Extension
+
+
+BUILD_COVERAGE = os.environ.get("BUILD_COVERAGE", "") == "ON"
 
 
 def get_link_args():
@@ -7,6 +11,18 @@ def get_link_args():
         return ["-Wl,-rpath,@loader_path/lib"]
     if platform.system() == "Linux":
         return ["-Wl,-rpath,$ORIGIN/lib"]
+
+
+def get_coverage_args_for_cc():
+    if BUILD_COVERAGE:
+        return ["--coverage", "-O0"]
+    return []
+
+
+def get_coverage_args_for_ld():
+    if BUILD_COVERAGE:
+        return ["--coverage"]
+    return []
 
 
 mecab = Extension(
@@ -23,8 +39,8 @@ mecab = Extension(
     libraries=["mecab"],
     library_dirs=["./mecab/lib/"],
     include_dirs=["./Includes"],
-    extra_compile_args=["-std=c++11"],
-    extra_link_args=get_link_args(),
+    extra_compile_args=["-std=c++11"] + get_coverage_args_for_cc(),
+    extra_link_args=get_link_args() + get_coverage_args_for_ld(),
     language="c++",
 )
 
