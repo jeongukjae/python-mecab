@@ -6,27 +6,8 @@
 
 #include <string>
 
-extern "C" {
-
-#ifdef HAVE_SYS_TYPES_H
-#include <sys/types.h>
-#endif
-
-#ifdef HAVE_FCNTL_H
-#include <fcntl.h>
-#endif
-
-#ifdef HAVE_SYS_MMAN_H
-#include <sys/mman.h>
-#endif
-
-#ifdef HAVE_UNISTD_H
-#include <unistd.h>
-#endif
-}
-
 #include "mecab/common.h"
-#include "utils.h"
+#include "mecab/utils.h"
 
 namespace MeCab {
 
