@@ -109,8 +109,18 @@ static PyObject* tagger_parse(Tagger* self, PyObject* args) {
   string = PyUnicode_AsUTF8String(string);
   PyBytes_AsStringAndSize(string, &text, &size);
 
-  const char* result = self->tagger->parse(text, size);
-  PyObject* resultObject = PyUnicode_FromString(result);
+  const MeCab::Node* parsedNode = self->tagger->parseToNode(text, size);
+  size_t nodeCount = 0;
+  for (const MeCab::Node* node = parsedNode->next; node->next; node = node->next, ++nodeCount);
+
+  PyObject *resultObject = PyTuple_New(nodeCount);
+  size_t index = 0;
+  for (const MeCab::Node* node = parsedNode->next; node->next; node = node->next) {
+    PyObject* surface = PyUnicode_FromStringAndSize(node->surface, node->length);
+    PyObject* feature = PyUnicode_FromString(node->feature);
+    PyObject* innerTuple = PyTuple_Pack(2, surface, feature);
+    PyTuple_SetItem(resultObject, index++, innerTuple);
+  }
   Py_IncRef(resultObject);
   return resultObject;
 }
