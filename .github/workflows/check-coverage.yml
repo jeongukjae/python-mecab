@@ -46,13 +46,13 @@ jobs:
         run: pytest -v --cov mecab
 
       - name: Collect Code Coverage
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
         run: |
           cd build
           lcov --directory . --capture --output-file coverage.info
           lcov --remove coverage.info '**/usr/**' '**/tests/**' '**/third_party/**' --output-file coverage.info
           lcov --list coverage.info
-          bash <(curl -s https://codecov.io/bash) -f coverage.info
-          cd ..
-          bash <(curl -s https://codecov.io/bash) -f .coverage
+
+      - name: Report Coverage
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+        run: bash <(curl -s https://codecov.io/bash) -f build/coverage.info -f .coverage
