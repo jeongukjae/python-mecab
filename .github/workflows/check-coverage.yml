@@ -43,6 +43,8 @@ jobs:
         run: pytest -v
 
       - name: Collect Code Coverage
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
         run: |
           lcov --directory . --capture --output-file coverage.info
           lcov --remove coverage.info '/usr/*' '**/tests/**' '**/third_party/**' --output-file coverage.info
