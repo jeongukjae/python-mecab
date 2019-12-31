@@ -36,6 +36,7 @@ set(TEST_CODE
 find_package(Iconv REQUIRED)
 
 include(./cmake/Testing.cmake)
+include(./cmake/CodeCoverage.cmake)
 
 add_library(mecab SHARED ${SOURCE_CODE})
 target_link_libraries(mecab ${Iconv_LIBRARIES})

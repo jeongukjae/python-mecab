@@ -1,0 +1,50 @@
+name: Check Coverage
+
+on: [push]
+
+jobs:
+  run-test:
+    name: Check Code Coverage on Python 3.7 and ubuntu-latest
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: git pull submodules
+        run: git submodule update --init --recursive
+
+      - name: Set up Python 3.7
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.7
+
+      - name: Install Ninja for Linux
+        run: |
+          curl -LO https://github.com/ninja-build/ninja/releases/download/v1.9.0/ninja-linux.zip
+          sudo unzip ninja-linux.zip -d /usr/local/bin/
+
+      - name: Set up CMake
+        run: |
+          mkdir build
+          cd build
+          cmake .. -DBUILD_TEST=ON -DBUILD_COV=ON -DCMAKE_BUILD_TYPE=Debug -GNinja
+
+      - name: Build C++ and Run C++ Tests
+        run: |
+          cd build
+          ninja
+          ./run-test
+
+      - name: Install Python Dependencies and Package
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest
+          python setup.py develop
+
+      - name: Run Python Tests
+        run: pytest -v
+
+      - name: Collect Code Coverage
+        run: |
+          lcov --directory . --capture --output-file coverage.info
+          lcov --remove coverage.info '/usr/*' '**/tests/**' '**/third_party/**' --output-file coverage.info
+          lcov --list coverage.info
+          bash <(curl -s https://codecov.io/bash) -f coverage.info
