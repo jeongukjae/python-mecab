@@ -74,7 +74,7 @@ class Mmap {
     length = st.st_size;
 
     text = new T[length];
-    CHECK_FALSE(::fread(text, sizeof(T), length, fd) >= 0) << "read() failed: " << filename;
+    CHECK_FALSE(::fread(text, 1, length, fd) >= 0) << "read() failed: " << filename;
     ::fclose(fd);
     fd = NULL;
 
@@ -90,8 +90,8 @@ class Mmap {
     if (text) {
       if (flag.compare("r+b")) {
         FILE* fd2;
-        if ((fd2 = ::fopen(fileName.c_str(), "r+")) != NULL) {
-          ::fwrite(text, sizeof(T), length, fd2);
+        if ((fd2 = ::fopen(fileName.c_str(), "wb")) != NULL) {
+          ::fwrite(text, 1, length, fd2);
           ::fclose(fd2);
         }
       }
