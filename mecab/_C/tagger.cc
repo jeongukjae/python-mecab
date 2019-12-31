@@ -70,7 +70,7 @@ static PyObject* tagger_new(PyTypeObject* subtype, PyObject* args) {
     string = PyUnicode_AsUTF8String(string);
     const char* dicdir = PyBytes_AsString(string);
 
-    std::string args = "-C -d ";
+    std::string args = "-C -r /dev/null -d ";
     args += dicdir;
     tagger->tagger = MeCab::createTagger(args.c_str());
   } else {
@@ -111,9 +111,10 @@ static PyObject* tagger_parse(Tagger* self, PyObject* args) {
 
   const MeCab::Node* parsedNode = self->tagger->parseToNode(text, size);
   size_t nodeCount = 0;
-  for (const MeCab::Node* node = parsedNode->next; node->next; node = node->next, ++nodeCount);
+  for (const MeCab::Node* node = parsedNode->next; node->next; node = node->next, ++nodeCount)
+    ;
 
-  PyObject *resultObject = PyTuple_New(nodeCount);
+  PyObject* resultObject = PyTuple_New(nodeCount);
   size_t index = 0;
   for (const MeCab::Node* node = parsedNode->next; node->next; node = node->next) {
     PyObject* surface = PyUnicode_FromStringAndSize(node->surface, node->length);
