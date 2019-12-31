@@ -8,6 +8,8 @@
 
 A repository to bind mecab for Python 3.5+. Not using swig nor pybind.
 
+Support only Linux, macOS
+
 Original source codes: [taku910/mecab](https://github.com/taku910/mecab)
 
 ## Installation
