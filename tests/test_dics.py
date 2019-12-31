@@ -38,11 +38,11 @@ def test_dics(test_data_path, tmpdir):
 
     _copy_file(DICRC, PROCESSED_DIC_DIR.join("dicrc"))
 
-    run_mecab_dict_index(["index", "-f", "euc-jp", "-c", "euc-jp", "-d", DIC_DIR, "-o", str(PROCESSED_DIC_DIR)])
+    run_mecab_dict_index(["index", "-d", DIC_DIR, "-o", str(PROCESSED_DIC_DIR)])
     run_mecab_main(["mecab", "-r", "/dev/null", "-d", str(PROCESSED_DIC_DIR), "-o", str(PREDICT_PATH), TEST_CASE])
 
-    with open(TRUE_PATH, "rb") as f:
-        assert f.read() == PREDICT_PATH.read(mode="rb")
+    with open(TRUE_PATH, "r") as f:
+        assert f.read() == PREDICT_PATH.read()
 
 
 def _copy_file(from_, to):

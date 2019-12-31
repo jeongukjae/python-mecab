@@ -48,34 +48,6 @@ class CharProperty {
 
   inline CharInfo getCharInfo(const char* begin, const char* end, size_t* mblen) const {
     unsigned short int t = 0;
-#ifndef MECAB_USE_UTF8_ONLY
-    switch (charset_) {
-      case EUC_JP:
-        t = euc_to_ucs2(begin, end, mblen);
-        break;
-      case CP932:
-        t = cp932_to_ucs2(begin, end, mblen);
-        break;
-      case UTF8:
-        t = utf8_to_ucs2(begin, end, mblen);
-        break;
-      case UTF16:
-        t = utf16_to_ucs2(begin, end, mblen);
-        break;
-      case UTF16LE:
-        t = utf16le_to_ucs2(begin, end, mblen);
-        break;
-      case UTF16BE:
-        t = utf16be_to_ucs2(begin, end, mblen);
-        break;
-      case ASCII:
-        t = ascii_to_ucs2(begin, end, mblen);
-        break;
-      default:
-        t = utf8_to_ucs2(begin, end, mblen);
-        break;
-    }
-#else
     switch (charset_) {
       case UTF8:
         t = utf8_to_ucs2(begin, end, mblen);
@@ -93,7 +65,6 @@ class CharProperty {
         t = utf8_to_ucs2(begin, end, mblen);
         break;
     }
-#endif
     return map_[t];
   }
 

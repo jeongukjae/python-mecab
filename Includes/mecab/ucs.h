@@ -1,10 +1,6 @@
 #ifndef MECAB_UCS_H
 #define MECAB_UCS_H
 
-#ifndef MECAB_USE_UTF8_ONLY
-#include "mecab/ucstable.h"
-#endif
-
 namespace MeCab {
 
 // All internal codes are represented in UCS2,
@@ -86,45 +82,6 @@ inline unsigned short utf16_to_ucs2(const char* begin, const char* end, size_t* 
   return utf16le_to_ucs2(begin, end, mblen);
 #endif
 }
-
-#ifndef MECAB_USE_UTF8_ONLY
-inline unsigned short euc_to_ucs2(const char* begin, const char* end, size_t* mblen) {
-  const size_t len = end - begin;
-
-  // JISX 0212, 0213
-  if (static_cast<unsigned char>(begin[0]) == 0x8f && len >= 3) {
-    unsigned short key = (static_cast<unsigned char>(begin[1]) << 8) + static_cast<unsigned char>(begin[2]);
-    if (key < 0xA0A0) {  // offset  violation
-      *mblen = 1;
-      return static_cast<unsigned char>(begin[0]);
-    }
-    *mblen = 3;
-    return euc_hojo_tbl[key - 0xA0A0];
-    // JISX 0208 + 0201
-  } else if ((static_cast<unsigned char>(begin[0]) & 0x80) && len >= 2) {
-    *mblen = 2;
-    return euc_tbl[(static_cast<unsigned char>(begin[0]) << 8) + static_cast<unsigned char>(begin[1])];
-  } else {
-    *mblen = 1;
-    return static_cast<unsigned char>(begin[0]);
-  }
-}
-
-inline unsigned short cp932_to_ucs2(const char* begin, const char* end, size_t* mblen) {
-  const size_t len = end - begin;
-
-  if ((static_cast<unsigned char>(begin[0]) >= 0xA1 && static_cast<unsigned char>(begin[0]) <= 0xDF)) {
-    *mblen = 1;
-    return cp932_tbl[static_cast<unsigned char>(begin[0])];
-  } else if ((static_cast<unsigned char>(begin[0]) & 0x80) && len >= 2) {
-    *mblen = 2;
-    return cp932_tbl[(static_cast<unsigned char>(begin[0]) << 8) + static_cast<unsigned char>(begin[1])];
-  } else {
-    *mblen = 1;
-    return static_cast<unsigned char>(begin[0]);
-  }
-}
-#endif
 }  // namespace MeCab
 
 #endif
