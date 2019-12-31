@@ -123,7 +123,7 @@ class DictionaryComplier {
       }
     }
 
-    std::cout << "\ndone!\n";
+    std::cout << "\ndone!" << std::endl;
 
     return 0;
   }

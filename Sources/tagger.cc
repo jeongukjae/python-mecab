@@ -1,6 +1,8 @@
 #include <cstring>
 #include <iostream>
 #include <iterator>
+#include <mutex>
+#include <thread>
 
 #include "mecab.h"
 #include "mecab/common.h"
@@ -95,19 +97,12 @@ class ModelImpl : public Model {
 
   const Writer* writer() const { return writer_.get(); }
 
-#ifdef HAVE_ATOMIC_OPS
-  read_write_mutex* mutex() const { return &mutex_; }
-#endif
-
  private:
   Viterbi* viterbi_;
+  std::mutex mutex_;
   scoped_ptr<Writer> writer_;
   int request_type_;
   double theta_;
-
-#ifdef HAVE_ATOMIC_OPS
-  mutable read_write_mutex mutex_;
-#endif
 };
 
 class TaggerImpl : public Tagger {
@@ -172,6 +167,8 @@ class TaggerImpl : public Tagger {
   }
 
   const ModelImpl* current_model_;
+  mutable std::mutex mutex_;
+
   scoped_ptr<ModelImpl> model_;
   scoped_ptr<Lattice> lattice_;
   int request_type_;
@@ -319,10 +316,6 @@ bool ModelImpl::swap(Model* model) {
     setGlobalError("current model is not available");
     return false;
   }
-#ifndef HAVE_ATOMIC_OPS
-  setGlobalError("atomic model replacement is not supported");
-  return false;
-#else
   ModelImpl* m = static_cast<ModelImpl*>(model_data.get());
   if (!m) {
     setGlobalError("Invalid model is passed");
@@ -336,7 +329,7 @@ bool ModelImpl::swap(Model* model) {
 
   Viterbi* current_viterbi = viterbi_;
   {
-    scoped_writer_lock l(mutex());
+    std::lock_guard<std::mutex> lock(mutex_);
     viterbi_ = m->take_viterbi();
     request_type_ = m->request_type();
     theta_ = m->theta();
@@ -345,7 +338,6 @@ bool ModelImpl::swap(Model* model) {
   delete current_viterbi;
 
   return true;
-#endif
 }
 
 Tagger* ModelImpl::createTagger() const {
@@ -482,10 +474,7 @@ bool TaggerImpl::all_morphs() const {
 }
 
 bool TaggerImpl::parse(Lattice* lattice) const {
-#ifdef HAVE_ATOMIC_OPS
-  scoped_reader_lock l(model()->mutex());
-#endif
-
+  std::lock_guard<std::mutex> lock(mutex_);
   return model()->viterbi()->analyze(lattice);
 }
 

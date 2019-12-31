@@ -17,7 +17,6 @@ namespace {
 
 #define DCONF(file) create_filename(dicdir, std::string(file)).c_str()
 
-#ifdef MECAB_USE_THREAD
 class learner_thread : public thread {
  public:
   unsigned short start_i;
@@ -40,7 +39,6 @@ class learner_thread : public thread {
     }
   }
 };
-#endif
 
 class CRFLearner {
  public:
@@ -137,13 +135,10 @@ class CRFLearner {
     std::cout << "freq:                " << freq << std::endl;
     std::cout << "eval-size:           " << eval_size << std::endl;
     std::cout << "unk-eval-size:       " << unk_eval_size << std::endl;
-#ifdef MECAB_USE_THREAD
     std::cout << "threads:             " << thread_num << std::endl;
-#endif
     std::cout << "charset:             " << tokenizer.dictionary_info()->charset << std::endl;
     std::cout << "C(sigma^2):          " << C << std::endl << std::endl;
 
-#ifdef MECAB_USE_THREAD
     std::vector<learner_thread> thread;
     if (thread_num > 1) {
       thread.resize(thread_num);
@@ -155,7 +150,6 @@ class CRFLearner {
         thread[i].expected.resize(expected.size());
       }
     }
-#endif
 
     int converge = 0;
     double prev_obj = 0.0;
@@ -169,7 +163,6 @@ class CRFLearner {
       size_t micro_r = 0;
       size_t micro_c = 0;
 
-#ifdef MECAB_USE_THREAD
       if (thread_num > 1) {
         for (size_t i = 0; i < thread_num; ++i) {
           thread[i].start();
@@ -189,9 +182,7 @@ class CRFLearner {
             expected[k] += thread[i].expected[k];
           }
         }
-      } else
-#endif
-      {
+      } else {
         for (size_t i = 0; i < x.size(); ++i) {
           obj += x[i]->gradient(&expected[0]);
           err += x[i]->eval(&micro_c, &micro_p, &micro_r);

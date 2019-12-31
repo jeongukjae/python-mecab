@@ -179,6 +179,7 @@ class Eval {
       }
       printeval(&*ofs, result_tbl[i], prec, recall);
     }
+    ofs->flush();
 
     return true;
   }
