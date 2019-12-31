@@ -9,11 +9,11 @@
 #include <sched.h>
 #endif
 
-#if defined HAVE_OSX_ATOMIC_OPS
+#ifdef HAVE_OSX_ATOMIC_OPS
 #include <libkern/OSAtomic.h>
 #endif
 
-#if defined HAVE_PTHREAD_H
+#ifdef HAVE_PTHREAD_H
 #define MECAB_USE_THREAD 1
 #endif
 

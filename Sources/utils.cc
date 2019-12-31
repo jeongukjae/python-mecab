@@ -226,30 +226,12 @@ bool load_dictionary_resource(Param* param) {
 }
 
 namespace {
-// Copied from MurmurHash3.cpp
-// http://code.google.com/p/smhasher/source/browse/trunk/MurmurHash3.cpp
-//-----------------------------------------------------------------------------
-// Platform-specific functions and macros
-// Microsoft Visual Studio
-#if defined(_MSC_VER)
-
-#define inline __forceinline
-
-#define ROTL32(x, y) _rotl(x, y)
-
-#define BIG_CONSTANT(x) (x)
-
-// Other compilers
-
-#else  // defined(_MSC_VER)
 
 inline uint32_t rotl32(uint32_t x, uint8_t r) {
   return (x << r) | (x >> (32 - r));
 }
 
 #define ROTL32(x, y) rotl32(x, y)
-
-#endif  // !defined(_MSC_VER)
 
 //-----------------------------------------------------------------------------
 // Block read - if your platform needs to do endian-swapping or can only

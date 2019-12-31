@@ -68,7 +68,7 @@ inline unsigned short utf16le_to_ucs2(const char* begin, const char* end, size_t
     return 0;
   }
   *mblen = 2;
-#if defined WORDS_BIGENDIAN
+#ifdef WORDS_BIGENDIAN
   return (begin[1] << 8 | begin[0]);
 #else
   return (begin[0] << 8 | begin[1]);
@@ -76,7 +76,7 @@ inline unsigned short utf16le_to_ucs2(const char* begin, const char* end, size_t
 }
 
 inline unsigned short utf16_to_ucs2(const char* begin, const char* end, size_t* mblen) {
-#if defined WORDS_BIGENDIAN
+#ifdef WORDS_BIGENDIAN
   return utf16be_to_ucs2(begin, end, mblen);
 #else
   return utf16le_to_ucs2(begin, end, mblen);
