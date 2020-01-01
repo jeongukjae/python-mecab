@@ -177,7 +177,6 @@ int load_request_type(const Param& param) {
 bool load_dictionary_resource(Param* param) {
   std::string rcfile = param->get<std::string>("rcfile");
 
-#ifdef HAVE_GETENV
   if (rcfile.empty()) {
     const char* homedir = getenv("HOME");
     if (homedir) {
@@ -195,7 +194,6 @@ bool load_dictionary_resource(Param* param) {
       rcfile = rcenv;
     }
   }
-#endif
 
   if (rcfile.empty()) {
     rcfile = MECAB_DEFAULT_RC;
