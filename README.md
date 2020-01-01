@@ -2,6 +2,7 @@
 
 ![Run Test Status](https://github.com/jeongukjae/python-mecab/workflows/Run%20Test/badge.svg)
 [![codecov](https://codecov.io/gh/jeongukjae/python-mecab/branch/master/graph/badge.svg)](https://codecov.io/gh/jeongukjae/python-mecab)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/0264497c53a1491cb24ecbee05dfb90f)](https://www.codacy.com/manual/jeongukjae/python-mecab?utm_source=github.com&utm_medium=referral&utm_content=jeongukjae/python-mecab&utm_campaign=Badge_Grade)
 
 ![Py Versions](https://img.shields.io/pypi/pyversions/python-mecab)
 ![PyPi Versions](https://img.shields.io/pypi/v/python-mecab)
