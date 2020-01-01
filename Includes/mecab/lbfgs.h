@@ -1,5 +1,5 @@
-#ifndef MECAB_LBFGS_H_
-#define MECAB_LBFGS_H_
+#ifndef _MECAB_LBFGS_H_
+#define _MECAB_LBFGS_H_
 
 #include <iostream>
 #include <vector>
@@ -75,4 +75,4 @@ class LBFGS {
 };
 }  // namespace MeCab
 
-#endif
+#endif  // _MECAB_LBFGS_H_

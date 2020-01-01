@@ -1,5 +1,5 @@
-#ifndef MECAB_UCS_H
-#define MECAB_UCS_H
+#ifndef _MECAB_UCS_H_
+#define _MECAB_UCS_H_
 
 namespace MeCab {
 
@@ -84,4 +84,4 @@ inline unsigned short utf16_to_ucs2(const char* begin, const char* end, size_t* 
 }
 }  // namespace MeCab
 
-#endif
+#endif  // _MECAB_UCS_H_

@@ -1,5 +1,5 @@
-#ifndef MECAB_UTILS_H
-#define MECAB_UTILS_H
+#ifndef _MECAB_UTILS_H_
+#define _MECAB_UTILS_H_
 
 #include <stdint.h>
 
@@ -235,4 +235,5 @@ inline char getEscapedChar(const char p) {
 uint64_t fingerprint(const char* str, size_t size);
 uint64_t fingerprint(const std::string& str);
 }  // namespace MeCab
-#endif
+
+#endif  // _MECAB_UTILS_H_

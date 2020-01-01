@@ -1,5 +1,5 @@
-#ifndef MECAB_CHARACTER_CATEGORY_H_
-#define MECAB_CHARACTER_CATEGORY_H_
+#ifndef _MECAB_CHARACTER_CATEGORY_H_
+#define _MECAB_CHARACTER_CATEGORY_H_
 
 #include "mecab/mmap.h"
 #include "mecab/scoped_ptr.h"
@@ -83,4 +83,5 @@ class CharProperty {
   whatlog what_;
 };
 }  // namespace MeCab
-#endif  // MECAB_CHARACTER_CATEGORY_H_
+
+#endif  // _MECAB_CHARACTER_CATEGORY_H_

@@ -1,5 +1,5 @@
-#ifndef MECAB_WRITER_H_
-#define MECAB_WRITER_H_
+#ifndef _MECAB_WRITER_H_
+#define _MECAB_WRITER_H_
 
 #include <string>
 
@@ -46,4 +46,4 @@ class Writer {
 };
 }  // namespace MeCab
 
-#endif  // WRITER_H_
+#endif  // _MECAB_WRITER_H_

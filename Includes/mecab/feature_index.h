@@ -1,5 +1,5 @@
-#ifndef MECAB_FEATUREINDEX_H_
-#define MECAB_FEATUREINDEX_H_
+#ifndef _MECAB_FEATUREINDEX_H_
+#define _MECAB_FEATUREINDEX_H_
 
 #include <map>
 #include <vector>
@@ -98,4 +98,5 @@ class DecoderFeatureIndex : public FeatureIndex {
   const char* charset_;
 };
 }  // namespace MeCab
-#endif
+
+#endif  // _MECAB_FEATUREINDEX_H_

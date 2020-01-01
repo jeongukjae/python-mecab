@@ -1,5 +1,5 @@
-#ifndef MECAB_FREELIST_H
-#define MECAB_FREELIST_H
+#ifndef _MECAB_FREELIST_H
+#define _MECAB_FREELIST_H
 
 #include <algorithm>
 #include <vector>
@@ -80,4 +80,5 @@ class ChunkFreeList {
   }
 };
 }  // namespace MeCab
-#endif
+
+#endif  // _MECAB_FREELIST_H

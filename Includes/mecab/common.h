@@ -1,5 +1,5 @@
-#ifndef MECAB_COMMON_H_
-#define MECAB_COMMON_H_
+#ifndef _MECAB_COMMON_H_
+#define _MECAB_COMMON_H_
 
 #include <algorithm>
 #include <cmath>
@@ -101,4 +101,4 @@ class wlog {
 #define CHECK_DIE(condition) \
   (condition) ? 0 : die() & std::cerr << __FILE__ << "(" << __LINE__ << ") [" << #condition << "] "
 
-#endif  // MECAB_COMMON_H_
+#endif  // _MECAB_COMMON_H_

@@ -1,5 +1,5 @@
-#ifndef MECAB_LEARNER_NODE_H_
-#define MECAB_LEARNER_NODE_H_
+#ifndef _MECAB_LEARNER_NODE_H_
+#define _MECAB_LEARNER_NODE_H_
 
 #include <cstring>
 
@@ -119,4 +119,4 @@ inline void calc_beta(LearnerNode* n) {
 }
 }  // namespace MeCab
 
-#endif  // MECAB_LEARNER_NODE_H_
+#endif  // _MECAB_LEARNER_NODE_H_

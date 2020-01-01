@@ -1,5 +1,5 @@
-#ifndef MECAB_CONNECTOR_H_
-#define MECAB_CONNECTOR_H_
+#ifndef _MECAB_CONNECTOR_H_
+#define _MECAB_CONNECTOR_H_
 
 #include "mecab.h"
 #include "mecab/common.h"
@@ -54,4 +54,5 @@ class Connector {
   virtual ~Connector() { this->close(); }
 };
 }  // namespace MeCab
-#endif  // MECAB_CONNECTOR_H_
+
+#endif  // _MECAB_CONNECTOR_H_

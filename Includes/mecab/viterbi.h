@@ -1,5 +1,5 @@
-#ifndef MECAB_VITERBI_H_
-#define MECAB_VITERBI_H_
+#ifndef _MECAB_VITERBI_H_
+#define _MECAB_VITERBI_H_
 
 #include <vector>
 
@@ -50,4 +50,5 @@ class Viterbi {
   whatlog what_;
 };
 }  // namespace MeCab
-#endif  // MECAB_VITERBI_H_
+
+#endif  // _MECAB_VITERBI_H_

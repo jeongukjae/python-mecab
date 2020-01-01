@@ -1,5 +1,5 @@
-#ifndef MECAB_NBEST_GENERATOR_H_
-#define MECAB_NBEST_GENERATOR_H_
+#ifndef _MECAB_NBEST_GENERATOR_H_
+#define _MECAB_NBEST_GENERATOR_H_
 
 #include <queue>
 
@@ -33,4 +33,4 @@ class NBestGenerator {
 };
 }  // namespace MeCab
 
-#endif  // MECAB_NBEST_GENERATOR_H_
+#endif  // _MECAB_NBEST_GENERATOR_H_

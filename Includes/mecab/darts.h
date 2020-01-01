@@ -4,8 +4,8 @@
 
   Copyright(C) 2001-2007 Taku Kudo <taku@chasen.org>
 */
-#ifndef DARTS_H_
-#define DARTS_H_
+#ifndef _DARTS_H_
+#define _DARTS_H_
 
 #define DARTS_VERSION "0.31"
 #include <cstdio>
@@ -514,4 +514,5 @@ typedef Darts::DoubleArrayImpl<char, unsigned char, long long, unsigned long lon
 #endif
 }  // namespace Darts
 }  // namespace MeCab
-#endif
+
+#endif  // _DARTS_H_

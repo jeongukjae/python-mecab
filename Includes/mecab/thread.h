@@ -1,5 +1,5 @@
-#ifndef MECAB_THREAD_H
-#define MECAB_THREAD_H
+#ifndef _MECAB_THREAD_H_
+#define _MECAB_THREAD_H_
 
 #include <pthread.h>
 
@@ -25,4 +25,5 @@ class thread {
   virtual ~thread() {}
 };
 }  // namespace MeCab
-#endif
+
+#endif  // _MECAB_THREAD_H_

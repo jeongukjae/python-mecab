@@ -1,5 +1,5 @@
-#ifndef MECAB_ICONV_H
-#define MECAB_ICONV_H
+#ifndef _MECAB_ICONV_H_
+#define _MECAB_ICONV_H_
 
 #include <iconv.h>
 
@@ -17,4 +17,4 @@ class Iconv {
 };
 }  // namespace MeCab
 
-#endif
+#endif // _MECAB_ICONV_H_

@@ -1,5 +1,5 @@
-#ifndef MECAB_MMAP_H
-#define MECAB_MMAP_H
+#ifndef _MECAB_MMAP_H_
+#define _MECAB_MMAP_H_
 
 #include <errno.h>
 #include <sys/stat.h>
@@ -87,4 +87,5 @@ class Mmap {
   virtual ~Mmap() { this->close(); }
 };
 }  // namespace MeCab
-#endif
+
+#endif  // _MECAB_MMAP_H_

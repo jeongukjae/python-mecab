@@ -1,13 +1,13 @@
-#ifndef MECAB_DICTIONARY_REWRITER_H
-#define MECAB_DICTIONARY_REWRITER_H
+#ifndef _MECAB_DICTIONARY_REWRITER_H_
+#define _MECAB_DICTIONARY_REWRITER_H_
 
 #include <map>
 #include <string>
 #include <vector>
 
+#include "mecab.h"
 #include "mecab/common.h"
 #include "mecab/freelist.h"
-#include "mecab.h"
 
 namespace MeCab {
 
@@ -59,4 +59,5 @@ class POSIDGenerator {
   int id(const char* key) const;
 };
 }  // namespace MeCab
-#endif
+
+#endif  // _MECAB_DICTIONARY_REWRITER_H_

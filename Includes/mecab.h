@@ -4,8 +4,8 @@
   Copyright(C) 2001-2011 Taku Kudo <taku@chasen.org>
   Copyright(C) 2004-2006 Nippon Telegraph and Telephone Corporation
 */
-#ifndef MECAB_MECAB_H_
-#define MECAB_MECAB_H_
+#ifndef _MECAB_MECAB_H_
+#define _MECAB_MECAB_H_
 
 /* C/C++ common data structures  */
 
@@ -1491,4 +1491,5 @@ MECAB_DLL_EXTERN const char* getTaggerError();
 #endif
 }  // namespace MeCab
 #endif
-#endif /* MECAB_MECAB_H_ */
+
+#endif /* _MECAB_MECAB_H_ */

@@ -1,5 +1,5 @@
-#ifndef MECAB_TAGGER_H
-#define MECAB_TAGGER_H
+#ifndef _MECAB_TAGGER_H
+#define _MECAB_TAGGER_H
 
 #include <vector>
 
@@ -73,4 +73,4 @@ class DecoderLearnerTagger : public LearnerTagger {
 };
 }  // namespace MeCab
 
-#endif
+#endif  // _MECAB_TAGGER_H

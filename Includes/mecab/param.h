@@ -1,5 +1,5 @@
-#ifndef MECAB_PARAM_H
-#define MECAB_PARAM_H
+#ifndef _MECAB_PARAM_H_
+#define _MECAB_PARAM_H_
 
 #include <map>
 #include <sstream>
@@ -82,4 +82,4 @@ class Param {
 };
 }  // namespace MeCab
 
-#endif
+#endif  // _MECAB_PARAM_H_

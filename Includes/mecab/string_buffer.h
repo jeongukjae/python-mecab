@@ -1,5 +1,5 @@
-#ifndef MECAB_STRINGBUFFER_H
-#define MECAB_STRINGBUFFER_H
+#ifndef _MECAB_STRINGBUFFER_H
+#define _MECAB_STRINGBUFFER_H
 
 #include <string>
 
@@ -69,4 +69,4 @@ class StringBuffer {
 };
 }  // namespace MeCab
 
-#endif
+#endif // _MECAB_STRINGBUFFER_H

@@ -1,5 +1,5 @@
-#ifndef MECAB_SCOPED_PTR_H
-#define MECAB_SCOPED_PTR_H
+#ifndef _MECAB_SCOPED_PTR_H_
+#define _MECAB_SCOPED_PTR_H_
 
 #include <cstring>
 #include <string>
@@ -87,4 +87,5 @@ class scoped_string : public scoped_array<char> {
   }
 };
 }  // namespace MeCab
-#endif
+
+#endif  // _MECAB_SCOPED_PTR_H_

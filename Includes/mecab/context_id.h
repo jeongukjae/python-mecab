@@ -1,5 +1,5 @@
-#ifndef MECAB_CONTEXT_ID_H
-#define MECAB_CONTEXT_ID_H
+#ifndef _MECAB_CONTEXT_ID_H_
+#define _MECAB_CONTEXT_ID_H_
 
 #include <map>
 #include <string>
@@ -36,4 +36,5 @@ class ContextID {
   bool is_valid(size_t lid, size_t rid) { return (lid >= 0 && lid < left_size() && rid >= 0 && rid < right_size()); }
 };
 }  // namespace MeCab
-#endif
+
+#endif  // _MECAB_CONTEXT_ID_H_

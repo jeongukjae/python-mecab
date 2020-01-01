@@ -1,5 +1,5 @@
-#ifndef MECAB_STREAM_WRAPPER_H_
-#define MECAB_STREAM_WRAPPER_H_
+#ifndef _MECAB_STREAM_WRAPPER_H_
+#define _MECAB_STREAM_WRAPPER_H_
 
 #include <cstring>
 #include <fstream>
@@ -52,4 +52,4 @@ class ostream_wrapper {
 };
 }  // namespace MeCab
 
-#endif  // MECAB_STREAM_WRAPPER_H_
+#endif  // _MECAB_STREAM_WRAPPER_H_

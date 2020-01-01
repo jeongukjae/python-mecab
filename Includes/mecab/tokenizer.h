@@ -1,5 +1,5 @@
-#ifndef MECAB_TOKENIZER_H_
-#define MECAB_TOKENIZER_H_
+#ifndef _MECAB_TOKENIZER_H_
+#define _MECAB_TOKENIZER_H_
 
 #include "mecab.h"
 #include "mecab/char_property.h"
@@ -121,4 +121,4 @@ class Tokenizer {
   virtual ~Tokenizer() { this->close(); }
 };
 }  // namespace MeCab
-#endif  // MECAB_TOKENIZER_H_
+#endif  // _MECAB_TOKENIZER_H_

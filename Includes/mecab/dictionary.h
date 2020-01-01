@@ -1,5 +1,5 @@
-#ifndef MECAB_DICTIONARY_H_
-#define MECAB_DICTIONARY_H_
+#ifndef _MECAB_DICTIONARY_H_
+#define _MECAB_DICTIONARY_H_
 
 #include "mecab.h"
 #include "mecab/char_property.h"
@@ -80,4 +80,4 @@ class Dictionary {
   Darts::DoubleArray da_;
 };
 }  // namespace MeCab
-#endif  // MECAB_DICTIONARY_H_
+#endif  // _MECAB_DICTIONARY_H_
