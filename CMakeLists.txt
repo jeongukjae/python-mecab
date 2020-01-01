@@ -21,7 +21,6 @@ set(SOURCE_CODE
       Sources/iconv_utils.cc
       Sources/lbfgs.cc
       Sources/learner_tagger.cc
-      Sources/libmecab.cc
       Sources/nbest_generator.cc
       Sources/param.cc
       Sources/string_buffer.cc

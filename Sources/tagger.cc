@@ -17,8 +17,22 @@
 #include "mecab/viterbi.h"
 #include "mecab/writer.h"
 
-const char* getGlobalError();
-void setGlobalError(const char* str);
+namespace {
+const size_t kErrorBufferSize = 256;
+}
+
+namespace {
+char kErrorBuffer[kErrorBufferSize];
+}  // namespace
+
+const char* getGlobalError() {
+  return kErrorBuffer;
+}
+
+void setGlobalError(const char* str) {
+  strncpy(kErrorBuffer, str, kErrorBufferSize - 1);
+  kErrorBuffer[kErrorBufferSize - 1] = '\0';
+}
 
 namespace MeCab {
 namespace {
