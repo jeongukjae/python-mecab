@@ -17,10 +17,6 @@ const char* decode_charset_iconv(const char* str) {
   switch (charset) {
     case MeCab::UTF8:
       return "UTF-8";
-    case MeCab::EUC_JP:
-      return "EUC-JP";
-    case MeCab::CP932:
-      return "SHIFT-JIS";
     case MeCab::UTF16:
       return "UTF-16";
     case MeCab::UTF16LE:

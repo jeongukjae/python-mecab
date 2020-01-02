@@ -16,11 +16,7 @@ namespace MeCab {
 int decode_charset(const char* charset) {
   std::string tmp = charset;
   tmp = to_lower(tmp);
-  if (tmp == "sjis" || tmp == "shift-jis" || tmp == "shift_jis" || tmp == "cp932")
-    return CP932;
-  else if (tmp == "euc" || tmp == "euc_jp" || tmp == "euc-jp")
-    return EUC_JP;
-  else if (tmp == "utf8" || tmp == "utf_8" || tmp == "utf-8")
+  if (tmp == "utf8" || tmp == "utf_8" || tmp == "utf-8")
     return UTF8;
   else if (tmp == "utf16" || tmp == "utf_16" || tmp == "utf-16")
     return UTF16;

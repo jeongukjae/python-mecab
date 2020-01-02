@@ -16,7 +16,7 @@ namespace MeCab {
 
 class Param;
 
-enum { EUC_JP, CP932, UTF8, UTF16, UTF16LE, UTF16BE, ASCII };
+enum { UTF8, UTF16, UTF16LE, UTF16BE, ASCII };
 int decode_charset(const char* charset);
 
 void inline dtoa(double val, char* s) {

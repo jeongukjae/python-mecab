@@ -2,8 +2,8 @@
 #include "mecab/utils.h"
 
 TEST(mecab_utils, test_decode_charset) {
-  ASSERT_EQ(MeCab::decode_charset("euc"), MeCab::EUC_JP);
   ASSERT_EQ(MeCab::decode_charset("utf8"), MeCab::UTF8);
+  ASSERT_EQ(MeCab::decode_charset("utf16le"), MeCab::UTF16LE);
   ASSERT_EQ(MeCab::decode_charset("invalid"), MeCab::UTF8);
 }
 
