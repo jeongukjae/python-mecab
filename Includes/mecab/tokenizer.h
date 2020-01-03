@@ -92,19 +92,6 @@ class Allocator {
 
 template <typename N, typename P>
 class Tokenizer {
- private:
-  std::vector<Dictionary*> dic_;
-  Dictionary unkdic_;
-  scoped_string bos_feature_;
-  scoped_string unk_feature_;
-  FreeList<DictionaryInfo> dictionary_info_freelist_;
-  std::vector<std::pair<const Token*, size_t>> unk_tokens_;
-  DictionaryInfo* dictionary_info_;
-  CharInfo space_;
-  CharProperty property_;
-  size_t max_grouping_size_;
-  whatlog what_;
-
  public:
   N* getBOSNode(Allocator<N, P>* allocator) const;
   N* getEOSNode(Allocator<N, P>* allocator) const;
@@ -119,6 +106,19 @@ class Tokenizer {
 
   explicit Tokenizer();
   virtual ~Tokenizer() { this->close(); }
+
+ private:
+  std::vector<Dictionary*> dic_;
+  Dictionary unkdic_;
+  scoped_string bos_feature_;
+  scoped_string unk_feature_;
+  FreeList<DictionaryInfo> dictionary_info_freelist_;
+  std::vector<std::pair<const Token*, size_t>> unk_tokens_;
+  DictionaryInfo* dictionary_info_;
+  CharInfo space_;
+  CharProperty property_;
+  size_t max_grouping_size_;
+  whatlog what_;
 };
 }  // namespace MeCab
 #endif  // _MECAB_TOKENIZER_H_
