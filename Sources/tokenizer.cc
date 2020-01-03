@@ -4,8 +4,8 @@
 #include "mecab/connector.h"
 #include "mecab/darts.h"
 #include "mecab/learner_node.h"
-#include "mecab/scoped_ptr.h"
 #include "mecab/param.h"
+#include "mecab/scoped_ptr.h"
 #include "mecab/utils.h"
 #include "mecab/viterbi.h"
 

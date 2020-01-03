@@ -1,14 +1,14 @@
+#include "mecab/iconv_utils.h"
+
 #include <cstring>
 #include <fstream>
 #include <iostream>
 #include <string>
 
+#include "mecab/char_property.h"
 #include "mecab/common.h"
 #include "mecab/scoped_ptr.h"
 #include "mecab/utils.h"
-
-#include "mecab/char_property.h"
-#include "mecab/iconv_utils.h"
 
 namespace {
 

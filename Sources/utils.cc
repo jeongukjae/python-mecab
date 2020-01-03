@@ -1,15 +1,15 @@
+#include "mecab/utils.h"
+
 #include <dirent.h>
+#include <stdint.h>
 
 #include <cstring>
 #include <fstream>
 #include <iostream>
 
-#include <stdint.h>
-
 #include "mecab.h"
 #include "mecab/common.h"
 #include "mecab/param.h"
-#include "mecab/utils.h"
 
 namespace MeCab {
 
