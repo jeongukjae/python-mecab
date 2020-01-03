@@ -1,8 +1,9 @@
 #ifndef _MECAB_CHARACTER_CATEGORY_H_
 #define _MECAB_CHARACTER_CATEGORY_H_
 
+#include <string>
+
 #include "mecab/mmap.h"
-#include "mecab/param.h"
 #include "mecab/scoped_ptr.h"
 #include "mecab/ucs.h"
 #include "mecab/utils.h"
@@ -15,14 +16,15 @@ struct CharInfo {
   unsigned int length : 4;
   unsigned int group : 1;
   unsigned int invoke : 1;
+
   CharInfo() : type(0), default_type(0), length(0), group(0), invoke(0) {}
   bool isKindOf(CharInfo c) const { return type & c.type; }
 };
 
 class CharProperty {
  public:
-  bool open(const Param&);
-  bool open(const char*);
+  bool open(const std::string dicdir);
+  bool open(const char* filename);
   void close();
   size_t size() const;
   void set_charset(const char* charset);

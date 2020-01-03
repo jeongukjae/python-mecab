@@ -77,7 +77,7 @@ bool Tokenizer<N, P>::open(const Param& param) {
   const std::string prefix = param.template get<std::string>("dicdir");
 
   CHECK_FALSE(unkdic_.open(create_filename(prefix, UNK_DIC_FILE).c_str())) << unkdic_.what();
-  CHECK_FALSE(property_.open(param)) << property_.what();
+  CHECK_FALSE(property_.open(param.get<std::string>("dicdir"))) << property_.what();
 
   Dictionary* sysdic = new Dictionary;
 

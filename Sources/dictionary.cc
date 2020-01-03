@@ -156,7 +156,7 @@ bool Dictionary::assignUserDictionaryCosts(const Param& param,
   rewriter.open(rewrite_file.c_str(), &config_iconv);
   CHECK_DIE(fi.open(param)) << "cannot open feature index";
 
-  CHECK_DIE(property.open(param));
+  CHECK_DIE(property.open(param.get<std::string>("dicdir")));
   property.set_charset(from.c_str());
 
   if (!matrix.openText(matrix_file.c_str()) && !matrix.open(matrix_bin_file.c_str())) {
@@ -303,7 +303,7 @@ bool Dictionary::compile(const Param& param, const std::vector<std::string>& dic
           fi.reset(new DecoderFeatureIndex);
           CHECK_DIE(fi->open(param)) << "cannot open feature index";
           property.reset(new CharProperty);
-          CHECK_DIE(property->open(param));
+          CHECK_DIE(property->open(param.get<std::string>("dicdir")));
           property->set_charset(from.c_str());
         }
         cost = calcCost(w, feature, factor, fi.get(), rewrite.get(), property.get());

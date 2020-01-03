@@ -9,7 +9,6 @@
 
 #include "mecab/common.h"
 #include "mecab/mmap.h"
-#include "mecab/param.h"
 #include "mecab/utils.h"
 
 namespace MeCab {
@@ -63,9 +62,8 @@ CharInfo encode(const std::vector<std::string>& c, std::map<std::string, CharInf
 }
 }  // namespace
 
-bool CharProperty::open(const Param& param) {
-  const std::string prefix = param.get<std::string>("dicdir");
-  const std::string filename = create_filename(prefix, CHAR_PROPERTY_FILE);
+bool CharProperty::open(const std::string dicdir) {
+  const std::string filename = create_filename(dicdir, CHAR_PROPERTY_FILE);
   return open(filename.c_str());
 }
 
