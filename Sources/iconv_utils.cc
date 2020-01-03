@@ -24,7 +24,7 @@ const char* decode_charset_iconv(const char* str) {
     case MeCab::UTF16BE:
       return "UTF-16BE";
     default:
-      std::cerr << "charset " << str << " is not defined, use " MECAB_DEFAULT_CHARSET;
+      std::cerr << "charset " << str << " is not defined, use " MECAB_DEFAULT_CHARSET << std::endl;
       return MECAB_DEFAULT_CHARSET;
   }
   return MECAB_DEFAULT_CHARSET;
