@@ -17,7 +17,6 @@ class Mmap {
   T* text;
   size_t length;
   std::string fileName;
-  whatlog what_;
 
   FILE* fd;
   std::string flag;
@@ -30,8 +29,7 @@ class Mmap {
   T* end() { return text + size(); }
   const T* end() const { return text + size(); }
   size_t size() { return length / sizeof(T); }
-  const char* what() { return what_.str(); }
-  const char* file_name() { return fileName.c_str(); }
+  std::string file_name() { return fileName; }
   size_t file_size() { return length; }
   bool empty() { return (length == 0); }
 
@@ -82,7 +80,7 @@ class Mmap {
     text = 0;
   }
 
-  Mmap() : text(NULL), fd(NULL) {}
+  Mmap() : text(NULL), length(0), fd(NULL) {}
 
   virtual ~Mmap() { this->close(); }
 };
