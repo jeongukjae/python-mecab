@@ -5,16 +5,12 @@
 
 #include "mecab.h"
 #include "mecab/common.h"
+#include "mecab/connector.h"
 #include "mecab/scoped_ptr.h"
 #include "mecab/thread.h"
+#include "mecab/tokenizer.h"
 
 namespace MeCab {
-
-class Lattice;
-class Param;
-class Connector;
-template <typename N, typename P>
-class Tokenizer;
 
 class Viterbi {
  public:
