@@ -76,12 +76,12 @@ bool Tokenizer<N, P>::open(const Param& param) {
 
   const std::string prefix = param.template get<std::string>("dicdir");
 
-  CHECK_FALSE(unkdic_.open(create_filename(prefix, UNK_DIC_FILE).c_str())) << unkdic_.what();
-  CHECK_FALSE(property_.open(param.get<std::string>("dicdir"))) << property_.what();
+  CHECK_FALSE(unkdic_.open(create_filename(prefix, UNK_DIC_FILE).c_str()));
+  CHECK_FALSE(property_.open(param.get<std::string>("dicdir")));
 
   Dictionary* sysdic = new Dictionary;
 
-  CHECK_FALSE(sysdic->open(create_filename(prefix, SYS_DIC_FILE).c_str())) << sysdic->what();
+  CHECK_FALSE(sysdic->open(create_filename(prefix, SYS_DIC_FILE).c_str()));
 
   CHECK_FALSE(sysdic->type() == 0) << "not a system dictionary: " << prefix;
 
@@ -96,7 +96,7 @@ bool Tokenizer<N, P>::open(const Param& param) {
     const size_t n = tokenizeCSV(buf.get(), dicfile.get(), dicfile.size());
     for (size_t i = 0; i < n; ++i) {
       Dictionary* d = new Dictionary;
-      CHECK_FALSE(d->open(dicfile[i])) << d->what();
+      CHECK_FALSE(d->open(dicfile[i]));
       CHECK_FALSE(d->type() == 1) << "not a user dictionary: " << dicfile[i];
       CHECK_FALSE(sysdic->isCompatible(*d)) << "incompatible dictionary: " << dicfile[i];
       dic_.push_back(d);

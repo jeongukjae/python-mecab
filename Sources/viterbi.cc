@@ -38,11 +38,11 @@ Viterbi::~Viterbi() {}
 
 bool Viterbi::open(const Param& param) {
   tokenizer_.reset(new Tokenizer<Node, Path>);
-  CHECK_FALSE(tokenizer_->open(param)) << tokenizer_->what();
+  CHECK_FALSE(tokenizer_->open(param));
   CHECK_FALSE(tokenizer_->dictionary_info()) << "Dictionary is empty";
 
   connector_.reset(new Connector);
-  CHECK_FALSE(connector_->open(param)) << connector_->what();
+  CHECK_FALSE(connector_->open(param));
 
   CHECK_FALSE(tokenizer_->dictionary_info()->lsize == connector_->left_size() &&
               tokenizer_->dictionary_info()->rsize == connector_->right_size())

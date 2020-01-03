@@ -38,10 +38,7 @@ void Connector::close() {
 
 bool Connector::openText(const char* filename) {
   std::ifstream ifs(filename);
-  if (!ifs) {
-    WHAT << "no such file or directory: " << filename;
-    return false;
-  }
+  CHECK_FALSE(ifs) << "no such file or directory: " << filename;
   char* column[2];
   scoped_fixed_array<char, BUF_SIZE> buf;
   ifs.getline(buf.get(), buf.size());

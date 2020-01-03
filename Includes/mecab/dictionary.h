@@ -59,8 +59,6 @@ class Dictionary {
                                         const std::vector<std::string>& dics,
                                         const char* output);  // outputs
 
-  const char* what() { return what_.str(); }
-
   explicit Dictionary() : dmmap_(new Mmap<char>), token_(0), feature_(0), charset_(0) {}
   virtual ~Dictionary() { this->close(); }
 
@@ -75,7 +73,6 @@ class Dictionary {
   unsigned int lsize_;
   unsigned int rsize_;
   std::string filename_;
-  whatlog what_;
   Darts::DoubleArray da_;
 };
 }  // namespace MeCab

@@ -72,31 +72,18 @@ class die {
   int operator&(std::ostream&) { return 0; }
 };
 
-struct whatlog {
-  std::ostringstream stream_;
-  std::string str_;
-  const char* str() {
-    str_ = stream_.str();
-    return str_.c_str();
-  }
-};
-
 class wlog {
  public:
-  wlog(whatlog* what) : what_(what) { what_->stream_.clear(); }
+  wlog() {}
+  ~wlog() { std::cerr << std::endl; }
   bool operator&(std::ostream&) { return false; }
-
- private:
-  whatlog* what_;
 };
 }  // namespace MeCab
-
-#define WHAT what_.stream_
 
 #define CHECK_FALSE(condition) \
   if (condition) {             \
   } else                       \
-    return wlog(&what_) & std::cout << __FILE__ << "(" << __LINE__ << ") [" << #condition << "] "
+    return wlog() & std::cerr << __FILE__ << "(" << __LINE__ << ") [" << #condition << "] "
 
 #define CHECK_DIE(condition) \
   (condition) ? 0 : die() & std::cerr << __FILE__ << "(" << __LINE__ << ") [" << #condition << "] "

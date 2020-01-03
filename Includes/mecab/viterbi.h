@@ -22,8 +22,6 @@ class Viterbi {
 
   const Connector* connector() const;
 
-  const char* what() { return what_.str(); }
-
   static bool buildResultForNBest(Lattice* lattice);
 
   Viterbi();
@@ -43,7 +41,6 @@ class Viterbi {
   scoped_ptr<Tokenizer<Node, Path>> tokenizer_;
   scoped_ptr<Connector> connector_;
   int cost_factor_;
-  whatlog what_;
 };
 }  // namespace MeCab
 

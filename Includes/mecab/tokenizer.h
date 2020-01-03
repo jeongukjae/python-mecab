@@ -102,8 +102,6 @@ class Tokenizer {
 
   const DictionaryInfo* dictionary_info() const;
 
-  const char* what() { return what_.str(); }
-
   explicit Tokenizer();
   virtual ~Tokenizer() { this->close(); }
 
@@ -118,7 +116,6 @@ class Tokenizer {
   CharInfo space_;
   CharProperty property_;
   size_t max_grouping_size_;
-  whatlog what_;
 };
 }  // namespace MeCab
 #endif  // _MECAB_TOKENIZER_H_

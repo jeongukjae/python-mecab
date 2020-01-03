@@ -178,13 +178,13 @@ bool Param::open(int argc, char** argv, const Option* opts) {
 ERROR:
   switch (_errno) {
     case 0:
-      WHAT << "unrecognized option `" << argv[ind] << "`";
+      CHECK_FALSE(false) << "unrecognized option `" << argv[ind] << "`";
       break;
     case 1:
-      WHAT << "`" << argv[ind] << "` requires an argument";
+      CHECK_FALSE(false) << "`" << argv[ind] << "` requires an argument";
       break;
     case 2:
-      WHAT << "`" << argv[ind] << "` doesn't allow an argument";
+      CHECK_FALSE(false) << "`" << argv[ind] << "` doesn't allow an argument";
       break;
   }
   return false;

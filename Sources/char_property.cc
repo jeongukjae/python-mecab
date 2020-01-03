@@ -9,6 +9,7 @@
 
 #include "mecab/common.h"
 #include "mecab/mmap.h"
+#include "mecab/scoped_ptr.h"
 #include "mecab/utils.h"
 
 namespace MeCab {

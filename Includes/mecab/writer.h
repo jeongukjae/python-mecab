@@ -25,15 +25,12 @@ class Writer {
 
   bool write(Lattice* lattice, StringBuffer* node) const;
 
-  const char* what() { return what_.str(); }
-
  private:
   scoped_string node_format_;
   scoped_string bos_format_;
   scoped_string eos_format_;
   scoped_string unk_format_;
   scoped_string eon_format_;
-  whatlog what_;
 
   bool writeLattice(Lattice* lattice, StringBuffer* s) const;
   bool writeWakati(Lattice* lattice, StringBuffer* s) const;

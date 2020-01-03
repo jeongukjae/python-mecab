@@ -43,7 +43,6 @@ class Param {
   std::string system_name_;
   std::string help_;
   std::string version_;
-  whatlog what_;
 
  public:
   bool open(int argc, char** argv, const Option* opt);
@@ -53,7 +52,6 @@ class Param {
   const std::vector<std::string>& rest_args() const { return rest_; }
 
   const char* program_name() const { return system_name_.c_str(); }
-  const char* what() { return what_.str(); }
   const char* help() const { return help_.c_str(); }
   const char* version() const { return version_.c_str(); }
   int help_version() const;

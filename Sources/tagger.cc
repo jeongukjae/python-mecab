@@ -291,7 +291,6 @@ ModelImpl::~ModelImpl() {
 bool ModelImpl::open(int argc, char** argv) {
   Param param;
   if (!param.open(argc, argv, long_options) || !load_dictionary_resource(&param)) {
-    setGlobalError(param.what());
     return false;
   }
   return open(param);
@@ -300,22 +299,13 @@ bool ModelImpl::open(int argc, char** argv) {
 bool ModelImpl::open(const char* arg) {
   Param param;
   if (!param.open(arg, long_options) || !load_dictionary_resource(&param)) {
-    setGlobalError(param.what());
     return false;
   }
   return open(param);
 }
 
 bool ModelImpl::open(const Param& param) {
-  if (!writer_->open(param) || !viterbi_->open(param)) {
-    std::string error = viterbi_->what();
-    if (!error.empty()) {
-      error.append(" ");
-    }
-    error.append(writer_->what());
-    setGlobalError(error.c_str());
-    return false;
-  }
+  CHECK_FALSE(writer_->open(param) && viterbi_->open(param));
 
   request_type_ = load_request_type(param);
   theta_ = param.get<double>("theta");
@@ -1060,7 +1050,6 @@ int mecab_do(int argc, char** argv) {
 
   MeCab::Param param;
   if (!param.open(argc, argv, MeCab::long_options)) {
-    std::cout << param.what() << std::endl;
     return EXIT_FAILURE;
   }
 
@@ -1075,7 +1064,6 @@ int mecab_do(int argc, char** argv) {
   }
 
   if (!load_dictionary_resource(&param)) {
-    std::cout << param.what() << std::endl;
     return EXIT_SUCCESS;
   }
 

@@ -15,14 +15,11 @@ class Connector {
   short* matrix_;
   unsigned short lsize_;
   unsigned short rsize_;
-  whatlog what_;
 
  public:
   bool open(const Param& param);
   void close();
   void clear() {}
-
-  const char* what() { return what_.str(); }
 
   size_t left_size() const { return static_cast<size_t>(lsize_); }
   size_t right_size() const { return static_cast<size_t>(rsize_); }

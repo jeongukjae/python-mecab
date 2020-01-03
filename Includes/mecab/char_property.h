@@ -4,7 +4,6 @@
 #include <string>
 
 #include "mecab/mmap.h"
-#include "mecab/scoped_ptr.h"
 #include "mecab/ucs.h"
 #include "mecab/utils.h"
 
@@ -30,7 +29,6 @@ class CharProperty {
   void set_charset(const char* charset);
   int id(const char*) const;
   const char* name(size_t i) const;
-  const char* what() { return what_.str(); }
 
   inline const char* seekToOtherType(const char* begin,
                                      const char* end,
@@ -75,14 +73,16 @@ class CharProperty {
   static bool compile(const char*, const char*, const char*);
 
   CharProperty() : cmmap_(new Mmap<char>), map_(0), charset_(0) {}
-  virtual ~CharProperty() { this->close(); }
+  virtual ~CharProperty() {
+    this->close();
+    delete cmmap_;
+  }
 
  private:
-  scoped_ptr<Mmap<char>> cmmap_;
+  Mmap<char>* cmmap_;
   std::vector<const char*> clist_;
   const CharInfo* map_;
   int charset_;
-  whatlog what_;
 };
 }  // namespace MeCab
 

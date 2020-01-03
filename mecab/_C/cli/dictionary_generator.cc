@@ -22,7 +22,7 @@ namespace MeCab {
 void copy(const char* src, const char* dst) {
   std::cout << "copying " << src << " to " << dst << std::endl;
   Mmap<char> mmap;
-  CHECK_DIE(mmap.open(src)) << mmap.what();
+  CHECK_DIE(mmap.open(src));
   std::ofstream ofs(dst, std::ios::binary | std::ios::out);
   CHECK_DIE(ofs) << "permission denied: " << dst;
   ofs.write(reinterpret_cast<char*>(mmap.begin()), mmap.size());
@@ -170,7 +170,7 @@ class DictionaryGenerator {
     Param param;
 
     if (!param.open(argc, argv, long_options)) {
-      std::cout << param.what() << "\n\n" << COPYRIGHT << "\ntry '--help' for more information." << std::endl;
+      std::cout << "\n\n" << COPYRIGHT << "\ntry '--help' for more information." << std::endl;
       return -1;
     }
 
@@ -199,7 +199,7 @@ class DictionaryGenerator {
     }
 
     CharProperty property;
-    CHECK_DIE(property.open(param));
+    CHECK_DIE(property.open(param.get<std::string>("dicdir")));
     property.set_charset(charset.c_str());
 
     const std::string bos = param.get<std::string>("bos-feature");

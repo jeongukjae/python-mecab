@@ -83,7 +83,7 @@ class Eval {
     MeCab::Param param;
 
     if (!param.open(argc, argv, long_options)) {
-      std::cout << param.what() << "\n\n" << COPYRIGHT << "\ntry '--help' for more information." << std::endl;
+      std::cout << "\n\n" << COPYRIGHT << "\ntry '--help' for more information." << std::endl;
       return -1;
     }
 
@@ -197,7 +197,7 @@ class TestSentenceGenerator {
     param.open(argc, argv, long_options);
 
     if (!param.open(argc, argv, long_options)) {
-      std::cout << param.what() << "\n\n" << COPYRIGHT << "\ntry '--help' for more information." << std::endl;
+      std::cout << "\n\n" << COPYRIGHT << "\ntry '--help' for more information." << std::endl;
       return -1;
     }
 
