@@ -2,6 +2,7 @@
 #define _MECAB_ICONV_H_
 
 #include <iconv.h>
+#include <string>
 
 namespace MeCab {
 
@@ -17,4 +18,4 @@ class Iconv {
 };
 }  // namespace MeCab
 
-#endif // _MECAB_ICONV_H_
+#endif  // _MECAB_ICONV_H_
