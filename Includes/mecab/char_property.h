@@ -2,12 +2,12 @@
 #define _MECAB_CHARACTER_CATEGORY_H_
 
 #include "mecab/mmap.h"
+#include "mecab/param.h"
 #include "mecab/scoped_ptr.h"
 #include "mecab/ucs.h"
 #include "mecab/utils.h"
 
 namespace MeCab {
-class Param;
 
 struct CharInfo {
   unsigned int type : 18;

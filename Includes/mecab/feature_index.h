@@ -11,11 +11,10 @@
 #include "mecab/freelist.h"
 #include "mecab/learner_node.h"
 #include "mecab/mmap.h"
+#include "mecab/param.h"
 #include "mecab/string_buffer.h"
 
 namespace MeCab {
-
-class Param;
 
 class FeatureIndex {
  public:

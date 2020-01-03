@@ -5,10 +5,9 @@
 #include "mecab/char_property.h"
 #include "mecab/darts.h"
 #include "mecab/mmap.h"
+#include "mecab/param.h"
 
 namespace MeCab {
-
-class Param;
 
 struct Token {
   unsigned short lcAttr;

@@ -5,10 +5,10 @@
 #include <string>
 #include <vector>
 
-namespace MeCab {
+#include "mecab/iconv_utils.h"
+#include "mecab/param.h"
 
-class Param;
-class Iconv;
+namespace MeCab {
 
 class ContextID {
  private:
