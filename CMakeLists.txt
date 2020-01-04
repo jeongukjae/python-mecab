@@ -22,7 +22,6 @@ set(SOURCE_CODE
       Sources/lbfgs.cc
       Sources/learner_tagger.cc
       Sources/nbest_generator.cc
-      Sources/param.cc
       Sources/string_buffer.cc
       Sources/tagger.cc
       Sources/tokenizer.cc
