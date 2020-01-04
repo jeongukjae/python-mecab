@@ -1054,12 +1054,12 @@ int mecab_do(int argc, char** argv) {
   }
 
   if (param.get<bool>("help")) {
-    std::cout << param.help() << std::endl;
+    std::cout << param.getHelpMessage() << std::endl;
     return EXIT_SUCCESS;
   }
 
   if (param.get<bool>("version")) {
-    std::cout << param.version() << std::endl;
+    std::cout << param.getVersion() << std::endl;
     return EXIT_SUCCESS;
   }
 

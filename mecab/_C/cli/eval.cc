@@ -87,12 +87,12 @@ class Eval {
       return -1;
     }
 
-    if (!param.help_version())
+    if (!param.printVersion())
       return 0;
 
     const std::vector<std::string>& files = param.rest_args();
     if (files.size() < 2) {
-      std::cout << "Usage: " << param.program_name() << " output answer" << std::endl;
+      std::cout << "Usage: " << param.getProgramName() << " output answer" << std::endl;
       return -1;
     }
 
@@ -201,7 +201,7 @@ class TestSentenceGenerator {
       return -1;
     }
 
-    if (!param.help_version()) {
+    if (!param.printVersion()) {
       return 0;
     }
 

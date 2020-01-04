@@ -54,7 +54,7 @@ class DictionaryComplier {
       return -1;
     }
 
-    if (!param.help_version()) {
+    if (!param.printVersion()) {
       return 0;
     }
 

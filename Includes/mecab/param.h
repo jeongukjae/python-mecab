@@ -22,7 +22,6 @@ struct Option {
   const char* description;
 };
 
-
 namespace {
 template <class Target, class Source>
 Target lexical_cast(Source arg) {
@@ -76,6 +75,22 @@ void init_param(std::string* help, std::string* version, const std::string& syst
 }
 
 enum ArgError { UNRECOGNIZED, REQUIRE_ARG, NO_ARG };
+
+bool printArgError(const ArgError error, const char* option) {
+  switch (error) {
+    case UNRECOGNIZED:
+      CHECK_FALSE(false) << "unrecognized option `" << option << "`";
+      break;
+    case REQUIRE_ARG:
+      CHECK_FALSE(false) << "`" << option << "` requires an argument";
+      break;
+    case NO_ARG:
+      CHECK_FALSE(false) << "`" << option << "` doesn't allow an argument";
+      break;
+  }
+  return false;
+}
+
 }  // namespace
 
 class Param {
@@ -85,21 +100,6 @@ class Param {
   std::string system_name_;
   std::string help_;
   std::string version_;
-
-  bool raiseError(const ArgError error, const char* option) const {
-    switch (error) {
-      case UNRECOGNIZED:
-        CHECK_FALSE(false) << "unrecognized option `" << option << "`";
-        break;
-      case REQUIRE_ARG:
-        CHECK_FALSE(false) << "`" << option << "` requires an argument";
-        break;
-      case NO_ARG:
-        CHECK_FALSE(false) << "`" << option << "` doesn't allow an argument";
-        break;
-    }
-    return false;
-  }
 
  public:
   bool open(int argc, char** argv, const Option* opts) {
@@ -141,19 +141,19 @@ class Param {
           }
 
           if (!hit)
-            return raiseError(UNRECOGNIZED, argv[ind]);
+            return printArgError(UNRECOGNIZED, argv[ind]);
 
           if (opts[i].arg_description) {
             if (*s == '=') {
               set<std::string>(opts[i].name, s + 1);
             } else {
               if (argc == (ind + 1))
-                return raiseError(REQUIRE_ARG, argv[ind]);
+                return printArgError(REQUIRE_ARG, argv[ind]);
               set<std::string>(opts[i].name, argv[++ind]);
             }
           } else {
             if (*s == '=')
-              return raiseError(NO_ARG, argv[ind]);
+              return printArgError(NO_ARG, argv[ind]);
             set<int>(opts[i].name, 1);
           }
 
@@ -169,19 +169,19 @@ class Param {
           }
 
           if (!hit)
-            return raiseError(UNRECOGNIZED, argv[ind]);
+            return printArgError(UNRECOGNIZED, argv[ind]);
 
           if (opts[i].arg_description) {
             if (argv[ind][2] != '\0') {
               set<std::string>(opts[i].name, &argv[ind][2]);
             } else {
               if (argc == (ind + 1))
-                return raiseError(REQUIRE_ARG, argv[ind]);
+                return printArgError(REQUIRE_ARG, argv[ind]);
               set<std::string>(opts[i].name, argv[++ind]);
             }
           } else {
             if (argv[ind][2] != '\0')
-              return raiseError(NO_ARG, argv[ind]);
+              return printArgError(NO_ARG, argv[ind]);
             set<int>(opts[i].name, 1);
           }
         }
@@ -248,17 +248,17 @@ class Param {
 
   const std::vector<std::string>& rest_args() const { return rest_; }
 
-  const char* program_name() const { return system_name_.c_str(); }
-  const char* help() const { return help_.c_str(); }
-  const char* version() const { return version_.c_str(); }
-  int help_version() const {
+  std::string getProgramName() const { return system_name_; }
+  std::string getHelpMessage() const { return help_; }
+  std::string getVersion() const { return version_; }
+  int printVersion() const {
     if (get<bool>("help")) {
-      std::cout << help();
+      std::cout << help_ << std::endl;
       return 0;
     }
 
     if (get<bool>("version")) {
-      std::cout << version();
+      std::cout << version_ << std::endl;
       return 0;
     }
 

@@ -48,7 +48,7 @@ class CRFLearner {
 
     const std::vector<std::string>& files = param->rest_args();
     if (files.size() != 2) {
-      std::cout << "Usage: " << param->program_name() << " corpus model" << std::endl;
+      std::cout << "Usage: " << param->getProgramName() << " corpus model" << std::endl;
       return -1;
     }
 
@@ -265,7 +265,7 @@ class Learner {
       return -1;
     }
 
-    if (!param.help_version()) {
+    if (!param.printVersion()) {
       return 0;
     }
 
