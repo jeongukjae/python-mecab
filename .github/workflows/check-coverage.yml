@@ -56,5 +56,5 @@ jobs:
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
         run: |
-          codecov -f coverage.xml -Xgcov
-          codecov -f build/coverage.info
+          codecov -f coverage.xml -Xgcov -F integration
+          codecov -f build/coverage.info -F unittests
