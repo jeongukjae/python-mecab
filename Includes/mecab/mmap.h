@@ -81,7 +81,6 @@ class Mmap {
   }
 
   Mmap() : text(NULL), length(0), fd(NULL) {}
-
   virtual ~Mmap() { this->close(); }
 };
 }  // namespace MeCab
