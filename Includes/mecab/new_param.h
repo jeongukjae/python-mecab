@@ -48,7 +48,7 @@ Target castString(std::string arg) {
   std::stringstream interpreter;
   Target result;
   if (!(interpreter << arg) || !(interpreter >> result) || !(interpreter >> std::ws).eof())
-    return nullptr;
+    return (Target) nullptr;
   return result;
 }
 
@@ -155,7 +155,33 @@ class Param {
         if (iterator == longOptionMap.end())
           return printArgError(UNRECOGNIZED, argument);
 
+        Option selected = *iterator->second;
+        if (selected.argName.empty()) {
+          // this argument does not need arguments, but passed
+          if (argument.length() != selected.optionName.length() + 2)
+            return printArgError(NO_ARG, argument);
+
+          configurations[selected.optionName] = "1";
+        } else {
+          // TODO
+        }
       } else if (argument.rfind("-", 0) == 0) {
+        char shortArg = argument.at(1);
+
+        auto iterator = shortOptionMap.find(shortArg);
+        if (iterator == shortOptionMap.end())
+          return printArgError(UNRECOGNIZED, argument);
+
+        Option selected = *iterator->second;
+        if (selected.argName.empty()) {
+          // this argument does not need arguments, but passed
+          if (argument.length() != 2)
+            return printArgError(NO_ARG, argument);
+
+          configurations[selected.optionName] = "1";
+        } else {
+          // TODO
+        }
       } else {
         restParameters.push_back(argument);
       }
@@ -183,7 +209,7 @@ class Param {
   Target get(std::string key) const {
     auto iterator = configurations.find(key);
     if (iterator == configurations.end())
-      return nullptr;
+      return (Target) nullptr;
     return castString<Target>(iterator->second);
   }
 

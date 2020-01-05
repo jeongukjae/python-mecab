@@ -28,3 +28,34 @@ TEST(mecab_param, test_help_version_messages) {
   ASSERT_STREQ(param.getVersionMessage().c_str(), "mecab of 0.996\n");
   ASSERT_STREQ(param.getCommandName().c_str(), "command");
 }
+
+TEST(mecab_param, test_parse_help_argument) {
+  MeCab::Param param;
+  std::vector<MeCab::Option> emptyOption;
+
+  MAKE_ARGS(arguments, "command", "-h");
+  ASSERT_TRUE(param.parse(arguments.size(), arguments.data(), emptyOption));
+  ASSERT_TRUE(param.get<bool>("help"));
+  ASSERT_FALSE(param.get<bool>("some-unknown"));
+}
+
+TEST(mecab_param, test_parse_long_help_argument) {
+  MeCab::Param param;
+  std::vector<MeCab::Option> emptyOption;
+
+  MAKE_ARGS(arguments, "command", "--help");
+  ASSERT_TRUE(param.parse(arguments.size(), arguments.data(), emptyOption));
+  ASSERT_TRUE(param.get<bool>("help"));
+  ASSERT_FALSE(param.get<bool>("some-unknown"));
+}
+
+TEST(mecab_param, test_parse_version_and_help_argument) {
+  MeCab::Param param;
+  std::vector<MeCab::Option> emptyOption;
+
+  MAKE_ARGS(arguments, "command", "-v", "-h");
+  ASSERT_TRUE(param.parse(arguments.size(), arguments.data(), emptyOption));
+  ASSERT_TRUE(param.get<bool>("version"));
+  ASSERT_TRUE(param.get<bool>("help"));
+  ASSERT_FALSE(param.get<bool>("some-unknown"));
+}
