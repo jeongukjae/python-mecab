@@ -30,6 +30,7 @@ set(SOURCE_CODE
       Sources/writer.cc)
 set(TEST_CODE
       tests/cc/test_mmap.cc
+      tests/cc/test_param.cc
       tests/cc/test_utils.cc)
 
 find_package(Iconv REQUIRED)
