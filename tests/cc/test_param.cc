@@ -212,14 +212,6 @@ TEST(mecab_param, test_dump_config) {
   ASSERT_THAT(captured, testing::HasSubstr("version: \n"));
 }
 
-TEST(mecab_param, test_value_containing_whitespcae) {
-  MeCab::Param param;
-
-  MAKE_ARGS(arguments, "command", "-a", "0 1 2 4");
-  ASSERT_TRUE(param.parse(arguments.size(), arguments.data(), options));
-  ASSERT_EQ(param.get<std::string>("arg-option"), "0 1 2 4");
-}
-
 /* file content:
 ; some-comment = 123
 # some-comment = 123
@@ -253,4 +245,24 @@ TEST(mecab_param, test_get_rest_parameters) {
 
   ASSERT_TRUE(param.parse(arguments.size(), arguments.data(), options));
   ASSERT_THAT(param.getRestParameters(), testing::ElementsAre("1", "2", "3", "4"));
+}
+
+// =========
+// regressions
+
+TEST(mecab_param, test_value_containing_whitespcae) {
+  MeCab::Param param;
+
+  MAKE_ARGS(arguments, "command", "-a", "0 1 2 4");
+  ASSERT_TRUE(param.parse(arguments.size(), arguments.data(), options));
+  ASSERT_EQ(param.get<std::string>("arg-option"), "0 1 2 4");
+}
+
+TEST(mecab_param, test_parse_autolink_dicrc) {
+  MeCab::Param param;
+
+  param.set("output-format-type", "");
+  ASSERT_TRUE(param.parseFile("../tests/test-data/autolink/dicrc"));
+  ASSERT_EQ(param.get<std::string>("output-format-type"), "autolink");
+  ASSERT_EQ(param.get<std::string>("node-format-autolink"), "<a href=\"%H\">%M</a>");
 }

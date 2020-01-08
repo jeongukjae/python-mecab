@@ -56,15 +56,15 @@ bool Writer::open(const Param& param) {
       unk_format_key += ostyle;
       eon_format_key += "-";
       eon_format_key += ostyle;
-      const std::string tmp = param.get<std::string>(node_format_key.c_str());
+      const std::string tmp = param.get<std::string>(node_format_key);
       CHECK_FALSE(!tmp.empty()) << "unknown format type [" << ostyle << "]";
     }
 
-    const std::string node_format2 = param.get<std::string>(node_format_key.c_str());
-    const std::string bos_format2 = param.get<std::string>(bos_format_key.c_str());
-    const std::string eos_format2 = param.get<std::string>(eos_format_key.c_str());
-    const std::string unk_format2 = param.get<std::string>(unk_format_key.c_str());
-    const std::string eon_format2 = param.get<std::string>(eon_format_key.c_str());
+    const std::string node_format2 = param.get<std::string>(node_format_key);
+    const std::string bos_format2 = param.get<std::string>(bos_format_key);
+    const std::string eos_format2 = param.get<std::string>(eos_format_key);
+    const std::string unk_format2 = param.get<std::string>(unk_format_key);
+    const std::string eon_format2 = param.get<std::string>(eon_format_key);
 
     if (node_format != node_format2 || bos_format != bos_format2 || eos_format != eos_format2 ||
         unk_format != unk_format2) {

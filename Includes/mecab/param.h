@@ -281,7 +281,8 @@ class Param {
   }
 
   void set(const std::string key, const std::string value, bool override = true) {
-    if (override || (configurations.find(key) == configurations.end()))
+    auto found = configurations.find(key);
+    if (override || (found == configurations.end()) || (found->second.empty()))
       configurations[key] = value;
   }
 

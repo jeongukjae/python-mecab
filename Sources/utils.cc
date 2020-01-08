@@ -206,13 +206,9 @@ bool load_dictionary_resource(Param* param) {
   std::string rcpath = remove_filename(rcfile);
   dicdir = replace_string(dicdir, "$(rcpath)", rcpath);
   param->set("dicdir", dicdir, true);
-  dicdir = create_filename(dicdir, DICRC);
+  std::string dicrc = create_filename(dicdir, DICRC);
 
-  if (!param->parseFile(dicdir.c_str())) {
-    return false;
-  }
-
-  return true;
+  return param->parseFile(dicrc);
 }
 
 namespace {
