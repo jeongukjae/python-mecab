@@ -202,3 +202,11 @@ TEST(mecab_param, test_parse_file_after_parsing_parameter) {
   ASSERT_EQ(param.get<std::string>("test-option2"), "blablablabla");
   ASSERT_EQ(param.get<std::string>("unknown-option"), "");
 }
+
+TEST(mecab_param, test_get_rest_parameters) {
+  MeCab::Param param;
+  MAKE_ARGS(arguments, "command", "-t", "1", "2", "3", "4");
+
+  ASSERT_TRUE(param.parse(arguments.size(), arguments.data(), options));
+  ASSERT_THAT(param.getRestParameters(), testing::ElementsAre("1", "2", "3", "4"));
+}

@@ -141,7 +141,7 @@ class Param {
     Option* optionForNextArg = nullptr;
 
     for (auto& argument : arguments) {
-      if (argument.size() == 0)
+      if (*arguments.begin() == argument || argument.size() == 0)
         continue;
 
       if (optionForNextArg != nullptr) {
@@ -258,7 +258,12 @@ class Param {
     return castString<Target>(iterator->second);
   }
 
-  void clear() { configurations.clear(); }
+  const std::vector<std::string>& getRestParameters() const { return restParameters; }
+
+  void clear() {
+    configurations.clear();
+    restParameters.clear();
+  }
 
   const std::string getCommandName() const { return commandName; }
   const std::string getHelpMessage() const { return helpMessage; }
