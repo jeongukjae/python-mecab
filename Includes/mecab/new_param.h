@@ -230,19 +230,19 @@ class Param {
     return castString<Target>(iterator->second);
   }
 
-  template <>
-  std::string get(std::string key) const {
-    auto iterator = configurations.find(key);
-    if (iterator == configurations.end())
-      return "";
-    return iterator->second;
-  }
-
   void clear() { configurations.clear(); }
 
   const std::string getCommandName() const { return commandName; }
   const std::string getHelpMessage() const { return helpMessage; }
   const std::string getVersionMessage() const { return versionMessage; }
 };
+
+template <>
+std::string Param::get(std::string key) const {
+  auto iterator = configurations.find(key);
+  if (iterator == configurations.end())
+    return "";
+  return iterator->second;
+}
 }  // namespace MeCab
 #endif  // _MECAB_NEW_PARAM_H_
