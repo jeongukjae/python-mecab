@@ -1,3 +1,4 @@
+#include "gmock/gmock.h"
 #include "gtest/gtest.h"
 #include "mecab/new_param.h"
 
@@ -58,4 +59,86 @@ TEST(mecab_param, test_parse_version_and_help_argument) {
   ASSERT_TRUE(param.get<bool>("version"));
   ASSERT_TRUE(param.get<bool>("help"));
   ASSERT_FALSE(param.get<bool>("some-unknown"));
+}
+
+TEST(mecab_param, test_parse_argument_1) {
+  MeCab::Param param;
+
+  MAKE_ARGS(arguments, "command", "-a=hello");
+  ASSERT_TRUE(param.parse(arguments.size(), arguments.data(), options));
+  ASSERT_STREQ(param.get<std::string>("arg-option").c_str(), "hello");
+}
+
+TEST(mecab_param, test_parse_argument_2) {
+  MeCab::Param param;
+
+  MAKE_ARGS(arguments, "command", "-a=");
+  ASSERT_TRUE(param.parse(arguments.size(), arguments.data(), options));
+  ASSERT_STREQ(param.get<std::string>("arg-option").c_str(), "");
+}
+
+TEST(mecab_param, test_parse_argument_3) {
+  MeCab::Param param;
+
+  MAKE_ARGS(arguments, "command", "-ahello");
+  ASSERT_TRUE(param.parse(arguments.size(), arguments.data(), options));
+  ASSERT_STREQ(param.get<std::string>("arg-option").c_str(), "hello");
+}
+
+TEST(mecab_param, test_parse_argument_4) {
+  MeCab::Param param;
+
+  MAKE_ARGS(arguments, "command", "-a", "hello");
+  ASSERT_TRUE(param.parse(arguments.size(), arguments.data(), options));
+  ASSERT_STREQ(param.get<std::string>("arg-option").c_str(), "hello");
+}
+TEST(mecab_param, test_parse_argument_5) {
+  MeCab::Param param;
+
+  testing::internal::CaptureStderr();
+  MAKE_ARGS(arguments, "command", "-a");
+  ASSERT_FALSE(param.parse(arguments.size(), arguments.data(), options));
+  EXPECT_THAT(testing::internal::GetCapturedStderr(), ::testing::HasSubstr("`arg-option` requires an argument"));
+}
+
+TEST(mecab_param, test_parse_long_argument_1) {
+  MeCab::Param param;
+
+  MAKE_ARGS(arguments, "command", "--arg-option", "hello");
+  ASSERT_TRUE(param.parse(arguments.size(), arguments.data(), options));
+  ASSERT_STREQ(param.get<std::string>("arg-option").c_str(), "hello");
+}
+
+TEST(mecab_param, test_parse_long_argument_2) {
+  MeCab::Param param;
+
+  MAKE_ARGS(arguments, "command", "--arg-option=hello");
+  ASSERT_TRUE(param.parse(arguments.size(), arguments.data(), options));
+  ASSERT_STREQ(param.get<std::string>("arg-option").c_str(), "hello");
+}
+
+TEST(mecab_param, test_parse_long_argument_3) {
+  MeCab::Param param;
+
+  MAKE_ARGS(arguments, "command", "--arg-option=");
+  ASSERT_TRUE(param.parse(arguments.size(), arguments.data(), options));
+  ASSERT_STREQ(param.get<std::string>("arg-option").c_str(), "");
+}
+
+TEST(mecab_param, test_parse_long_argument_4) {
+  MeCab::Param param;
+
+  testing::internal::CaptureStderr();
+  MAKE_ARGS(arguments, "command", "--arg-option");
+  ASSERT_FALSE(param.parse(arguments.size(), arguments.data(), options));
+  EXPECT_THAT(testing::internal::GetCapturedStderr(), ::testing::HasSubstr("`arg-option` requires an argument"));
+}
+
+TEST(mecab_param, test_parse_long_argument_5) {
+  MeCab::Param param;
+
+  testing::internal::CaptureStderr();
+  MAKE_ARGS(arguments, "command", "--arg-optiontest");
+  ASSERT_FALSE(param.parse(arguments.size(), arguments.data(), options));
+  EXPECT_THAT(testing::internal::GetCapturedStderr(), ::testing::HasSubstr("unrecognized option `--arg-optiontest`"));
 }

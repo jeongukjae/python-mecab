@@ -141,16 +141,24 @@ class Param {
       shortOptionMap[option.shortOption] = &option;
     }
 
+    Option* optionForNextArg = nullptr;
+
     for (auto& argument : arguments) {
       if (argument.size() == 0)
         continue;
+
+      if (optionForNextArg != nullptr) {
+        configurations[optionForNextArg->optionName] = std::string(argument);
+        optionForNextArg = nullptr;
+        continue;
+      }
 
       if (argument.rfind("--", 0) == 0) {
         size_t end = argument.find_first_of("=");
         if (end == std::string::npos)
           end = argument.length();
 
-        std::string key = argument.substr(2, end);
+        std::string key = argument.substr(2, end - 2);
         auto iterator = longOptionMap.find(key);
         if (iterator == longOptionMap.end())
           return printArgError(UNRECOGNIZED, argument);
@@ -162,8 +170,11 @@ class Param {
             return printArgError(NO_ARG, argument);
 
           configurations[selected.optionName] = "1";
+        } else if (argument.length() == selected.optionName.length() + 2) {
+          optionForNextArg = &selected;
         } else {
-          // TODO
+          auto value = argument.substr(selected.optionName.length() + 3);
+          configurations[selected.optionName] = value;
         }
       } else if (argument.rfind("-", 0) == 0) {
         char shortArg = argument.at(1);
@@ -179,13 +190,24 @@ class Param {
             return printArgError(NO_ARG, argument);
 
           configurations[selected.optionName] = "1";
+        } else if (argument.length() == 2) {
+          // -a some-arg
+          optionForNextArg = &selected;
+        } else if (argument.at(2) == '=') {
+          // -a=some-arg
+          auto value = argument.substr(3);
+          configurations[selected.optionName] = value;
         } else {
-          // TODO
+          auto value = argument.substr(2);
+          configurations[selected.optionName] = value;
         }
       } else {
         restParameters.push_back(argument);
       }
     }
+
+    if (optionForNextArg)
+      return printArgError(REQUIRE_ARG, optionForNextArg->optionName);
 
     return true;
   }
@@ -211,6 +233,10 @@ class Param {
     if (iterator == configurations.end())
       return (Target) nullptr;
     return castString<Target>(iterator->second);
+  }
+
+  void clear() {
+    configurations.clear();
   }
 
   const std::string getCommandName() const { return commandName; }
