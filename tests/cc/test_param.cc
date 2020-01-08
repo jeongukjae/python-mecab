@@ -17,17 +17,17 @@ TEST(mecab_param, test_help_version_messages) {
   MAKE_ARGS(arguments, "command", "-v");
 
   ASSERT_TRUE(param.parse(arguments.size(), arguments.data(), options));
-  ASSERT_STREQ(param.getHelpMessage().c_str(),
-               "MeCab: Yet Another Part-of-Speech and Morphological Analyzer\n\n"
-               "Copyright(C) 2001-2012 Taku Kudo\n"
-               "Copyright(C) 2004-2008 Nippon Telegraph and Telephone Corporation\n\n"
-               "Usage: command [options] files\n"
-               " -t, --test-option    some description of test-option\n"
-               " -a, --arg-option=ARG some description of arg-option\n"
-               " -h, --help           print help message and exit\n"
-               " -v, --version        print version and exit\n");
-  ASSERT_STREQ(param.getVersionMessage().c_str(), "mecab of 0.996\n");
-  ASSERT_STREQ(param.getCommandName().c_str(), "command");
+  ASSERT_EQ(param.getHelpMessage(),
+            "MeCab: Yet Another Part-of-Speech and Morphological Analyzer\n\n"
+            "Copyright(C) 2001-2012 Taku Kudo\n"
+            "Copyright(C) 2004-2008 Nippon Telegraph and Telephone Corporation\n\n"
+            "Usage: command [options] files\n"
+            " -t, --test-option    some description of test-option\n"
+            " -a, --arg-option=ARG some description of arg-option\n"
+            " -h, --help           print help message and exit\n"
+            " -v, --version        print version and exit\n");
+  ASSERT_EQ(param.getVersionMessage(), "mecab of 0.996\n");
+  ASSERT_EQ(param.getCommandName(), "command");
 }
 
 TEST(mecab_param, test_parse_help_argument) {
@@ -66,7 +66,7 @@ TEST(mecab_param, test_parse_argument_1) {
 
   MAKE_ARGS(arguments, "command", "-a=hello");
   ASSERT_TRUE(param.parse(arguments.size(), arguments.data(), options));
-  ASSERT_STREQ(param.get<std::string>("arg-option").c_str(), "hello");
+  ASSERT_EQ(param.get<std::string>("arg-option"), "hello");
 }
 
 TEST(mecab_param, test_parse_argument_2) {
@@ -74,7 +74,7 @@ TEST(mecab_param, test_parse_argument_2) {
 
   MAKE_ARGS(arguments, "command", "-a=");
   ASSERT_TRUE(param.parse(arguments.size(), arguments.data(), options));
-  ASSERT_STREQ(param.get<std::string>("arg-option").c_str(), "");
+  ASSERT_EQ(param.get<std::string>("arg-option"), "");
 }
 
 TEST(mecab_param, test_parse_argument_3) {
@@ -82,7 +82,7 @@ TEST(mecab_param, test_parse_argument_3) {
 
   MAKE_ARGS(arguments, "command", "-ahello");
   ASSERT_TRUE(param.parse(arguments.size(), arguments.data(), options));
-  ASSERT_STREQ(param.get<std::string>("arg-option").c_str(), "hello");
+  ASSERT_EQ(param.get<std::string>("arg-option"), "hello");
 }
 
 TEST(mecab_param, test_parse_argument_4) {
@@ -90,7 +90,7 @@ TEST(mecab_param, test_parse_argument_4) {
 
   MAKE_ARGS(arguments, "command", "-a", "hello");
   ASSERT_TRUE(param.parse(arguments.size(), arguments.data(), options));
-  ASSERT_STREQ(param.get<std::string>("arg-option").c_str(), "hello");
+  ASSERT_EQ(param.get<std::string>("arg-option"), "hello");
 }
 TEST(mecab_param, test_parse_argument_5) {
   MeCab::Param param;
@@ -106,7 +106,7 @@ TEST(mecab_param, test_parse_long_argument_1) {
 
   MAKE_ARGS(arguments, "command", "--arg-option", "hello");
   ASSERT_TRUE(param.parse(arguments.size(), arguments.data(), options));
-  ASSERT_STREQ(param.get<std::string>("arg-option").c_str(), "hello");
+  ASSERT_EQ(param.get<std::string>("arg-option"), "hello");
 }
 
 TEST(mecab_param, test_parse_long_argument_2) {
@@ -114,7 +114,7 @@ TEST(mecab_param, test_parse_long_argument_2) {
 
   MAKE_ARGS(arguments, "command", "--arg-option=hello");
   ASSERT_TRUE(param.parse(arguments.size(), arguments.data(), options));
-  ASSERT_STREQ(param.get<std::string>("arg-option").c_str(), "hello");
+  ASSERT_EQ(param.get<std::string>("arg-option"), "hello");
 }
 
 TEST(mecab_param, test_parse_long_argument_3) {
@@ -122,7 +122,7 @@ TEST(mecab_param, test_parse_long_argument_3) {
 
   MAKE_ARGS(arguments, "command", "--arg-option=");
   ASSERT_TRUE(param.parse(arguments.size(), arguments.data(), options));
-  ASSERT_STREQ(param.get<std::string>("arg-option").c_str(), "");
+  ASSERT_EQ(param.get<std::string>("arg-option"), "");
 }
 
 TEST(mecab_param, test_parse_long_argument_4) {
@@ -141,4 +141,37 @@ TEST(mecab_param, test_parse_long_argument_5) {
   MAKE_ARGS(arguments, "command", "--arg-optiontest");
   ASSERT_FALSE(param.parse(arguments.size(), arguments.data(), options));
   EXPECT_THAT(testing::internal::GetCapturedStderr(), ::testing::HasSubstr("unrecognized option `--arg-optiontest`"));
+}
+
+TEST(mecab_param, test_multiple_arg_1) {
+  MeCab::Param param;
+
+  MAKE_ARGS(arguments, "command", "--arg-option=blabla", "-t");
+  ASSERT_TRUE(param.parse(arguments.size(), arguments.data(), options));
+  ASSERT_TRUE(param.get<bool>("test-option"));
+  ASSERT_EQ(param.get<std::string>("arg-option"), "blabla");
+}
+
+TEST(mecab_param, test_clear) {
+  MeCab::Param param;
+
+  MAKE_ARGS(arguments, "command", "--arg-option=hello");
+  ASSERT_TRUE(param.parse(arguments.size(), arguments.data(), options));
+  ASSERT_EQ(param.get<std::string>("arg-option"), "hello");
+
+  param.clear();
+  ASSERT_EQ(param.get<std::string>("arg-option"), "");
+}
+
+TEST(mecab_param, test_get_unknown) {
+  MeCab::Param param;
+
+  MAKE_ARGS(arguments, "command", "--arg-option=hello");
+  ASSERT_TRUE(param.parse(arguments.size(), arguments.data(), options));
+  ASSERT_EQ(param.get<std::string>("arg-option"), "hello");
+  ASSERT_EQ(param.get<bool>("unknown"), false);
+  ASSERT_EQ(param.get<short>("unknown"), 0);
+  ASSERT_EQ(param.get<int>("unknown"), 0);
+  ASSERT_EQ(param.get<float>("unknown"), 0.0);
+  ASSERT_EQ(param.get<void*>("unknown"), nullptr);
 }

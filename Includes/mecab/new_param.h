@@ -48,13 +48,8 @@ Target castString(std::string arg) {
   std::stringstream interpreter;
   Target result;
   if (!(interpreter << arg) || !(interpreter >> result) || !(interpreter >> std::ws).eof())
-    return (Target) nullptr;
+    return (Target)NULL;
   return result;
-}
-
-template <>
-std::string castString(std::string arg) {
-  return arg;
 }
 
 enum ArgError { UNRECOGNIZED, REQUIRE_ARG, NO_ARG };
@@ -231,8 +226,16 @@ class Param {
   Target get(std::string key) const {
     auto iterator = configurations.find(key);
     if (iterator == configurations.end())
-      return (Target) nullptr;
+      return (Target)NULL;
     return castString<Target>(iterator->second);
+  }
+
+  template <>
+  std::string get(std::string key) const {
+    auto iterator = configurations.find(key);
+    if (iterator == configurations.end())
+      return "";
+    return iterator->second;
   }
 
   void clear() { configurations.clear(); }
