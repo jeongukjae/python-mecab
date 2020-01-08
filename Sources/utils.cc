@@ -195,7 +195,7 @@ bool load_dictionary_resource(Param* param) {
     rcfile = MECAB_DEFAULT_RC;
   }
 
-  if (!param->load(rcfile.c_str())) {
+  if (!param->parseFile(rcfile.c_str())) {
     return false;
   }
 
@@ -205,10 +205,10 @@ bool load_dictionary_resource(Param* param) {
   }
   std::string rcpath = remove_filename(rcfile);
   dicdir = replace_string(dicdir, "$(rcpath)", rcpath);
-  param->set<std::string>("dicdir", dicdir, true);
+  param->set("dicdir", dicdir, true);
   dicdir = create_filename(dicdir, DICRC);
 
-  if (!param->load(dicdir.c_str())) {
+  if (!param->parseFile(dicdir.c_str())) {
     return false;
   }
 

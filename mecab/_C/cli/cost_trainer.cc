@@ -44,11 +44,11 @@ class CRFLearner {
  public:
   static int run(Param* param) {
     const std::string dicdir = param->get<std::string>("dicdir");
-    CHECK_DIE(param->load(DCONF(DICRC))) << "no such file or directory: " << DCONF(DICRC);
+    CHECK_DIE(param->parseFile(DCONF(DICRC))) << "no such file or directory: " << DCONF(DICRC);
 
-    const std::vector<std::string>& files = param->rest_args();
+    const std::vector<std::string>& files = param->getRestParameters();
     if (files.size() != 2) {
-      std::cout << "Usage: " << param->getProgramName() << " corpus model" << std::endl;
+      std::cout << "Usage: " << param->getCommandName() << " corpus model" << std::endl;
       return -1;
     }
 
@@ -247,25 +247,27 @@ class CRFLearner {
 class Learner {
  public:
   static bool run(int argc, char** argv) {
-    static const MeCab::Option long_options[] = {
+    static const std::vector<MeCab::Option> long_options{
         {"dicdir", 'd', ".", "DIR", "set DIR as dicdir(default \".\" )"},
-        {"old-model", 'M', 0, "FILE", "set FILE as old CRF model file"},
+        {"old-model", 'M', "", "FILE", "set FILE as old CRF model file"},
         {"cost", 'c', "1.0", "FLOAT", "set FLOAT for cost C for constraints violatoin"},
         {"freq", 'f', "1", "INT", "set the frequency cut-off (default 1)"},
         {"eta", 'e', "0.00005", "DIR", "set FLOAT for tolerance of termination criterion"},
-        {"thread", 'p', "1", "INT", "number of threads(default 1)"},
-        {"version", 'v', 0, 0, "show the version and exit"},
-        {"help", 'h', 0, 0, "show this help and exit."},
-        {0, 0, 0, 0}};
+        {"thread", 'p', "1", "INT", "number of threads(default 1)"}};
 
     Param param;
 
-    if (!param.open(argc, argv, long_options)) {
+    if (!param.parse(argc, argv, long_options)) {
       std::cout << "\n\n" << COPYRIGHT << "\ntry '--help' for more information." << std::endl;
       return -1;
     }
 
-    if (!param.printVersion()) {
+    if (param.get<bool>("help")) {
+      std::cout << param.getHelpMessage() << std::endl;
+      return 0;
+    }
+    if (param.get<bool>("version")) {
+      std::cout << param.getVersionMessage() << std::endl;
       return 0;
     }
 

@@ -39,33 +39,30 @@ namespace {
 
 const float kDefaultTheta = 0.75;
 
-const MeCab::Option long_options[] = {
-    {"rcfile", 'r', 0, "FILE", "use FILE as resource file"},
-    {"dicdir", 'd', 0, "DIR", "set DIR  as a system dicdir"},
-    {"userdic", 'u', 0, "FILE", "use FILE as a user dictionary"},
+const std::vector<MeCab::Option> long_options{
+    {"rcfile", 'r', "", "FILE", "use FILE as resource file"},
+    {"dicdir", 'd', "", "DIR", "set DIR  as a system dicdir"},
+    {"userdic", 'u', "", "FILE", "use FILE as a user dictionary"},
     {"lattice-level", 'l', "0", "INT", "lattice information level (DEPRECATED)"},
-    {"dictionary-info", 'D', 0, 0, "show dictionary information and exit"},
-    {"output-format-type", 'O', 0, "TYPE", "set output format type (wakati,none,...)"},
-    {"all-morphs", 'a', 0, 0, "output all morphs(default false)"},
+    {"dictionary-info", 'D', "", "", "show dictionary information and exit"},
+    {"output-format-type", 'O', "", "TYPE", "set output format type (wakati,none,...)"},
+    {"all-morphs", 'a', "", "", "output all morphs(default false)"},
     {"nbest", 'N', "1", "INT", "output N best results (default 1)"},
-    {"partial", 'p', 0, 0, "partial parsing mode (default false)"},
-    {"marginal", 'm', 0, 0, "output marginal probability (default false)"},
+    {"partial", 'p', "", "", "partial parsing mode (default false)"},
+    {"marginal", 'm', "", "", "output marginal probability (default false)"},
     {"max-grouping-size", 'M', "24", "INT", "maximum grouping size for unknown words (default 24)"},
     {"node-format", 'F', "%m\\t%H\\n", "STR", "use STR as the user-defined node format"},
     {"unk-format", 'U', "%m\\t%H\\n", "STR", "use STR as the user-defined unknown node format"},
     {"bos-format", 'B', "", "STR", "use STR as the user-defined beginning-of-sentence format"},
     {"eos-format", 'E', "EOS\\n", "STR", "use STR as the user-defined end-of-sentence format"},
     {"eon-format", 'S', "", "STR", "use STR as the user-defined end-of-NBest format"},
-    {"unk-feature", 'x', 0, "STR", "use STR as the feature for unknown word"},
-    {"input-buffer-size", 'b', 0, "INT", "set input buffer size (default 8192)"},
-    {"dump-config", 'P', 0, 0, "dump MeCab parameters"},
-    {"allocate-sentence", 'C', 0, 0, "allocate new memory for input sentence"},
+    {"unk-feature", 'x', "", "STR", "use STR as the feature for unknown word"},
+    {"input-buffer-size", 'b', "", "INT", "set input buffer size (default 8192)"},
+    {"dump-config", 'P', "", "", "dump MeCab parameters"},
+    {"allocate-sentence", 'C', "", "", "allocate new memory for input sentence"},
     {"theta", 't', "0.75", "FLOAT", "set temparature parameter theta (default 0.75)"},
     {"cost-factor", 'c', "700", "INT", "set cost factor (default 700)"},
-    {"output", 'o', 0, "FILE", "set the output file name"},
-    {"version", 'v', 0, 0, "show the version and exit."},
-    {"help", 'h', 0, 0, "show this help and exit."},
-    {0, 0, 0, 0}};
+    {"output", 'o', "", "FILE", "set the output file name"}};
 
 class ModelImpl : public Model {
  public:
@@ -290,7 +287,7 @@ ModelImpl::~ModelImpl() {
 
 bool ModelImpl::open(int argc, char** argv) {
   Param param;
-  if (!param.open(argc, argv, long_options) || !load_dictionary_resource(&param)) {
+  if (!param.parse(argc, argv, long_options) || !load_dictionary_resource(&param)) {
     return false;
   }
   return open(param);
@@ -298,7 +295,7 @@ bool ModelImpl::open(int argc, char** argv) {
 
 bool ModelImpl::open(const char* arg) {
   Param param;
-  if (!param.open(arg, long_options) || !load_dictionary_resource(&param)) {
+  if (!param.parse(arg, long_options) || !load_dictionary_resource(&param)) {
     return false;
   }
   return open(param);
@@ -1049,7 +1046,7 @@ int mecab_do(int argc, char** argv) {
   } while (0);
 
   MeCab::Param param;
-  if (!param.open(argc, argv, MeCab::long_options)) {
+  if (!param.parse(argc, argv, MeCab::long_options)) {
     return EXIT_FAILURE;
   }
 
@@ -1059,7 +1056,7 @@ int mecab_do(int argc, char** argv) {
   }
 
   if (param.get<bool>("version")) {
-    std::cout << param.getVersion() << std::endl;
+    std::cout << param.getVersionMessage() << std::endl;
     return EXIT_SUCCESS;
   }
 
@@ -1094,7 +1091,7 @@ int mecab_do(int argc, char** argv) {
   }
 
   if (param.get<bool>("dump-config")) {
-    param.dump_config(&*ofs);
+    param.dumpConfig(*ofs);
     return EXIT_FAILURE;
   }
 
@@ -1112,7 +1109,7 @@ int mecab_do(int argc, char** argv) {
     return EXIT_FAILURE;
   }
 
-  const std::vector<std::string>& rest_ = param.rest_args();
+  const std::vector<std::string>& rest_ = param.getRestParameters();
   std::vector<std::string> rest = rest_;
 
   if (rest.empty()) {

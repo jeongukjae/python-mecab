@@ -1,9 +1,9 @@
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
-#include "mecab/new_param.h"
+#include "mecab/param.h"
 
-std::vector<MeCab::Option> options{{"test-option", 't', "", "some description of test-option", ""},
-                                   {"arg-option", 'a', "ARG", "some description of arg-option", ""}};
+std::vector<MeCab::Option> options{{"test-option", 't', "", "", "some description of test-option"},
+                                   {"arg-option", 'a', "", "ARG", "some description of arg-option"}};
 
 #define MAKE_ARGS(arg_name, ...)                                   \
   std::vector<std::string> __arguments{__VA_ARGS__};               \
@@ -143,6 +143,28 @@ TEST(mecab_param, test_parse_long_argument_5) {
   EXPECT_THAT(testing::internal::GetCapturedStderr(), ::testing::HasSubstr("unrecognized option `--arg-optiontest`"));
 }
 
+TEST(mecab_param, test_parse_with_string) {
+  MeCab::Param param;
+
+  testing::internal::CaptureStderr();
+  ASSERT_FALSE(param.parse("--arg-optiontest", options));
+  EXPECT_THAT(testing::internal::GetCapturedStderr(), ::testing::HasSubstr("unrecognized option `--arg-optiontest`"));
+}
+
+TEST(mecab_param, test_parse_with_string_2) {
+  MeCab::Param param;
+
+  ASSERT_TRUE(param.parse("-a hello", options));
+  ASSERT_EQ(param.get<std::string>("arg-option"), "hello");
+}
+
+TEST(mecab_param, test_parse_with_string_3) {
+  MeCab::Param param;
+
+  ASSERT_TRUE(param.parse("--arg-option hello", options));
+  ASSERT_EQ(param.get<std::string>("arg-option"), "hello");
+}
+
 TEST(mecab_param, test_multiple_arg_1) {
   MeCab::Param param;
 
@@ -174,6 +196,28 @@ TEST(mecab_param, test_get_unknown) {
   ASSERT_EQ(param.get<int>("unknown"), 0);
   ASSERT_EQ(param.get<float>("unknown"), 0.0);
   ASSERT_EQ(param.get<void*>("unknown"), nullptr);
+}
+
+TEST(mecab_param, test_dump_config) {
+  MeCab::Param param;
+
+  ASSERT_TRUE(param.parse("--arg-option hello -t", options));
+  testing::internal::CaptureStdout();
+  param.dumpConfig();
+  auto captured = testing::internal::GetCapturedStdout();
+
+  ASSERT_THAT(captured, testing::HasSubstr("arg-option: hello\n"));
+  ASSERT_THAT(captured, testing::HasSubstr("test-option: 1\n"));
+  ASSERT_THAT(captured, testing::HasSubstr("help: \n"));
+  ASSERT_THAT(captured, testing::HasSubstr("version: \n"));
+}
+
+TEST(mecab_param, test_value_containing_whitespcae) {
+  MeCab::Param param;
+
+  MAKE_ARGS(arguments, "command", "-a", "0 1 2 4");
+  ASSERT_TRUE(param.parse(arguments.size(), arguments.data(), options));
+  ASSERT_EQ(param.get<std::string>("arg-option"), "0 1 2 4");
 }
 
 /* file content:

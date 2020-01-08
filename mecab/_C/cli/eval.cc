@@ -74,25 +74,28 @@ class Eval {
 
  public:
   static bool eval(int argc, char** argv) {
-    static const MeCab::Option long_options[] = {{"level", 'l', "0 -1", "STR", "set level of evaluations"},
-                                                 {"output", 'o', 0, "FILE", "set the output file name"},
-                                                 {"version", 'v', 0, 0, "show the version and exit"},
-                                                 {"help", 'h', 0, 0, "show this help and exit."},
-                                                 {0, 0, 0, 0}};
+    static const std::vector<MeCab::Option> long_options{{"level", 'l', "0 -1", "STR", "set level of evaluations"},
+                                                         {"output", 'o', "", "FILE", "set the output file name"}};
 
     MeCab::Param param;
 
-    if (!param.open(argc, argv, long_options)) {
+    if (!param.parse(argc, argv, long_options)) {
       std::cout << "\n\n" << COPYRIGHT << "\ntry '--help' for more information." << std::endl;
       return -1;
     }
 
-    if (!param.printVersion())
+    if (param.get<bool>("help")) {
+      std::cout << param.getHelpMessage() << std::endl;
       return 0;
+    }
+    if (param.get<bool>("version")) {
+      std::cout << param.getVersionMessage() << std::endl;
+      return 0;
+    }
 
-    const std::vector<std::string>& files = param.rest_args();
+    const std::vector<std::string>& files = param.getRestParameters();
     if (files.size() < 2) {
-      std::cout << "Usage: " << param.getProgramName() << " output answer" << std::endl;
+      std::cout << "Usage: " << param.getCommandName() << " output answer" << std::endl;
       return -1;
     }
 
@@ -188,24 +191,26 @@ class Eval {
 class TestSentenceGenerator {
  public:
   static int run(int argc, char** argv) {
-    static const MeCab::Option long_options[] = {{"output", 'o', 0, "FILE", "set the output filename"},
-                                                 {"version", 'v', 0, 0, "show the version and exit"},
-                                                 {"help", 'h', 0, 0, "show this help and exit."},
-                                                 {0, 0, 0, 0}};
+    static const std::vector<MeCab::Option> long_options{{"output", 'o', "", "FILE", "set the output filename"}};
 
     MeCab::Param param;
-    param.open(argc, argv, long_options);
+    param.parse(argc, argv, long_options);
 
-    if (!param.open(argc, argv, long_options)) {
+    if (!param.parse(argc, argv, long_options)) {
       std::cout << "\n\n" << COPYRIGHT << "\ntry '--help' for more information." << std::endl;
       return -1;
     }
 
-    if (!param.printVersion()) {
+    if (param.get<bool>("help")) {
+      std::cout << param.getHelpMessage() << std::endl;
+      return 0;
+    }
+    if (param.get<bool>("version")) {
+      std::cout << param.getVersionMessage() << std::endl;
       return 0;
     }
 
-    const std::vector<std::string>& tmp = param.rest_args();
+    const std::vector<std::string>& tmp = param.getRestParameters();
     std::vector<std::string> files = tmp;
     if (files.empty()) {
       files.push_back("-");

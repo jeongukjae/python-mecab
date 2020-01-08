@@ -616,7 +616,7 @@ bool EncoderFeatureIndex::reopen(const char* filename,
     if (std::string(column[0]) == "charset") {
       model_charset = column[1] + 1;
     } else {
-      param->set<std::string>(column[0], column[1] + 1, true);
+      param->set(column[0], column[1] + 1, true);
     }
   }
 

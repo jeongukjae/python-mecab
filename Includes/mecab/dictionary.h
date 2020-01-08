@@ -6,6 +6,7 @@
 #include "mecab/darts.h"
 #include "mecab/mmap.h"
 #include "mecab/param.h"
+#include "mecab/scoped_ptr.h"
 
 namespace MeCab {
 
