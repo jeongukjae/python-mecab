@@ -175,3 +175,30 @@ TEST(mecab_param, test_get_unknown) {
   ASSERT_EQ(param.get<float>("unknown"), 0.0);
   ASSERT_EQ(param.get<void*>("unknown"), nullptr);
 }
+
+/* file content:
+; some-comment = 123
+# some-comment = 123
+test-option = blabla
+test-option2 = blablablabla
+*/
+TEST(mecab_param, test_parse_file) {
+  MeCab::Param param;
+
+  ASSERT_TRUE(param.parseFile("../tests/test-data/cc/file-used-in-test-param.txt"));
+  ASSERT_EQ(param.get<std::string>("test-option"), "blabla");
+  ASSERT_EQ(param.get<std::string>("test-option2"), "blablablabla");
+  ASSERT_EQ(param.get<std::string>("unknown-option"), "");
+  ASSERT_EQ(param.get<std::string>("some-comment"), "");
+}
+
+TEST(mecab_param, test_parse_file_after_parsing_parameter) {
+  MeCab::Param param;
+  MAKE_ARGS(arguments, "command", "-t");
+
+  ASSERT_TRUE(param.parse(arguments.size(), arguments.data(), options));
+  ASSERT_TRUE(param.parseFile("../tests/test-data/cc/file-used-in-test-param.txt"));
+  ASSERT_EQ(param.get<std::string>("test-option"), "1");
+  ASSERT_EQ(param.get<std::string>("test-option2"), "blablablabla");
+  ASSERT_EQ(param.get<std::string>("unknown-option"), "");
+}

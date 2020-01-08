@@ -1,0 +1,4 @@
+; some-comment = 123
+# some-comment = 123
+test-option = blabla
+test-option2 = blablablabla

@@ -2,6 +2,8 @@
 #define _MECAB_NEW_PARAM_H_
 
 #include <algorithm>
+#include <fstream>
+#include <functional>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -215,6 +217,32 @@ class Param {
       arguments.push_back(std::string(argv[i]));
 
     return parse(arguments, options);
+  }
+
+  bool parseFile(std::string filename) {
+    std::ifstream ifs(filename);
+
+    CHECK_FALSE(!ifs.fail()) << "cannot open file: " << filename;
+
+    std::string line;
+    while (std::getline(ifs, line)) {
+      if (!line.size() || line[0] == ';' || line[0] == '#')
+        continue;
+
+      size_t pos = line.find_first_of('=');
+      CHECK_FALSE(pos != std::string::npos) << "format error: " << line;
+
+      std::string key = line.substr(0, pos);
+      std::string value = line.substr(pos + 1);
+
+      key.erase(key.find_last_not_of(" \t\v") + 1);
+      value.erase(0, value.find_first_not_of(" \t\v"));
+
+      // do not override
+      set(key, value, false);
+    }
+
+    return true;
   }
 
   void set(const std::string key, const std::string value, bool override = true) {
