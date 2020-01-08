@@ -148,7 +148,7 @@ class Param {
         continue;
 
       if (optionForNextArg != nullptr) {
-        configurations[optionForNextArg->optionName] = std::string(argument);
+        configurations[optionForNextArg->optionName] = argument;
         optionForNextArg = nullptr;
         continue;
       }
@@ -235,9 +235,7 @@ class Param {
     return castString<Target>(iterator->second);
   }
 
-  void clear() {
-    configurations.clear();
-  }
+  void clear() { configurations.clear(); }
 
   const std::string getCommandName() const { return commandName; }
   const std::string getHelpMessage() const { return helpMessage; }
