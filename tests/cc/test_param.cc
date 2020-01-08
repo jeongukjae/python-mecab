@@ -208,8 +208,6 @@ TEST(mecab_param, test_dump_config) {
 
   ASSERT_THAT(captured, testing::HasSubstr("arg-option: hello\n"));
   ASSERT_THAT(captured, testing::HasSubstr("test-option: 1\n"));
-  ASSERT_THAT(captured, testing::HasSubstr("help: \n"));
-  ASSERT_THAT(captured, testing::HasSubstr("version: \n"));
 }
 
 /* file content:

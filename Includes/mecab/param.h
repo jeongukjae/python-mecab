@@ -125,7 +125,8 @@ class Param {
 
   void setDefaultValue(const std::vector<Option> options) {
     for (const auto& option : options)
-      configurations[option.optionName] = option.defaultValue;
+      if (!option.defaultValue.empty())
+        configurations[option.optionName] = option.defaultValue;
   }
 
  public:
