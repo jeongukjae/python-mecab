@@ -8,7 +8,7 @@ TEST(mecab_mmap, test_unopend_mmap_instance) {
   ASSERT_EQ(mmap.size(), 0);
   ASSERT_EQ(mmap.file_size(), 0);
   ASSERT_TRUE(mmap.empty());
-  ASSERT_STREQ(mmap.file_name().c_str(), "");
+  ASSERT_EQ(mmap.file_name(), "");
   ASSERT_EQ(mmap.begin(), nullptr);
 }
 
@@ -20,7 +20,7 @@ TEST(mecab_mmap, test_open_mmap_instance) {
   // file content: "test content" + new line
   ASSERT_STREQ(mmap.begin(), "test content\n");
   ASSERT_EQ(mmap[3], 't');
-  ASSERT_STREQ(mmap.file_name().c_str(), "../tests/test-data/cc/file-used-in-test-mmap.txt");
+  ASSERT_EQ(mmap.file_name(), "../tests/test-data/cc/file-used-in-test-mmap.txt");
   ASSERT_EQ(mmap.size(), 13);
   ASSERT_EQ(mmap.file_size(), 13);
   ASSERT_FALSE(mmap.empty());
