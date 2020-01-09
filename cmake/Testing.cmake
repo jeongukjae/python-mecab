@@ -4,7 +4,7 @@ if(BUILD_TEST AND CMAKE_BUILD_TYPE MATCHES Debug)
   enable_testing()
   add_subdirectory("${PROJECT_SOURCE_DIR}/third_party/googletest")
 
-  include_directories(${PROJECT_SOURCE_DIR}/Includes)
+  include_directories(${PROJECT_SOURCE_DIR}/include)
   include_directories(${gtest_SOURCE_DIR}/include)
   include_directories(${gmock_SOURCE_DIR}/include)
 

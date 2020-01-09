@@ -38,7 +38,7 @@ mecab = Extension(
     ],
     libraries=["mecab"],
     library_dirs=["./mecab/lib/"],
-    include_dirs=["./Includes"],
+    include_dirs=["./include"],
     extra_compile_args=["-std=c++11"] + get_coverage_args_for_cc(),
     extra_link_args=get_link_args() + get_coverage_args_for_ld(),
     language="c++",

@@ -10,24 +10,24 @@ if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Debug)
 endif()
 
-include_directories(./Includes)
+include_directories(./include)
 set(SOURCE_CODE
-      Sources/char_property.cc
-      Sources/connector.cc
-      Sources/context_id.cc
-      Sources/dictionary.cc
-      Sources/dictionary_rewriter.cc
-      Sources/feature_index.cc
-      Sources/iconv_utils.cc
-      Sources/lbfgs.cc
-      Sources/learner_tagger.cc
-      Sources/nbest_generator.cc
-      Sources/string_buffer.cc
-      Sources/tagger.cc
-      Sources/tokenizer.cc
-      Sources/utils.cc
-      Sources/viterbi.cc
-      Sources/writer.cc)
+      src/char_property.cc
+      src/connector.cc
+      src/context_id.cc
+      src/dictionary.cc
+      src/dictionary_rewriter.cc
+      src/feature_index.cc
+      src/iconv_utils.cc
+      src/lbfgs.cc
+      src/learner_tagger.cc
+      src/nbest_generator.cc
+      src/string_buffer.cc
+      src/tagger.cc
+      src/tokenizer.cc
+      src/utils.cc
+      src/viterbi.cc
+      src/writer.cc)
 set(TEST_CODE
       tests/cc/test_mmap.cc
       tests/cc/test_param.cc
