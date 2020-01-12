@@ -12,7 +12,6 @@ endif()
 
 include_directories(./include)
 set(SOURCE_CODE
-      src/learner_tagger.cc
       src/nbest_generator.cc
       src/tagger.cc
       src/tokenizer.cc
