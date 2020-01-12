@@ -16,7 +16,6 @@ set(SOURCE_CODE
       src/dictionary.cc
       src/dictionary_rewriter.cc
       src/feature_index.cc
-      src/lbfgs.cc
       src/learner_tagger.cc
       src/nbest_generator.cc
       src/string_buffer.cc
