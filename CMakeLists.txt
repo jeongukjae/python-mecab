@@ -12,7 +12,6 @@ endif()
 
 include_directories(./include)
 set(SOURCE_CODE
-      src/char_property.cc
       src/connector.cc
       src/context_id.cc
       src/dictionary.cc
