@@ -1,6 +1,7 @@
 #ifndef _MECAB_DICTIONARY_H_
 #define _MECAB_DICTIONARY_H_
 
+#include <climits>
 #include "mecab.h"
 #include "mecab/char_property.h"
 #include "mecab/connector.h"
