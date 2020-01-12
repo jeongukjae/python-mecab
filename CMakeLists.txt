@@ -12,8 +12,7 @@ endif()
 
 include_directories(./include)
 set(SOURCE_CODE
-      src/tagger.cc
-      src/utils.cc)
+      src/tagger.cc)
 set(TEST_CODE
       tests/cc/test_iconv.cc
       tests/cc/test_mmap.cc
