@@ -18,7 +18,6 @@ set(SOURCE_CODE
       src/dictionary.cc
       src/dictionary_rewriter.cc
       src/feature_index.cc
-      src/iconv_utils.cc
       src/lbfgs.cc
       src/learner_tagger.cc
       src/nbest_generator.cc
@@ -29,6 +28,7 @@ set(SOURCE_CODE
       src/viterbi.cc
       src/writer.cc)
 set(TEST_CODE
+      tests/cc/test_iconv.cc
       tests/cc/test_mmap.cc
       tests/cc/test_param.cc
       tests/cc/test_utils.cc)

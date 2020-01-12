@@ -8,7 +8,7 @@
 #include <vector>
 
 #include "mecab/common.h"
-#include "mecab/iconv_utils.h"
+#include "mecab/iconv.h"
 #include "mecab/scoped_ptr.h"
 #include "mecab/utils.h"
 

@@ -2,7 +2,7 @@
 
 #include <fstream>
 
-#include "mecab/iconv_utils.h"
+#include "mecab/iconv.h"
 #include "mecab/utils.h"
 
 namespace {

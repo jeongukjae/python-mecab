@@ -9,7 +9,7 @@
 #include "mecab/context_id.h"
 #include "mecab/dictionary_rewriter.h"
 #include "mecab/feature_index.h"
-#include "mecab/iconv_utils.h"
+#include "mecab/iconv.h"
 #include "mecab/mmap.h"
 #include "mecab/param.h"
 #include "mecab/scoped_ptr.h"

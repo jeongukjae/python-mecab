@@ -6,7 +6,7 @@
 #include <string>
 
 #include "mecab/common.h"
-#include "mecab/iconv_utils.h"
+#include "mecab/iconv.h"
 #include "mecab/learner_node.h"
 #include "mecab/param.h"
 #include "mecab/scoped_ptr.h"
