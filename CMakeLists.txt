@@ -12,7 +12,6 @@ endif()
 
 include_directories(./include)
 set(SOURCE_CODE
-      src/dictionary_rewriter.cc
       src/feature_index.cc
       src/learner_tagger.cc
       src/nbest_generator.cc
