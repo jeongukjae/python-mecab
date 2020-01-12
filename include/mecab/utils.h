@@ -9,12 +9,10 @@
 #include <cstring>
 #include <string>
 #include <vector>
-
 #include "mecab/common.h"
+#include "mecab/param.h"
 
 namespace MeCab {
-
-class Param;
 
 enum { UTF8, UTF16, UTF16LE, UTF16BE, ASCII };
 int decode_charset(const char* charset);
