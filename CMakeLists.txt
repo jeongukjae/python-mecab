@@ -14,8 +14,7 @@ include_directories(./include)
 set(SOURCE_CODE
       src/tagger.cc
       src/tokenizer.cc
-      src/utils.cc
-      src/viterbi.cc)
+      src/utils.cc)
 set(TEST_CODE
       tests/cc/test_iconv.cc
       tests/cc/test_mmap.cc
