@@ -8,10 +8,9 @@
 #include "mecab.h"
 #include "mecab/common.h"
 #include "mecab/freelist.h"
+#include "mecab/iconv.h"
 
 namespace MeCab {
-
-class Iconv;
 
 class RewritePattern {
  private:
