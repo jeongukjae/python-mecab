@@ -6,6 +6,8 @@
 #include "mecab/common.h"
 #include "utils.h"
 
+#define DEFAULT_ALLOC_SIZE BUF_SIZE
+
 namespace MeCab {
 
 #define _ITOA(n)              \
@@ -34,17 +36,56 @@ class StringBuffer {
   char* ptr_;
   bool is_delete_;
   bool error_;
-  bool reserve(size_t);
+  bool reserve(size_t length) {
+    if (!is_delete_) {
+      error_ = (size_ + length >= alloc_size_);
+      return (!error_);
+    }
+
+    if (size_ + length >= alloc_size_) {
+      if (alloc_size_ == 0) {
+        alloc_size_ = DEFAULT_ALLOC_SIZE;
+        ptr_ = new char[alloc_size_];
+      }
+      size_t len = size_ + length;
+      do {
+        alloc_size_ *= 2;
+      } while (len >= alloc_size_);
+      char* new_ptr = new char[alloc_size_];
+      std::memcpy(new_ptr, ptr_, size_);
+      delete[] ptr_;
+      ptr_ = new_ptr;
+    }
+
+    return true;
+  }
 
  public:
   explicit StringBuffer() : size_(0), alloc_size_(0), ptr_(0), is_delete_(true), error_(false) {}
   explicit StringBuffer(char* _s, size_t _l) : size_(0), alloc_size_(_l), ptr_(_s), is_delete_(false), error_(false) {}
 
-  virtual ~StringBuffer();
+  virtual ~StringBuffer() {
+    if (is_delete_) {
+      delete[] ptr_;
+      ptr_ = 0;
+    }
+  }
 
-  StringBuffer& write(char);
-  StringBuffer& write(const char*, size_t);
-  StringBuffer& write(const char*);
+  StringBuffer& write(char str) {
+    if (reserve(1)) {
+      ptr_[size_] = str;
+      ++size_;
+    }
+    return *this;
+  }
+  StringBuffer& write(const char* str, size_t length) {
+    if (reserve(length)) {
+      std::memcpy(ptr_ + size_, str, length);
+      size_ += length;
+    }
+    return *this;
+  }
+  StringBuffer& write(const char* str) { return this->write(str, std::strlen(str)); }
   StringBuffer& operator<<(double n) { _DTOA(n); }
   StringBuffer& operator<<(short int n) { _ITOA(n); }
   StringBuffer& operator<<(int n) { _ITOA(n); }
@@ -69,4 +110,4 @@ class StringBuffer {
 };
 }  // namespace MeCab
 
-#endif // _MECAB_STRINGBUFFER_H
+#endif  // _MECAB_STRINGBUFFER_H

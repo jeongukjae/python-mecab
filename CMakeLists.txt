@@ -18,7 +18,6 @@ set(SOURCE_CODE
       src/feature_index.cc
       src/learner_tagger.cc
       src/nbest_generator.cc
-      src/string_buffer.cc
       src/tagger.cc
       src/tokenizer.cc
       src/utils.cc
