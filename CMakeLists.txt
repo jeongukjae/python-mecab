@@ -13,7 +13,6 @@ endif()
 include_directories(./include)
 set(SOURCE_CODE
       src/connector.cc
-      src/context_id.cc
       src/dictionary.cc
       src/dictionary_rewriter.cc
       src/feature_index.cc
