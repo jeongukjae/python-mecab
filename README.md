@@ -52,5 +52,6 @@ with [eunjeon/mecab-ko-dic](https://bitbucket.org/eunjeon/mecab-ko-dic/src/maste
 - `mecab`
 - `mecab-dict-index`
 - `mecab-dict-gen`
+- `mecab-test-gen`
 - `mecab-cost-train`
 - `mecab-system-eval`
