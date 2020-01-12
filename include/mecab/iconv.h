@@ -37,21 +37,21 @@ class Iconv {
  public:
   explicit Iconv() : conversionDescriptor(0) {}
   virtual ~Iconv() {
-    if (conversionDescriptor != 0)
+    if (conversionDescriptor != NULL)
       iconv_close(conversionDescriptor);
   }
 
   bool open(const char* from, const char* to) {
-    conversionDescriptor = 0;
+    conversionDescriptor = NULL;
     const char* from2 = decodeCharsetForIconv(from);
     const char* to2 = decodeCharsetForIconv(to);
     if (std::strcmp(from2, to2) == 0) {
       return true;
     }
-    conversionDescriptor = 0;
+    conversionDescriptor = NULL;
     conversionDescriptor = iconv_open(to2, from2);
     if (conversionDescriptor == (iconv_t)(-1)) {
-      conversionDescriptor = 0;
+      conversionDescriptor = NULL;
       return false;
     }
 
@@ -59,12 +59,10 @@ class Iconv {
   }
 
   bool convert(std::string* str) {
-    if (str->empty()) {
+    if (str->empty())
       return true;
-    }
-    if (conversionDescriptor == 0) {
+    if (conversionDescriptor == NULL)
       return true;
-    }
 
     size_t ilen = 0;
     size_t olen = 0;
