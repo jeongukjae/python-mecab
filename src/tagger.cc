@@ -850,6 +850,15 @@ Model* createModel(const char* arg) {
   return model;
 }
 
+Model* createModel(const Param& param) {
+  ModelImpl* model = new ModelImpl;
+  if (!model->open(param)) {
+    delete model;
+    return 0;
+  }
+  return model;
+}
+
 void deleteModel(Model* model) {
   delete model;
 }
@@ -860,6 +869,10 @@ Model* Model::create(int argc, char** argv) {
 
 Model* Model::create(const char* arg) {
   return createModel(arg);
+}
+
+Model* Model::create(const Param& param) {
+  return createModel(param);
 }
 
 const char* Model::version() {
@@ -883,126 +896,3 @@ void deleteLattice(Lattice* lattice) {
   delete lattice;
 }
 }  // namespace MeCab
-
-int mecab_do(int argc, char** argv) {
-  MeCab::Param param;
-  if (!param.parse(argc, argv, MeCab::mecab_options)) {
-    return EXIT_FAILURE;
-  }
-
-  if (param.get<bool>("help")) {
-    std::cout << param.getHelpMessage() << std::endl;
-    return EXIT_SUCCESS;
-  }
-
-  if (param.get<bool>("version")) {
-    std::cout << param.getVersionMessage() << std::endl;
-    return EXIT_SUCCESS;
-  }
-
-  if (!load_dictionary_resource(&param)) {
-    return EXIT_SUCCESS;
-  }
-
-  if (param.get<int>("lattice-level") >= 1) {
-    std::cerr << "lattice-level is DEPERCATED. "
-              << "use --marginal or --nbest." << std::endl;
-  }
-
-  MeCab::scoped_ptr<MeCab::ModelImpl> model(new MeCab::ModelImpl);
-  if (!model->open(param)) {
-    std::cout << MeCab::getLastError() << std::endl;
-    return EXIT_FAILURE;
-  }
-
-  std::string ofilename = param.get<std::string>("output");
-  if (ofilename.empty()) {
-    ofilename = "-";
-  }
-
-  const int nbest = param.get<int>("nbest");
-  CHECK_DIE(nbest > 0 && nbest <= NBEST_MAX) << "invalid N value";
-
-  MeCab::ostream_wrapper ofs(ofilename.c_str());
-  CHECK_DIE(*ofs) << "no such file or directory: " << ofilename;
-
-  if (param.get<bool>("dump-config")) {
-    param.dumpConfig(*ofs);
-    return EXIT_FAILURE;
-  }
-
-  if (param.get<bool>("dictionary-info")) {
-    for (const MeCab::DictionaryInfo* d = model->dictionary_info(); d; d = d->next) {
-      *ofs << "filename:\t" << d->filename << std::endl;
-      *ofs << "version:\t" << d->version << std::endl;
-      *ofs << "charset:\t" << d->charset << std::endl;
-      *ofs << "type:\t" << d->type << std::endl;
-      *ofs << "size:\t" << d->size << std::endl;
-      *ofs << "left size:\t" << d->lsize << std::endl;
-      *ofs << "right size:\t" << d->rsize << std::endl;
-      *ofs << std::endl;
-    }
-    return EXIT_FAILURE;
-  }
-
-  const std::vector<std::string>& rest_ = param.getRestParameters();
-  std::vector<std::string> rest = rest_;
-
-  if (rest.empty()) {
-    rest.push_back("-");
-  }
-
-  size_t ibufsize =
-      std::min(MAX_INPUT_BUFFER_SIZE, std::max(param.get<int>("input-buffer-size"), MIN_INPUT_BUFFER_SIZE));
-
-  const bool partial = param.get<bool>("partial");
-  if (partial) {
-    ibufsize *= 8;
-  }
-
-  MeCab::scoped_array<char> ibuf_data(new char[ibufsize]);
-  char* ibuf = ibuf_data.get();
-
-  MeCab::scoped_ptr<MeCab::Tagger> tagger(model->createTagger());
-
-  CHECK_DIE(tagger.get()) << "cannot create tagger";
-
-  for (size_t i = 0; i < rest.size(); ++i) {
-    MeCab::istream_wrapper ifs(rest[i].c_str());
-    CHECK_DIE(*ifs) << "no such file or directory: " << rest[i];
-
-    while (true) {
-      if (!partial) {
-        ifs->getline(ibuf, ibufsize);
-      } else {
-        std::string sentence;
-        MeCab::scoped_fixed_array<char, BUF_SIZE> line;
-        for (;;) {
-          if (!ifs->getline(line.get(), line.size())) {
-            ifs->clear(std::ios::eofbit | std::ios::badbit);
-            break;
-          }
-          sentence += line.get();
-          sentence += '\n';
-          if (std::strcmp(line.get(), "EOS") == 0 || line[0] == '\0') {
-            break;
-          }
-        }
-        std::strncpy(ibuf, sentence.c_str(), ibufsize);
-      }
-      if (ifs->eof() && !ibuf[0]) {
-        return false;
-      }
-      if (ifs->fail()) {
-        std::cerr << "input-buffer overflow. "
-                  << "The line is split. use -b #SIZE option." << std::endl;
-        ifs->clear();
-      }
-      const char* r = (nbest >= 2) ? tagger->parseNBest(nbest, ibuf) : tagger->parse(ibuf);
-      CHECK_DIE(r) << tagger->what();
-      *ofs << r << std::flush;
-    }
-  }
-
-  return EXIT_SUCCESS;
-}

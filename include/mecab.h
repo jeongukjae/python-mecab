@@ -332,6 +332,7 @@ struct Node {
 template <typename N, typename P>
 class Allocator;
 class Tagger;
+class Param;
 
 /**
  * Lattice class
@@ -681,6 +682,8 @@ class Model {
    * @param arg single string representation of the argment.
    */
   static Model* create(const char* arg);
+
+  static Model* create(const Param& param);
 };
 
 /**
@@ -1030,7 +1033,5 @@ extern void deleteTagger(Tagger* tagger);
  */
 extern const char* getLastError();
 }  // namespace MeCab
-
-int mecab_do(int argc, char** argv);
 
 #endif /* _MECAB_MECAB_H_ */
