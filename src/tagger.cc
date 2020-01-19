@@ -39,7 +39,7 @@ namespace {
 
 const float kDefaultTheta = 0.75;
 
-const std::vector<MeCab::Option> long_options{
+const std::vector<MeCab::Option> mecab_options{
     {"rcfile", 'r', "", "FILE", "use FILE as resource file"},
     {"dicdir", 'd', "", "DIR", "set DIR  as a system dicdir"},
     {"userdic", 'u', "", "FILE", "use FILE as a user dictionary"},
@@ -74,7 +74,7 @@ class ModelImpl : public Model {
 
   bool open(int argc, char** argv) {
     Param param;
-    if (!param.parse(argc, argv, long_options) || !load_dictionary_resource(&param)) {
+    if (!param.parse(argc, argv, mecab_options) || !load_dictionary_resource(&param)) {
       return false;
     }
     return open(param);
@@ -82,7 +82,7 @@ class ModelImpl : public Model {
 
   bool open(const char* arg) {
     Param param;
-    if (!param.parse(arg, long_options) || !load_dictionary_resource(&param)) {
+    if (!param.parse(arg, mecab_options) || !load_dictionary_resource(&param)) {
       return false;
     }
     return open(param);
@@ -885,14 +885,8 @@ void deleteLattice(Lattice* lattice) {
 }  // namespace MeCab
 
 int mecab_do(int argc, char** argv) {
-#define WHAT_ERROR(msg)            \
-  do {                             \
-    std::cout << msg << std::endl; \
-    return EXIT_FAILURE;           \
-  } while (0);
-
   MeCab::Param param;
-  if (!param.parse(argc, argv, MeCab::long_options)) {
+  if (!param.parse(argc, argv, MeCab::mecab_options)) {
     return EXIT_FAILURE;
   }
 
@@ -927,14 +921,10 @@ int mecab_do(int argc, char** argv) {
   }
 
   const int nbest = param.get<int>("nbest");
-  if (nbest <= 0 || nbest > NBEST_MAX) {
-    WHAT_ERROR("invalid N value");
-  }
+  CHECK_DIE(nbest > 0 && nbest <= NBEST_MAX) << "invalid N value";
 
   MeCab::ostream_wrapper ofs(ofilename.c_str());
-  if (!*ofs) {
-    WHAT_ERROR("no such file or directory: " << ofilename);
-  }
+  CHECK_DIE(*ofs) << "no such file or directory: " << ofilename;
 
   if (param.get<bool>("dump-config")) {
     param.dumpConfig(*ofs);
@@ -975,15 +965,11 @@ int mecab_do(int argc, char** argv) {
 
   MeCab::scoped_ptr<MeCab::Tagger> tagger(model->createTagger());
 
-  if (!tagger.get()) {
-    WHAT_ERROR("cannot create tagger");
-  }
+  CHECK_DIE(tagger.get()) << "cannot create tagger";
 
   for (size_t i = 0; i < rest.size(); ++i) {
     MeCab::istream_wrapper ifs(rest[i].c_str());
-    if (!*ifs) {
-      WHAT_ERROR("no such file or directory: " << rest[i]);
-    }
+    CHECK_DIE(*ifs) << "no such file or directory: " << rest[i];
 
     while (true) {
       if (!partial) {
@@ -1013,14 +999,10 @@ int mecab_do(int argc, char** argv) {
         ifs->clear();
       }
       const char* r = (nbest >= 2) ? tagger->parseNBest(nbest, ibuf) : tagger->parse(ibuf);
-      if (!r) {
-        WHAT_ERROR(tagger->what());
-      }
+      CHECK_DIE(r) << tagger->what();
       *ofs << r << std::flush;
     }
   }
 
   return EXIT_SUCCESS;
-
-#undef WHAT_ERROR
 }

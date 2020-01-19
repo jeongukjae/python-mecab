@@ -86,6 +86,6 @@ class wlog {
     return wlog() & std::cerr << __FILE__ << "(" << __LINE__ << ") [" << #condition << "] "
 
 #define CHECK_DIE(condition) \
-  (condition) ? 0 : die() & std::cerr << __FILE__ << "(" << __LINE__ << ") [" << #condition << "] "
+  (condition) ? 0 : ::MeCab::die() & std::cerr << __FILE__ << "(" << __LINE__ << ") [" << #condition << "] "
 
 #endif  // _MECAB_COMMON_H_
