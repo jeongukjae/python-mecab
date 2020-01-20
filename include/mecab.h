@@ -1007,7 +1007,9 @@ extern Tagger* createTagger(const char* arg);
  * In some environment, e.g., MS-Windows, an object allocated inside a DLL must be deleted in the same DLL too.
  * @param lattice lattice object
  */
-extern void deleteLattice(Lattice* lattice);
+inline void deleteLattice(Lattice* lattice) {
+  delete lattice;
+}
 
 /**
  * delete Model object.
@@ -1015,7 +1017,9 @@ extern void deleteLattice(Lattice* lattice);
  * In some environment, e.g., MS-Windows, an object allocated inside a DLL must be deleted in the same DLL too.
  * @param model model object
  */
-extern void deleteModel(Model* model);
+inline void deleteModel(Model* model) {
+  delete model;
+}
 
 /**
  * delete Tagger object.
@@ -1023,7 +1027,9 @@ extern void deleteModel(Model* model);
  * In some environment, e.g., MS-Windows, an object allocated inside a DLL must be deleted in the same DLL too.
  * @param tagger tagger object
  */
-extern void deleteTagger(Tagger* tagger);
+inline void deleteTagger(Tagger* tagger) {
+  delete tagger;
+}
 
 /**
  * Return last error string.

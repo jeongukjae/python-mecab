@@ -818,14 +818,6 @@ Tagger* createTagger(const char* argv) {
   return tagger;
 }
 
-void deleteTagger(Tagger* tagger) {
-  delete tagger;
-}
-
-const char* getTaggerError() {
-  return getLastError();
-}
-
 const char* getLastError() {
   return getGlobalError();
 }
@@ -857,10 +849,6 @@ Model* createModel(const Param& param) {
   return model;
 }
 
-void deleteModel(Model* model) {
-  delete model;
-}
-
 Model* Model::create(int argc, char** argv) {
   return createModel(argc, argv);
 }
@@ -888,9 +876,5 @@ Lattice* Lattice::create() {
 
 Lattice* createLattice() {
   return new LatticeImpl;
-}
-
-void deleteLattice(Lattice* lattice) {
-  delete lattice;
 }
 }  // namespace MeCab
