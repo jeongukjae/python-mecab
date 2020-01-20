@@ -37,8 +37,6 @@ void setGlobalError(const char* str) {
 namespace MeCab {
 namespace {
 
-const float kDefaultTheta = 0.75;
-
 const std::vector<MeCab::Option> mecab_options{
     {"rcfile", 'r', "", "FILE", "use FILE as resource file"},
     {"dicdir", 'd', "", "DIR", "set DIR  as a system dicdir"},
@@ -404,7 +402,7 @@ class TaggerImpl : public Tagger {
 
   const char* what() const { return what_.c_str(); }
 
-  TaggerImpl() : current_model_(0), request_type_(MECAB_ONE_BEST), theta_(kDefaultTheta) {}
+  TaggerImpl() : current_model_(0), request_type_(MECAB_ONE_BEST), theta_(DEFAULT_THETA) {}
   virtual ~TaggerImpl() {}
 
  private:
@@ -439,7 +437,7 @@ class LatticeImpl : public Lattice {
   explicit LatticeImpl(const Writer* writer = 0)
       : sentence_(0),
         size_(0),
-        theta_(kDefaultTheta),
+        theta_(DEFAULT_THETA),
         Z_(0.0),
         request_type_(MECAB_ONE_BEST),
         writer_(writer),
@@ -461,7 +459,7 @@ class LatticeImpl : public Lattice {
     feature_constraint_.clear();
     boundary_constraint_.clear();
     size_ = 0;
-    theta_ = kDefaultTheta;
+    theta_ = DEFAULT_THETA;
     Z_ = 0.0;
     sentence_ = 0;
   }
