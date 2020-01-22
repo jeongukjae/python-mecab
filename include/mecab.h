@@ -9,8 +9,6 @@
 
 #include <iostream>
 
-/* C/C++ common data structures  */
-
 /**
  * Parameters for MeCab::Node::stat
  */
