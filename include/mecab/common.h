@@ -83,7 +83,7 @@ class wlog {
 #define CHECK_FALSE(condition) \
   if (condition) {             \
   } else                       \
-    return wlog() & std::cerr << __FILE__ << "(" << __LINE__ << ") [" << #condition << "] "
+    return ::MeCab::wlog() & std::cerr << __FILE__ << "(" << __LINE__ << ") [" << #condition << "] "
 
 #define CHECK_DIE(condition) \
   (condition) ? 0 : ::MeCab::die() & std::cerr << __FILE__ << "(" << __LINE__ << ") [" << #condition << "] "
