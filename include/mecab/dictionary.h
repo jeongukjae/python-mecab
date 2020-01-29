@@ -2,6 +2,7 @@
 #define _MECAB_DICTIONARY_H_
 
 #include <climits>
+
 #include "mecab.h"
 #include "mecab/char_property.h"
 #include "mecab/connector.h"
@@ -77,6 +78,8 @@ struct Token {
 class Dictionary {
  public:
   typedef Darts::DoubleArray::result_pair_type result_type;
+
+  bool open(const std::string file, const char* mode = "r") { return open(file.c_str(), mode); }
 
   bool open(const char* file, const char* mode = "r") {
     close();
