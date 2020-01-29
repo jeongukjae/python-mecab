@@ -17,8 +17,9 @@ class Connector {
   unsigned short rsize_;
 
  public:
-  bool open(const Param& param) {
-    const std::string filename = create_filename(param.get<std::string>("dicdir"), MATRIX_FILE);
+  bool open(const Param& param) { return open(param.get<std::string>("dicdir")); }
+  bool open(const std::string dicdir) {
+    const std::string filename = create_filename(dicdir, MATRIX_FILE);
     return open(filename.c_str());
   }
 

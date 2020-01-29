@@ -283,24 +283,31 @@ class Tokenizer {
 
     return result_node;
   }
+
   bool open(const Param& param) {
+    return open(param.get<std::string>("dicdir"), param.get<std::string>("userdic"),
+                param.get<std::string>("bos-feature"), param.get<std::string>("unk-feature"),
+                param.get<size_t>("max-grouping-size"));
+  }
+
+  bool open(const std::string prefix,
+            const std::string userdic,
+            const std::string bosFeature,
+            const std::string unkFeature,
+            const size_t maxGroupingSize) {
     close();
 
-    const std::string prefix = param.template get<std::string>("dicdir");
-
     CHECK_FALSE(unkdic_.open(create_filename(prefix, UNK_DIC_FILE).c_str()));
-    CHECK_FALSE(property_.open(param.get<std::string>("dicdir")));
+    CHECK_FALSE(property_.open(prefix));
 
     Dictionary* sysdic = new Dictionary;
 
     CHECK_FALSE(sysdic->open(create_filename(prefix, SYS_DIC_FILE).c_str()));
-
     CHECK_FALSE(sysdic->type() == 0) << "not a system dictionary: " << prefix;
 
     property_.set_charset(sysdic->charset());
     dic_.push_back(sysdic);
 
-    const std::string userdic = param.template get<std::string>("userdic");
     if (!userdic.empty()) {
       scoped_fixed_array<char, BUF_SIZE> buf;
       scoped_fixed_array<char*, BUF_SIZE> dicfile;
@@ -342,18 +349,18 @@ class Tokenizer {
 
     space_ = property_.getCharInfo(0x20);  // ad-hoc
 
-    bos_feature_.reset_string(param.template get<std::string>("bos-feature"));
+    bos_feature_.reset_string(bosFeature);
 
-    const std::string tmp = param.template get<std::string>("unk-feature");
     unk_feature_.reset(0);
-    if (!tmp.empty()) {
-      unk_feature_.reset_string(tmp);
+    if (!unkFeature.empty()) {
+      unk_feature_.reset_string(unkFeature);
     }
 
     CHECK_FALSE(*bos_feature_ != '\0') << "bos-feature is undefined in dicrc";
 
-    max_grouping_size_ = param.template get<size_t>("max-grouping-size");
-    if (max_grouping_size_ == 0) {
+    if (maxGroupingSize != 0) {
+      max_grouping_size_ = maxGroupingSize;
+    } else {
       max_grouping_size_ = DEFAULT_MAX_GROUPING_SIZE;
     }
 

@@ -4,6 +4,7 @@
 #include <cmath>
 #include <cstring>
 #include <vector>
+
 #include "mecab.h"
 #include "mecab/common.h"
 #include "mecab/connector.h"
@@ -79,18 +80,28 @@ bool connect(size_t pos,
 class Viterbi {
  public:
   bool open(const Param& param) {
+    return open(param.get<std::string>("dicdir"), param.get<std::string>("userdic"),
+                param.get<std::string>("bos-feature"), param.get<std::string>("unk-feature"),
+                param.get<size_t>("max-grouping-size"), param.get<int>("cost-factor"));
+  }
+  bool open(const std::string dicdir,
+            const std::string userdic,
+            const std::string bosFeature,
+            const std::string unkFeature,
+            const size_t maxGroupingSize,
+            const int costFactor) {
     tokenizer_.reset(new Tokenizer<Node, Path>);
-    CHECK_FALSE(tokenizer_->open(param));
+    CHECK_FALSE(tokenizer_->open(dicdir, userdic, bosFeature, unkFeature, maxGroupingSize));
     CHECK_FALSE(tokenizer_->dictionary_info()) << "Dictionary is empty";
 
     connector_.reset(new Connector);
-    CHECK_FALSE(connector_->open(param));
+    CHECK_FALSE(connector_->open(dicdir));
 
     CHECK_FALSE(tokenizer_->dictionary_info()->lsize == connector_->left_size() &&
                 tokenizer_->dictionary_info()->rsize == connector_->right_size())
         << "Transition table and dictionary are not compatible";
 
-    cost_factor_ = param.get<int>("cost-factor");
+    cost_factor_ = costFactor;
     if (cost_factor_ == 0) {
       cost_factor_ = 800;
     }
