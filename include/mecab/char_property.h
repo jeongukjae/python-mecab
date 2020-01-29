@@ -5,6 +5,7 @@
 #include <map>
 #include <set>
 #include <string>
+
 #include "mecab/mmap.h"
 #include "mecab/scoped_ptr.h"
 #include "mecab/ucs.h"
@@ -20,7 +21,7 @@ struct CharInfo {
   unsigned int invoke : 1;
 
   CharInfo() : type(0), default_type(0), length(0), group(0), invoke(0) {}
-  bool isKindOf(CharInfo c) const { return type & c.type; }
+  bool isKindOf(CharInfo charInfo) const { return type & charInfo.type; }
 };
 
 namespace {
