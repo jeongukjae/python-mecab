@@ -1,7 +1,16 @@
+#include "gmock/gmock.h"
 #include "gtest/gtest.h"
 #include "mecab/utils.h"
 
 // string utils
+TEST(mecab_utils, test_tokenize) {
+  std::vector<std::string> tokenized;
+  std::string source = "hello,My,Name,Is";
+  MeCab::tokenize(source, ",", tokenized);
+
+  ASSERT_THAT(tokenized, testing::ElementsAre("hello", "My", "Name", "Is"));
+}
+
 TEST(mecab_utils, test_decode_charset) {
   ASSERT_EQ(MeCab::decode_charset("utf8"), MeCab::UTF8);
   ASSERT_EQ(MeCab::decode_charset("utf16le"), MeCab::UTF16LE);

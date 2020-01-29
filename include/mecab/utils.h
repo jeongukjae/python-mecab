@@ -3,12 +3,14 @@
 
 #include <dirent.h>
 #include <stdint.h>
+
 #include <algorithm>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
 #include <string>
 #include <vector>
+
 #include "mecab.h"
 #include "mecab/common.h"
 #include "mecab/param.h"
@@ -524,6 +526,20 @@ inline size_t tokenize(char* str, const char* del, Iterator out, size_t max) {
   }
 
   return size;
+}
+
+inline void tokenize(std::string str, std::string delimiter, std::vector<std::string>& tokenizedResult) {
+  size_t pos = 0;
+  std::string token;
+  std::string str_(str);
+
+  while ((pos = str_.find(delimiter)) != std::string::npos) {
+    token = str_.substr(0, pos);
+    tokenizedResult.emplace_back(token);
+    str_ = str_.substr(pos + delimiter.length());
+  }
+
+  tokenizedResult.emplace_back(str_);
 }
 
 // continus run of space is regarded as one space
