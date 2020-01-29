@@ -298,7 +298,7 @@ class Tokenizer {
     close();
 
     CHECK_FALSE(unkdic_.open(create_filename(prefix, UNK_DIC_FILE).c_str()));
-    CHECK_FALSE(property_.open(prefix));
+    property_.open(create_filename(prefix, CHAR_PROPERTY_FILE));
 
     Dictionary* sysdic = new Dictionary;
 

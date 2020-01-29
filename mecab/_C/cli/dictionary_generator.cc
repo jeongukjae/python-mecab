@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 
+#include "cli.h"
 #include "mecab.h"
 #include "mecab/char_property.h"
 #include "mecab/common.h"
@@ -15,8 +16,6 @@
 #include "mecab/param.h"
 #include "mecab/scoped_ptr.h"
 #include "mecab/utils.h"
-
-#include "cli.h"
 
 namespace MeCab {
 
@@ -204,7 +203,7 @@ class DictionaryGenerator {
     }
 
     CharProperty property;
-    CHECK_DIE(property.open(param.get<std::string>("dicdir")));
+    property.open(create_filename(param.get<std::string>("dicdir"), CHAR_PROPERTY_FILE));
     property.set_charset(charset.c_str());
 
     const std::string bos = param.get<std::string>("bos-feature");

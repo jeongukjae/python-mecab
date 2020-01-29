@@ -75,14 +75,9 @@ CharInfo encode(const std::vector<std::string>& c, std::map<std::string, CharInf
 
 class CharProperty {
  public:
-  bool open(const std::string dicdir) {
-    const std::string filename = create_filename(dicdir, CHAR_PROPERTY_FILE);
-    return open(filename.c_str());
-  }
-
-  bool open(const char* filename) {
-    std::ostringstream error;
-    CHECK_FALSE(cmmap_->open(filename, "r"));
+  void open(const std::string filename) {
+    if (!cmmap_->open(filename.c_str(), "r"))
+      throw std::runtime_error("Cannot open " + filename);
 
     const char* ptr = cmmap_->begin();
     unsigned int csize;
@@ -90,7 +85,8 @@ class CharProperty {
 
     size_t fsize = sizeof(unsigned int) + (32 * csize) + sizeof(unsigned int) * 0xffff;
 
-    CHECK_FALSE(fsize == cmmap_->size()) << "invalid file size: " << filename;
+    if (fsize != cmmap_->size())
+      throw std::runtime_error("invalid file size: " + filename);
 
     clist_.clear();
     for (unsigned int i = 0; i < csize; ++i) {
@@ -99,8 +95,6 @@ class CharProperty {
     }
 
     map_ = reinterpret_cast<const CharInfo*>(ptr);
-
-    return true;
   }
 
   void close() { cmmap_->close(); }

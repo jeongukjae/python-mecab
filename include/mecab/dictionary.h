@@ -262,7 +262,7 @@ class Dictionary {
             fi.reset(new DecoderFeatureIndex);
             CHECK_DIE(fi->open(param)) << "cannot open feature index";
             property.reset(new CharProperty);
-            CHECK_DIE(property->open(param.get<std::string>("dicdir")));
+            property->open(create_filename(param.get<std::string>("dicdir"), CHAR_PROPERTY_FILE));
             property->set_charset(from.c_str());
           }
           cost = calcCost(w, feature, factor, fi.get(), rewrite.get(), property.get());
@@ -483,7 +483,7 @@ class Dictionary {
     rewriter.open(rewrite_file.c_str(), &config_iconv);
     CHECK_DIE(fi.open(param)) << "cannot open feature index";
 
-    CHECK_DIE(property.open(param.get<std::string>("dicdir")));
+    property.open(create_filename(param.get<std::string>("dicdir"), CHAR_PROPERTY_FILE));
     property.set_charset(from.c_str());
 
     if (!matrix.openText(matrix_file.c_str()) && !matrix.open(matrix_bin_file.c_str())) {
