@@ -1,6 +1,7 @@
 #ifndef __MECAB_UTILS_STRING_UTILS_H__
 #define __MECAB_UTILS_STRING_UTILS_H__
 
+#include <cstring>
 #include <string>
 
 namespace MeCab {
