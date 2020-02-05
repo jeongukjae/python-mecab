@@ -1,8 +1,8 @@
 #include "cli.h"
 #include "mecab/param.h"
+#include "mecab/utils.h"
 #include "mecab/utils/scoped_ptr.h"
 #include "mecab/utils/stream_wrapper.h"
-#include "mecab/utils.h"
 
 const std::vector<MeCab::Option> mecab_options{
     {"rcfile", 'r', "", "FILE", "use FILE as resource file"},

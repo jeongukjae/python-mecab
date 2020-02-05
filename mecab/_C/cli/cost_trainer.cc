@@ -4,13 +4,13 @@
 
 #include "mecab/common.h"
 #include "mecab/feature_index.h"
-#include "mecab/utils/freelist.h"
 #include "mecab/lbfgs.h"
 #include "mecab/learner_tagger.h"
 #include "mecab/param.h"
+#include "mecab/utils.h"
+#include "mecab/utils/freelist.h"
 #include "mecab/utils/string_buffer.h"
 #include "mecab/utils/thread.h"
-#include "mecab/utils.h"
 
 namespace MeCab {
 namespace {

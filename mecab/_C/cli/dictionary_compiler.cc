@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 
+#include "cli.h"
 #include "mecab.h"
 #include "mecab/char_property.h"
 #include "mecab/connector.h"
@@ -10,8 +11,6 @@
 #include "mecab/dictionary_rewriter.h"
 #include "mecab/feature_index.h"
 #include "mecab/param.h"
-
-#include "cli.h"
 
 namespace MeCab {
 

@@ -7,9 +7,9 @@
 #include "mecab.h"
 #include "mecab/common.h"
 #include "mecab/param.h"
+#include "mecab/utils.h"
 #include "mecab/utils/scoped_ptr.h"
 #include "mecab/utils/stream_wrapper.h"
-#include "mecab/utils.h"
 
 namespace MeCab {
 
