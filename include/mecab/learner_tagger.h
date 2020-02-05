@@ -6,8 +6,8 @@
 #include <vector>
 #include "mecab.h"
 #include "mecab/feature_index.h"
-#include "mecab/freelist.h"
-#include "mecab/scoped_ptr.h"
+#include "mecab/utils/freelist.h"
+#include "mecab/utils/scoped_ptr.h"
 #include "mecab/tokenizer.h"
 
 namespace MeCab {

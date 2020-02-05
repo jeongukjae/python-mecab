@@ -17,7 +17,8 @@ set(TEST_CODE
       tests/cc/test_iconv.cc
       tests/cc/test_mmap.cc
       tests/cc/test_param.cc
-      tests/cc/test_utils.cc)
+      tests/cc/test_utils.cc
+      tests/cc/utils/test_string_utils.cc)
 
 find_package(Iconv REQUIRED)
 

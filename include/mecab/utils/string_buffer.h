@@ -4,7 +4,7 @@
 #include <string>
 
 #include "mecab/common.h"
-#include "utils.h"
+#include "mecab/utils/string_utils.h"
 
 #define DEFAULT_ALLOC_SIZE BUF_SIZE
 

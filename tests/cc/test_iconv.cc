@@ -1,6 +1,6 @@
 #include <fstream>
 #include "gtest/gtest.h"
-#include "mecab/iconv.h"
+#include "mecab/utils/iconv.h"
 
 TEST(mecab_iconv, test_convert_utf16_to_utf8) {
   std::ifstream utf16File("../tests/test-data/cc/file-used-in-test-iconv-utf16.txt");

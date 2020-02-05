@@ -2,10 +2,11 @@
 #define _MECAB_ICONV_H_
 
 #include <iconv.h>
+
 #include <string>
 
 #include "mecab/common.h"
-#include "mecab/utils.h"
+#include "mecab/utils/string_utils.h"
 
 namespace MeCab {
 

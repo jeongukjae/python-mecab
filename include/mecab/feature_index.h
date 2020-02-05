@@ -8,11 +8,11 @@
 #include "mecab/common.h"
 #include "mecab/darts.h"
 #include "mecab/dictionary_rewriter.h"
-#include "mecab/freelist.h"
+#include "mecab/utils/freelist.h"
 #include "mecab/learner_node.h"
 #include "mecab/mmap.h"
 #include "mecab/param.h"
-#include "mecab/string_buffer.h"
+#include "mecab/utils/string_buffer.h"
 
 #define BUFSIZE (2048)
 #define POSSIZE (64)

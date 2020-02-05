@@ -7,9 +7,9 @@
 #include <string>
 
 #include "mecab/mmap.h"
-#include "mecab/scoped_ptr.h"
-#include "mecab/ucs.h"
 #include "mecab/utils.h"
+#include "mecab/utils/scoped_ptr.h"
+#include "mecab/utils/ucs.h"
 
 namespace MeCab {
 

@@ -4,10 +4,10 @@
 #include "mecab.h"
 #include "mecab/char_property.h"
 #include "mecab/dictionary.h"
-#include "mecab/freelist.h"
+#include "mecab/utils/freelist.h"
 #include "mecab/nbest_generator.h"
 #include "mecab/param.h"
-#include "mecab/scoped_ptr.h"
+#include "mecab/utils/scoped_ptr.h"
 
 namespace MeCab {
 namespace {

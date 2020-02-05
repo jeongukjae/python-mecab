@@ -4,9 +4,6 @@
 #include <algorithm>
 #include <vector>
 
-#include "mecab/common.h"
-#include "mecab/utils.h"
-
 namespace MeCab {
 
 template <class T>

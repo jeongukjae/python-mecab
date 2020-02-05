@@ -8,8 +8,8 @@
 #include "mecab.h"
 #include "mecab/common.h"
 #include "mecab/connector.h"
-#include "mecab/scoped_ptr.h"
-#include "mecab/thread.h"
+#include "mecab/utils/scoped_ptr.h"
+#include "mecab/utils/thread.h"
 #include "mecab/tokenizer.h"
 
 namespace MeCab {

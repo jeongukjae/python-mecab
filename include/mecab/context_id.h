@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 
-#include "mecab/iconv.h"
+#include "mecab/utils/iconv.h"
 #include "mecab/param.h"
 
 namespace MeCab {

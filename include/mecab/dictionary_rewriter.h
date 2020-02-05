@@ -5,11 +5,12 @@
 #include <map>
 #include <string>
 #include <vector>
+
 #include "mecab.h"
 #include "mecab/common.h"
-#include "mecab/freelist.h"
-#include "mecab/iconv.h"
-#include "mecab/scoped_ptr.h"
+#include "mecab/utils/freelist.h"
+#include "mecab/utils/iconv.h"
+#include "mecab/utils/scoped_ptr.h"
 
 namespace MeCab {
 

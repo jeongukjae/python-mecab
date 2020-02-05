@@ -4,7 +4,7 @@
 #include <queue>
 
 #include "mecab.h"
-#include "mecab/freelist.h"
+#include "mecab/utils/freelist.h"
 
 namespace MeCab {
 
