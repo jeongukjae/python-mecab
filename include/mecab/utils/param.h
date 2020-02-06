@@ -1,5 +1,5 @@
-#ifndef _MECAB_NEW_PARAM_H_
-#define _MECAB_NEW_PARAM_H_
+#ifndef __MECAB_UTILS_PARAM_H__
+#define __MECAB_UTILS_PARAM_H__
 
 #include <algorithm>
 #include <fstream>
@@ -313,4 +313,4 @@ class Param {
   }
 };
 }  // namespace MeCab
-#endif  // _MECAB_NEW_PARAM_H_
+#endif  // __MECAB_UTILS_PARAM_H__

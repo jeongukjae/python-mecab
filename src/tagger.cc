@@ -8,7 +8,7 @@
 #include "mecab/common.h"
 #include "mecab/connector.h"
 #include "mecab/nbest_generator.h"
-#include "mecab/param.h"
+#include "mecab/utils/param.h"
 #include "mecab/utils/scoped_ptr.h"
 #include "mecab/utils/stream_wrapper.h"
 #include "mecab/utils/string_buffer.h"

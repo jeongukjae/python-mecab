@@ -6,7 +6,7 @@
 #include "mecab/feature_index.h"
 #include "mecab/lbfgs.h"
 #include "mecab/learner_tagger.h"
-#include "mecab/param.h"
+#include "mecab/utils/param.h"
 #include "mecab/utils.h"
 #include "mecab/utils/freelist.h"
 #include "mecab/utils/string_buffer.h"

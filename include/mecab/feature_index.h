@@ -11,7 +11,7 @@
 #include "mecab/utils/freelist.h"
 #include "mecab/learner_node.h"
 #include "mecab/mmap.h"
-#include "mecab/param.h"
+#include "mecab/utils/param.h"
 #include "mecab/utils/string_buffer.h"
 
 #define BUFSIZE (2048)

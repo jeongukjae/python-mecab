@@ -1,5 +1,5 @@
 #include "cli.h"
-#include "mecab/param.h"
+#include "mecab/utils/param.h"
 #include "mecab/utils.h"
 #include "mecab/utils/scoped_ptr.h"
 #include "mecab/utils/stream_wrapper.h"

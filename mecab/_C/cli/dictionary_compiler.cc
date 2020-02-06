@@ -10,7 +10,7 @@
 #include "mecab/dictionary.h"
 #include "mecab/dictionary_rewriter.h"
 #include "mecab/feature_index.h"
-#include "mecab/param.h"
+#include "mecab/utils/param.h"
 
 namespace MeCab {
 

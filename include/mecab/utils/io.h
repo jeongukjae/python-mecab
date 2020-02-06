@@ -3,7 +3,7 @@
 
 #include <dirent.h>
 
-#include "mecab/param.h"
+#include "mecab/utils/param.h"
 #include "mecab/utils/string_utils.h"
 
 namespace MeCab {

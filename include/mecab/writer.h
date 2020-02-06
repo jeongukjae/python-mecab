@@ -5,7 +5,7 @@
 
 #include "mecab.h"
 #include "mecab/common.h"
-#include "mecab/param.h"
+#include "mecab/utils/param.h"
 #include "mecab/utils/scoped_ptr.h"
 #include "mecab/utils/string_buffer.h"
 #include "mecab/utils.h"

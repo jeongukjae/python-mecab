@@ -1,6 +1,6 @@
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
-#include "mecab/param.h"
+#include "mecab/utils/param.h"
 
 std::vector<MeCab::Option> options{{"test-option", 't', "", "", "some description of test-option"},
                                    {"arg-option", 'a', "", "ARG", "some description of arg-option"}};
@@ -12,7 +12,7 @@ std::vector<MeCab::Option> options{{"test-option", 't', "", "", "some descriptio
     arg_name.push_back(const_cast<char*>(__arguments[i].c_str())); \
   }
 
-TEST(mecab_param, test_help_version_messages) {
+TEST(mecab_utils_param, test_help_version_messages) {
   MeCab::Param param;
   MAKE_ARGS(arguments, "command", "-v");
 
@@ -30,7 +30,7 @@ TEST(mecab_param, test_help_version_messages) {
   ASSERT_EQ(param.getCommandName(), "command");
 }
 
-TEST(mecab_param, test_parse_help_argument) {
+TEST(mecab_utils_param, test_parse_help_argument) {
   MeCab::Param param;
   std::vector<MeCab::Option> emptyOption;
 
@@ -40,7 +40,7 @@ TEST(mecab_param, test_parse_help_argument) {
   ASSERT_FALSE(param.get<bool>("some-unknown"));
 }
 
-TEST(mecab_param, test_parse_long_help_argument) {
+TEST(mecab_utils_param, test_parse_long_help_argument) {
   MeCab::Param param;
   std::vector<MeCab::Option> emptyOption;
 
@@ -50,7 +50,7 @@ TEST(mecab_param, test_parse_long_help_argument) {
   ASSERT_FALSE(param.get<bool>("some-unknown"));
 }
 
-TEST(mecab_param, test_parse_version_and_help_argument) {
+TEST(mecab_utils_param, test_parse_version_and_help_argument) {
   MeCab::Param param;
   std::vector<MeCab::Option> emptyOption;
 
@@ -61,7 +61,7 @@ TEST(mecab_param, test_parse_version_and_help_argument) {
   ASSERT_FALSE(param.get<bool>("some-unknown"));
 }
 
-TEST(mecab_param, test_parse_argument_1) {
+TEST(mecab_utils_param, test_parse_argument_1) {
   MeCab::Param param;
 
   MAKE_ARGS(arguments, "command", "-a=hello");
@@ -69,7 +69,7 @@ TEST(mecab_param, test_parse_argument_1) {
   ASSERT_EQ(param.get<std::string>("arg-option"), "hello");
 }
 
-TEST(mecab_param, test_parse_argument_2) {
+TEST(mecab_utils_param, test_parse_argument_2) {
   MeCab::Param param;
 
   MAKE_ARGS(arguments, "command", "-a=");
@@ -77,7 +77,7 @@ TEST(mecab_param, test_parse_argument_2) {
   ASSERT_EQ(param.get<std::string>("arg-option"), "");
 }
 
-TEST(mecab_param, test_parse_argument_3) {
+TEST(mecab_utils_param, test_parse_argument_3) {
   MeCab::Param param;
 
   MAKE_ARGS(arguments, "command", "-ahello");
@@ -85,14 +85,14 @@ TEST(mecab_param, test_parse_argument_3) {
   ASSERT_EQ(param.get<std::string>("arg-option"), "hello");
 }
 
-TEST(mecab_param, test_parse_argument_4) {
+TEST(mecab_utils_param, test_parse_argument_4) {
   MeCab::Param param;
 
   MAKE_ARGS(arguments, "command", "-a", "hello");
   ASSERT_TRUE(param.parse(arguments.size(), arguments.data(), options));
   ASSERT_EQ(param.get<std::string>("arg-option"), "hello");
 }
-TEST(mecab_param, test_parse_argument_5) {
+TEST(mecab_utils_param, test_parse_argument_5) {
   MeCab::Param param;
 
   testing::internal::CaptureStderr();
@@ -101,7 +101,7 @@ TEST(mecab_param, test_parse_argument_5) {
   EXPECT_THAT(testing::internal::GetCapturedStderr(), ::testing::HasSubstr("`arg-option` requires an argument"));
 }
 
-TEST(mecab_param, test_parse_long_argument_1) {
+TEST(mecab_utils_param, test_parse_long_argument_1) {
   MeCab::Param param;
 
   MAKE_ARGS(arguments, "command", "--arg-option", "hello");
@@ -109,7 +109,7 @@ TEST(mecab_param, test_parse_long_argument_1) {
   ASSERT_EQ(param.get<std::string>("arg-option"), "hello");
 }
 
-TEST(mecab_param, test_parse_long_argument_2) {
+TEST(mecab_utils_param, test_parse_long_argument_2) {
   MeCab::Param param;
 
   MAKE_ARGS(arguments, "command", "--arg-option=hello");
@@ -117,7 +117,7 @@ TEST(mecab_param, test_parse_long_argument_2) {
   ASSERT_EQ(param.get<std::string>("arg-option"), "hello");
 }
 
-TEST(mecab_param, test_parse_long_argument_3) {
+TEST(mecab_utils_param, test_parse_long_argument_3) {
   MeCab::Param param;
 
   MAKE_ARGS(arguments, "command", "--arg-option=");
@@ -125,7 +125,7 @@ TEST(mecab_param, test_parse_long_argument_3) {
   ASSERT_EQ(param.get<std::string>("arg-option"), "");
 }
 
-TEST(mecab_param, test_parse_long_argument_4) {
+TEST(mecab_utils_param, test_parse_long_argument_4) {
   MeCab::Param param;
 
   testing::internal::CaptureStderr();
@@ -134,7 +134,7 @@ TEST(mecab_param, test_parse_long_argument_4) {
   EXPECT_THAT(testing::internal::GetCapturedStderr(), ::testing::HasSubstr("`arg-option` requires an argument"));
 }
 
-TEST(mecab_param, test_parse_long_argument_5) {
+TEST(mecab_utils_param, test_parse_long_argument_5) {
   MeCab::Param param;
 
   testing::internal::CaptureStderr();
@@ -143,7 +143,7 @@ TEST(mecab_param, test_parse_long_argument_5) {
   EXPECT_THAT(testing::internal::GetCapturedStderr(), ::testing::HasSubstr("unrecognized option `--arg-optiontest`"));
 }
 
-TEST(mecab_param, test_parse_with_string) {
+TEST(mecab_utils_param, test_parse_with_string) {
   MeCab::Param param;
 
   testing::internal::CaptureStderr();
@@ -151,21 +151,21 @@ TEST(mecab_param, test_parse_with_string) {
   EXPECT_THAT(testing::internal::GetCapturedStderr(), ::testing::HasSubstr("unrecognized option `--arg-optiontest`"));
 }
 
-TEST(mecab_param, test_parse_with_string_2) {
+TEST(mecab_utils_param, test_parse_with_string_2) {
   MeCab::Param param;
 
   ASSERT_TRUE(param.parse("-a hello", options));
   ASSERT_EQ(param.get<std::string>("arg-option"), "hello");
 }
 
-TEST(mecab_param, test_parse_with_string_3) {
+TEST(mecab_utils_param, test_parse_with_string_3) {
   MeCab::Param param;
 
   ASSERT_TRUE(param.parse("--arg-option hello", options));
   ASSERT_EQ(param.get<std::string>("arg-option"), "hello");
 }
 
-TEST(mecab_param, test_multiple_arg_1) {
+TEST(mecab_utils_param, test_multiple_arg_1) {
   MeCab::Param param;
 
   MAKE_ARGS(arguments, "command", "--arg-option=blabla", "-t");
@@ -174,7 +174,7 @@ TEST(mecab_param, test_multiple_arg_1) {
   ASSERT_EQ(param.get<std::string>("arg-option"), "blabla");
 }
 
-TEST(mecab_param, test_clear) {
+TEST(mecab_utils_param, test_clear) {
   MeCab::Param param;
 
   MAKE_ARGS(arguments, "command", "--arg-option=hello");
@@ -185,7 +185,7 @@ TEST(mecab_param, test_clear) {
   ASSERT_EQ(param.get<std::string>("arg-option"), "");
 }
 
-TEST(mecab_param, test_get_unknown) {
+TEST(mecab_utils_param, test_get_unknown) {
   MeCab::Param param;
 
   MAKE_ARGS(arguments, "command", "--arg-option=hello");
@@ -198,7 +198,7 @@ TEST(mecab_param, test_get_unknown) {
   ASSERT_EQ(param.get<void*>("unknown"), nullptr);
 }
 
-TEST(mecab_param, test_dump_config) {
+TEST(mecab_utils_param, test_dump_config) {
   MeCab::Param param;
 
   ASSERT_TRUE(param.parse("--arg-option hello -t", options));
@@ -216,7 +216,7 @@ TEST(mecab_param, test_dump_config) {
 test-option = blabla
 test-option2 = blablablabla
 */
-TEST(mecab_param, test_parse_file) {
+TEST(mecab_utils_param, test_parse_file) {
   MeCab::Param param;
 
   ASSERT_TRUE(param.parseFile("../tests/test-data/cc/file-used-in-test-param.txt"));
@@ -226,7 +226,7 @@ TEST(mecab_param, test_parse_file) {
   ASSERT_EQ(param.get<std::string>("some-comment"), "");
 }
 
-TEST(mecab_param, test_parse_file_after_parsing_parameter) {
+TEST(mecab_utils_param, test_parse_file_after_parsing_parameter) {
   MeCab::Param param;
   MAKE_ARGS(arguments, "command", "-t");
 
@@ -237,7 +237,7 @@ TEST(mecab_param, test_parse_file_after_parsing_parameter) {
   ASSERT_EQ(param.get<std::string>("unknown-option"), "");
 }
 
-TEST(mecab_param, test_get_rest_parameters) {
+TEST(mecab_utils_param, test_get_rest_parameters) {
   MeCab::Param param;
   MAKE_ARGS(arguments, "command", "-t", "1", "2", "3", "4");
 
@@ -248,7 +248,7 @@ TEST(mecab_param, test_get_rest_parameters) {
 // =========
 // regressions
 
-TEST(mecab_param, test_value_containing_whitespcae) {
+TEST(mecab_utils_param, test_value_containing_whitespcae) {
   MeCab::Param param;
 
   MAKE_ARGS(arguments, "command", "-a", "0 1 2 4");
@@ -256,7 +256,7 @@ TEST(mecab_param, test_value_containing_whitespcae) {
   ASSERT_EQ(param.get<std::string>("arg-option"), "0 1 2 4");
 }
 
-TEST(mecab_param, test_parse_autolink_dicrc) {
+TEST(mecab_utils_param, test_parse_autolink_dicrc) {
   MeCab::Param param;
 
   param.set("output-format-type", "");

@@ -6,7 +6,7 @@
 #include "mecab/dictionary.h"
 #include "mecab/utils/freelist.h"
 #include "mecab/nbest_generator.h"
-#include "mecab/param.h"
+#include "mecab/utils/param.h"
 #include "mecab/utils/scoped_ptr.h"
 
 namespace MeCab {

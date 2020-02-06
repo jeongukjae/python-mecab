@@ -4,7 +4,7 @@
 #include "mecab.h"
 #include "mecab/common.h"
 #include "mecab/mmap.h"
-#include "mecab/param.h"
+#include "mecab/utils/param.h"
 #include "mecab/utils/scoped_ptr.h"
 
 namespace MeCab {

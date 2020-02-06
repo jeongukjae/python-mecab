@@ -13,7 +13,7 @@
 #include "mecab/dictionary_rewriter.h"
 #include "mecab/feature_index.h"
 #include "mecab/mmap.h"
-#include "mecab/param.h"
+#include "mecab/utils/param.h"
 #include "mecab/utils.h"
 #include "mecab/utils/scoped_ptr.h"
 

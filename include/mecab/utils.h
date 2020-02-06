@@ -12,7 +12,7 @@
 
 #include "mecab.h"
 #include "mecab/common.h"
-#include "mecab/param.h"
+#include "mecab/utils/param.h"
 #include "mecab/utils/fingerprint.h"
 #include "mecab/utils/io.h"
 #include "mecab/utils/string_utils.h"
