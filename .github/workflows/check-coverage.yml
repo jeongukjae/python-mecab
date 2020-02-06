@@ -66,8 +66,7 @@ jobs:
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
         run: |
-          codecov -f build/coverage.info -F "C++" -b ${GITHUB_REF#refs/heads/}
+          codecov -f build/coverage.info -F "Cpp" -b ${GITHUB_REF#refs/heads/}
           cd extensions/python
           codecov -f coverage.xml -Xgcov -F "python" -b ${GITHUB_REF#refs/heads/}
-          cd build
-          codecov -f coverage.xml -Xgcov -F "python extension" -b ${GITHUB_REF#refs/heads/}
+          codecov -f build/coverage.info -Xgcov -F "PythonExtension" -b ${GITHUB_REF#refs/heads/}
