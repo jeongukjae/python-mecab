@@ -55,10 +55,19 @@ jobs:
           lcov --remove coverage.info '**/usr/**' '**/tests/**' '**/third_party/**' --output-file coverage.info
           lcov --list coverage.info
 
+      - name: Collect Code Coverage from extensions/python
+        run: |
+          cd extensions/python/build
+          lcov --directory . --capture --output-file coverage.info
+          lcov --remove coverage.info '**/usr/**' '**/tests/**' '**/third_party/**' --output-file coverage.info
+          lcov --list coverage.info
+
       - name: Report Coverage
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
         run: |
-          codecov -f build/coverage.info -F unittests -b ${GITHUB_REF#refs/heads/}
+          codecov -f build/coverage.info -F "C++" -b ${GITHUB_REF#refs/heads/}
           cd extensions/python
-          codecov -f coverage.xml -Xgcov -F integration -b ${GITHUB_REF#refs/heads/}
+          codecov -f coverage.xml -Xgcov -F "python" -b ${GITHUB_REF#refs/heads/}
+          cd build
+          codecov -f coverage.xml -Xgcov -F "python extension" -b ${GITHUB_REF#refs/heads/}
