@@ -1,4 +1,5 @@
 #include "tagger.h"
+
 #include <iostream>
 
 typedef struct {
@@ -85,7 +86,7 @@ static PyObject* tagger_new(PyTypeObject* subtype, PyObject* args) {
 }
 
 static void tagger_dealloc(Tagger* self) {
-  MeCab::deleteTagger(self->tagger);
+  delete self->tagger;
   PyObject_GC_Del(self);
 }
 

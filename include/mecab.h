@@ -688,36 +688,6 @@ extern Tagger* createTagger(int argc, char** argv);
 extern Tagger* createTagger(const char* arg);
 
 /**
- * delete Lattice object.
- * This method calles "delete lattice".
- * In some environment, e.g., MS-Windows, an object allocated inside a DLL must be deleted in the same DLL too.
- * @param lattice lattice object
- */
-inline void deleteLattice(Lattice* lattice) {
-  delete lattice;
-}
-
-/**
- * delete Model object.
- * This method calles "delete model".
- * In some environment, e.g., MS-Windows, an object allocated inside a DLL must be deleted in the same DLL too.
- * @param model model object
- */
-inline void deleteModel(Model* model) {
-  delete model;
-}
-
-/**
- * delete Tagger object.
- * This method calles "delete tagger".
- * In some environment, e.g., MS-Windows, an object allocated inside a DLL must be deleted in the same DLL too.
- * @param tagger tagger object
- */
-inline void deleteTagger(Tagger* tagger) {
-  delete tagger;
-}
-
-/**
  * Return last error string.
  * @return error string
  */
