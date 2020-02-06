@@ -23,7 +23,7 @@ from mecab.cli import run_mecab_dict_index, run_mecab_main
 )
 def test_dics(test_data_path, tmpdir):
     """test dict index command and mecab command to get same results as a given files"""
-    DIC_DIR = os.path.join("tests/test-data", test_data_path)
+    DIC_DIR = os.path.join("../../test-data", test_data_path)
     PROCESSED_DIC_DIR = tmpdir.mkdir(test_data_path)
 
     DICRC = os.path.join(DIC_DIR, "dicrc")

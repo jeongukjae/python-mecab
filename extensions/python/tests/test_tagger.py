@@ -5,7 +5,7 @@ from mecab.cli import run_mecab_dict_index
 
 
 def test_tagger_with_test_data_katakana(tmpdir):
-    DIC_DIR = "tests/test-data/katakana"
+    DIC_DIR = "../../test-data/katakana"
     PROCESSED_DIC_DIR = tmpdir.mkdir("katakana")
 
     DICRC = os.path.join(DIC_DIR, "dicrc")

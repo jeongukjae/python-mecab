@@ -27,9 +27,9 @@ LEVEL 4:    11.3290(52/459) 10.8559(52/479) 11.0874"""
 @pytest.mark.parametrize("threadnum", [pytest.param("1"), pytest.param("4")])
 def test_cost_train(threadnum, tmpdir, capfd):
     """check parameter estimation is possible"""
-    COST_TRAIN_SEED_PATH = "tests/test-data/cost-train/seed"
-    CORPUS_PATH = "tests/test-data/cost-train/training-data.txt"
-    COST_TRAIN_TEST_PATH = "tests/test-data/cost-train/test-data.txt"
+    COST_TRAIN_SEED_PATH = "../../test-data/cost-train/seed"
+    CORPUS_PATH = "../../test-data/cost-train/training-data.txt"
+    COST_TRAIN_TEST_PATH = "../../test-data/cost-train/test-data.txt"
     MODEL_PATH = str(tmpdir.join("model.bin"))
     DICTIONARY_PATH = str(tmpdir.mkdir("dic"))
     TEST_PROCESSED_PATH = str(tmpdir.join("test.txt"))

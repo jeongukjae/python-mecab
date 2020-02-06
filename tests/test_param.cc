@@ -219,7 +219,7 @@ test-option2 = blablablabla
 TEST(mecab_utils_param, test_parse_file) {
   MeCab::Param param;
 
-  ASSERT_TRUE(param.parseFile("../tests/test-data/cc/file-used-in-test-param.txt"));
+  ASSERT_TRUE(param.parseFile("../test-data/cc/file-used-in-test-param.txt"));
   ASSERT_EQ(param.get<std::string>("test-option"), "blabla");
   ASSERT_EQ(param.get<std::string>("test-option2"), "blablablabla");
   ASSERT_EQ(param.get<std::string>("unknown-option"), "");
@@ -231,7 +231,7 @@ TEST(mecab_utils_param, test_parse_file_after_parsing_parameter) {
   MAKE_ARGS(arguments, "command", "-t");
 
   ASSERT_TRUE(param.parse(arguments.size(), arguments.data(), options));
-  ASSERT_TRUE(param.parseFile("../tests/test-data/cc/file-used-in-test-param.txt"));
+  ASSERT_TRUE(param.parseFile("../test-data/cc/file-used-in-test-param.txt"));
   ASSERT_EQ(param.get<std::string>("test-option"), "1");
   ASSERT_EQ(param.get<std::string>("test-option2"), "blablablabla");
   ASSERT_EQ(param.get<std::string>("unknown-option"), "");
@@ -260,7 +260,7 @@ TEST(mecab_utils_param, test_parse_autolink_dicrc) {
   MeCab::Param param;
 
   param.set("output-format-type", "");
-  ASSERT_TRUE(param.parseFile("../tests/test-data/autolink/dicrc"));
+  ASSERT_TRUE(param.parseFile("../test-data/autolink/dicrc"));
   ASSERT_EQ(param.get<std::string>("output-format-type"), "autolink");
   ASSERT_EQ(param.get<std::string>("node-format-autolink"), "<a href=\"%H\">%M</a>");
 }

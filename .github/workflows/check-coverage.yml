@@ -38,12 +38,15 @@ jobs:
 
       - name: Install Python Dependencies and Package
         run: |
+          cd extensions/python
           python -m pip install --upgrade pip
           pip install pytest pytest-cov codecov
           BUILD_COVERAGE=ON python setup.py develop
 
       - name: Run Python Tests
-        run: pytest -v --cov mecab --cov-report=xml
+        run: |
+          cd extensions/python
+          pytest -v --cov mecab --cov-report=xml
 
       - name: Collect Code Coverage
         run: |
@@ -56,5 +59,6 @@ jobs:
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
         run: |
-          codecov -f coverage.xml -Xgcov -F integration -b ${GITHUB_REF#refs/heads/}
           codecov -f build/coverage.info -F unittests -b ${GITHUB_REF#refs/heads/}
+          cd extensions/python
+          codecov -f coverage.xml -Xgcov -F integration -b ${GITHUB_REF#refs/heads/}

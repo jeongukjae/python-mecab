@@ -46,10 +46,12 @@ jobs:
 
       - name: Install Python Dependencies and Package
         run: |
+          cd extensions/python
           python -m pip install --upgrade pip
           pip install pytest
           python setup.py develop
 
       - name: Run Python Tests
         run: |
+          cd extensions/python
           pytest -v

@@ -30,7 +30,7 @@ mecab = Extension(
     sources=["mecab/_C/mecab.cc", "mecab/_C/tagger.cc", "mecab/_C/cli.cc",],
     libraries=["mecab"],
     library_dirs=["./mecab/lib/"],
-    include_dirs=["./include"],
+    include_dirs=["../../include"],
     extra_compile_args=["-std=c++11"] + get_coverage_args_for_cc(),
     extra_link_args=get_link_args() + get_coverage_args_for_ld(),
     language="c++",
