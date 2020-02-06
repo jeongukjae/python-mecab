@@ -1,7 +1,7 @@
 #include <iostream>
-#include "PythonCommon.h"
 
-#include "cli/cli.h"
+#include "PythonCommon.h"
+#include "cli.h"
 #include "tagger.h"
 
 ADD_MECAB_CLI(mecab_main_python, mecab_main);

@@ -1,16 +1,16 @@
-#include <iostream>
-#include <map>
-#include <string>
+#ifndef __MECAB_DICTIONARY_COMPILER_H__
+#define __MECAB_DICTIONARY_COMPILER_H__
+
 #include <vector>
 
-#include "cli.h"
-#include "mecab.h"
 #include "mecab/char_property.h"
-#include "mecab/connector.h"
+#include "mecab/common.h"
 #include "mecab/dictionary.h"
-#include "mecab/dictionary_rewriter.h"
 #include "mecab/feature_index.h"
+#include "mecab/utils/io.h"
 #include "mecab/utils/param.h"
+
+// used in mecab/_C/cli/dictionary_compiler.cc
 
 namespace MeCab {
 
@@ -134,7 +134,4 @@ class DictionaryComplier {
 #undef OCONF
 }  // namespace MeCab
 
-// export functions
-int mecab_dict_index(int argc, char** argv) {
-  return MeCab::DictionaryComplier::run(argc, argv);
-}
+#endif  // __MECAB_DICTIONARY_COMPILER_H__

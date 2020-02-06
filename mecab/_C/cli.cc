@@ -1,6 +1,11 @@
 #include "cli.h"
-#include "mecab/utils/param.h"
+
+#include "mecab/cost_trainer.h"
+#include "mecab/dictionary_compiler.h"
+#include "mecab/dictionary_generator.h"
+#include "mecab/eval.h"
 #include "mecab/utils.h"
+#include "mecab/utils/param.h"
 #include "mecab/utils/scoped_ptr.h"
 #include "mecab/utils/stream_wrapper.h"
 
@@ -150,4 +155,25 @@ int mecab_main(int argc, char** argv) {
   }
 
   return EXIT_SUCCESS;
+}
+
+// exports
+int mecab_system_eval(int argc, char** argv) {
+  return MeCab::Eval::eval(argc, argv);
+}
+
+int mecab_test_gen(int argc, char** argv) {
+  return MeCab::TestSentenceGenerator::run(argc, argv);
+}
+
+int mecab_dict_gen(int argc, char** argv) {
+  return MeCab::DictionaryGenerator::run(argc, argv);
+}
+
+int mecab_dict_index(int argc, char** argv) {
+  return MeCab::DictionaryComplier::run(argc, argv);
+}
+
+int mecab_cost_train(int argc, char** argv) {
+  return MeCab::Learner::run(argc, argv);
 }

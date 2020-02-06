@@ -1,15 +1,14 @@
-#include <cstdio>
+#ifndef __MECAB_EVAL_H__
+#define __MECAB_EVAL_H__
+
 #include <fstream>
-#include <iostream>
-#include <map>
 #include <vector>
 
-#include "mecab.h"
 #include "mecab/common.h"
 #include "mecab/utils/param.h"
-#include "mecab/utils.h"
 #include "mecab/utils/scoped_ptr.h"
 #include "mecab/utils/stream_wrapper.h"
+#include "mecab/utils/string_utils.h"
 
 namespace MeCab {
 
@@ -245,11 +244,4 @@ class TestSentenceGenerator {
 };
 }  // namespace MeCab
 
-// exports
-int mecab_system_eval(int argc, char** argv) {
-  return MeCab::Eval::eval(argc, argv);
-}
-
-int mecab_test_gen(int argc, char** argv) {
-  return MeCab::TestSentenceGenerator::run(argc, argv);
-}
+#endif  // __MECAB_EVAL_H__

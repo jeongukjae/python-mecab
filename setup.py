@@ -27,15 +27,7 @@ def get_coverage_args_for_ld():
 
 mecab = Extension(
     "mecab._C",
-    sources=[
-        "mecab/_C/mecab.cc",
-        "mecab/_C/tagger.cc",
-        "mecab/_C/cli/mecab_main.cc",
-        "mecab/_C/cli/dictionary_compiler.cc",
-        "mecab/_C/cli/dictionary_generator.cc",
-        "mecab/_C/cli/cost_trainer.cc",
-        "mecab/_C/cli/eval.cc",
-    ],
+    sources=["mecab/_C/mecab.cc", "mecab/_C/tagger.cc", "mecab/_C/cli.cc",],
     libraries=["mecab"],
     library_dirs=["./mecab/lib/"],
     include_dirs=["./include"],

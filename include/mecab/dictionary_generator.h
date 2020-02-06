@@ -1,21 +1,19 @@
-#include <fstream>
-#include <iostream>
-#include <map>
-#include <string>
-#include <vector>
+#ifndef __MECAB_DICTIONARY_GENERATOR_H__
+#define __MECAB_DICTIONARY_GENERATOR_H__
 
-#include "cli.h"
-#include "mecab.h"
+#include <iostream>
+#include <string>
+
 #include "mecab/char_property.h"
 #include "mecab/common.h"
 #include "mecab/context_id.h"
 #include "mecab/dictionary.h"
 #include "mecab/dictionary_rewriter.h"
 #include "mecab/feature_index.h"
+#include "mecab/learner_node.h"
 #include "mecab/mmap.h"
-#include "mecab/utils/param.h"
-#include "mecab/utils.h"
-#include "mecab/utils/scoped_ptr.h"
+
+// used in mecab/_C/cli/dictionary_generator.cc
 
 namespace MeCab {
 
@@ -262,7 +260,4 @@ class DictionaryGenerator {
 };
 }  // namespace MeCab
 
-// export functions
-int mecab_dict_gen(int argc, char** argv) {
-  return MeCab::DictionaryGenerator::run(argc, argv);
-}
+#endif  // __MECAB_DICTIONARY_GENERATOR_H__

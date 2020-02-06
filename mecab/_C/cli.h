@@ -1,7 +1,7 @@
 #ifndef MECAB_PYTHON_CLI_H
 #define MECAB_PYTHON_CLI_H
 
-#include "../PythonCommon.h"
+#include "PythonCommon.h"
 
 int mecab_main(int argc, char** argv);
 int mecab_dict_index(int argc, char** argv);
