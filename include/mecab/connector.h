@@ -1,7 +1,6 @@
 #ifndef _MECAB_CONNECTOR_H_
 #define _MECAB_CONNECTOR_H_
 
-#include "mecab.h"
 #include "mecab/common.h"
 #include "mecab/mmap.h"
 #include "mecab/utils/param.h"

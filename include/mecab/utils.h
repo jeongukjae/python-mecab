@@ -10,11 +10,11 @@
 #include <string>
 #include <vector>
 
-#include "mecab.h"
 #include "mecab/common.h"
-#include "mecab/utils/param.h"
+#include "mecab/data_structure.h"
 #include "mecab/utils/fingerprint.h"
 #include "mecab/utils/io.h"
+#include "mecab/utils/param.h"
 #include "mecab/utils/string_utils.h"
 
 namespace MeCab {

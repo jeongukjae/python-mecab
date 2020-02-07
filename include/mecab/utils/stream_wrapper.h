@@ -5,8 +5,6 @@
 #include <fstream>
 #include <iostream>
 
-#include "mecab/utils.h"
-
 namespace MeCab {
 
 class istream_wrapper {

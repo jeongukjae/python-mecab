@@ -3,7 +3,7 @@
 
 #include <queue>
 
-#include "mecab.h"
+#include "mecab/data_structure.h"
 #include "mecab/utils/freelist.h"
 
 namespace MeCab {
@@ -30,13 +30,13 @@ class NBestGenerator {
  public:
   explicit NBestGenerator() : freelist_(512) {}
   virtual ~NBestGenerator() {}
-  bool set(Lattice* lattice) {
+  bool set(Node* eosNode) {
     freelist_.free();
     while (!agenda_.empty()) {
       agenda_.pop();  // make empty
     }
     QueueElement* eos = freelist_.alloc();
-    eos->node = lattice->eos_node();
+    eos->node = eosNode;
     eos->next = 0;
     eos->fx = eos->gx = 0;
     agenda_.push(eos);

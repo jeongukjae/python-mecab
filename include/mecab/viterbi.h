@@ -5,12 +5,12 @@
 #include <cstring>
 #include <vector>
 
-#include "mecab.h"
 #include "mecab/common.h"
 #include "mecab/connector.h"
+#include "mecab/data_structure.h"
+#include "mecab/lattice.h"
 #include "mecab/utils/scoped_ptr.h"
 #include "mecab/utils/thread.h"
-#include "mecab/tokenizer.h"
 
 namespace MeCab {
 
@@ -316,7 +316,7 @@ class Viterbi {
     if (!lattice->has_request_type(MECAB_NBEST)) {
       return true;
     }
-    lattice->allocator()->nbest_generator()->set(lattice);
+    lattice->allocator()->nbest_generator()->set(lattice->eos_node());
     return true;
   }
   static bool buildBestLattice(Lattice* lattice) {
@@ -330,25 +330,7 @@ class Viterbi {
 
     return true;
   }
-  static bool buildAllLattice(Lattice* lattice) {
-    if (!lattice->has_request_type(MECAB_ALL_MORPHS)) {
-      return true;
-    }
-
-    Node* prev = lattice->bos_node();
-    const size_t len = lattice->size();
-    Node** begin_node_list = lattice->begin_nodes();
-
-    for (long pos = 0; pos <= static_cast<long>(len); ++pos) {
-      for (Node* node = begin_node_list[pos]; node; node = node->bnext) {
-        prev->next = node;
-        node->prev = prev;
-        prev = node;
-      }
-    }
-
-    return true;
-  }
+  static bool buildAllLattice(Lattice* lattice) { Lattice::buildAllLattice(lattice); }
   static bool buildAlternative(Lattice* lattice) {
     Node** begin_node_list = lattice->begin_nodes();
 

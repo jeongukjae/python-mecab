@@ -3,16 +3,11 @@
 
 #include <climits>
 
-#include "mecab.h"
-#include "mecab/char_property.h"
 #include "mecab/connector.h"
 #include "mecab/context_id.h"
-#include "mecab/darts.h"
-#include "mecab/dictionary_rewriter.h"
 #include "mecab/feature_index.h"
-#include "mecab/mmap.h"
-#include "mecab/utils/param.h"
-#include "mecab/utils/scoped_ptr.h"
+#include "mecab/learner_node.h"
+#include "mecab/utils/string_utils.h"
 #include "mecab/writer.h"
 
 namespace MeCab {
@@ -210,7 +205,7 @@ class Dictionary {
 
     if (!node_format.empty()) {
       writer.reset(new Writer);
-      lattice.reset(createLattice());
+      lattice.reset(new Lattice);
       os.reset(new StringBuffer);
       memset(&node, 0, sizeof(node));
     }

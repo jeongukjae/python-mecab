@@ -4,11 +4,12 @@
 #include <algorithm>
 #include <functional>
 #include <vector>
+
 #include "mecab.h"
 #include "mecab/feature_index.h"
+#include "mecab/tokenizer.h"
 #include "mecab/utils/freelist.h"
 #include "mecab/utils/scoped_ptr.h"
-#include "mecab/tokenizer.h"
 
 namespace MeCab {
 namespace {

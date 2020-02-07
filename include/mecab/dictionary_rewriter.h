@@ -6,7 +6,6 @@
 #include <string>
 #include <vector>
 
-#include "mecab.h"
 #include "mecab/common.h"
 #include "mecab/utils/freelist.h"
 #include "mecab/utils/iconv.h"
