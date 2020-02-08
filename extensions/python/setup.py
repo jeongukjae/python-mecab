@@ -1,7 +1,15 @@
 import os
+import platform
 from setuptools import setup, Extension
 
 BUILD_COVERAGE = os.environ.get("BUILD_COVERAGE", "") == "ON"
+
+
+def get_libraries():
+    if platform.system() == "Darwin":
+        return ["iconv"]
+    if platform.system() == "Linux":
+        return ["c"]
 
 
 def get_coverage_args_for_cc():
@@ -19,7 +27,7 @@ def get_coverage_args_for_ld():
 mecab = Extension(
     "mecab._C",
     sources=["mecab/_C/mecab.cc", "mecab/_C/tagger.cc", "mecab/_C/cli.cc",],
-    libraries=["iconv"],
+    libraries=get_libraries(),
     include_dirs=["../../include"],
     extra_compile_args=["-std=c++11"] + get_coverage_args_for_cc(),
     extra_link_args=get_coverage_args_for_ld(),
