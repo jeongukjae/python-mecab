@@ -73,9 +73,9 @@ static PyObject* tagger_new(PyTypeObject* subtype, PyObject* args) {
 
     std::string args = "-C -r /dev/null -d ";
     args += dicdir;
-    tagger->tagger = MeCab::createTagger(args.c_str());
+    tagger->tagger = MeCab::Tagger::create(args.c_str());
   } else {
-    tagger->tagger = MeCab::createTagger("-C");
+    tagger->tagger = MeCab::Tagger::create("-C");
   }
 
   if (tagger->tagger == NULL) {

@@ -81,8 +81,7 @@ class Model {
 
   /**
    * Factory method to create a new Model with a specified main's argc/argv-style parameters.
-   * Return NULL if new model cannot be initialized. Use MeCab::getLastError() to obtain the
-   * cause of the errors.
+   * Return NULL if new model cannot be initialized.
    * @return new Model object
    * @param argc number of parameters
    * @param argv parameter list
@@ -99,8 +98,7 @@ class Model {
   /**
    * Factory method to create a new Model with a string parameter representation, i.e.,
    * "-d /user/local/mecab/dic/ipadic -Ochasen".
-   * Return NULL if new model cannot be initialized. Use MeCab::getLastError() to obtain the
-   * cause of the errors.
+   * Return NULL if new model cannot be initialized.
    * @return new Model object
    * @param arg single string representation of the argment.
    */

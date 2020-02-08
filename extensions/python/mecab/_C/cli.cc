@@ -61,7 +61,6 @@ int mecab_main(int argc, char** argv) {
 
   MeCab::scoped_ptr<MeCab::Model> model(MeCab::Model::create(param));
   if (model.get() == NULL) {
-    std::cout << MeCab::getLastError() << std::endl;
     return EXIT_FAILURE;
   }
 
@@ -113,7 +112,7 @@ int mecab_main(int argc, char** argv) {
   MeCab::scoped_array<char> ibuf_data(new char[ibufsize]);
   char* ibuf = ibuf_data.get();
 
-  MeCab::scoped_ptr<MeCab::Tagger> tagger(createTagger(model.get()));
+  MeCab::scoped_ptr<MeCab::Tagger> tagger(MeCab::Tagger::create(model.get()));
 
   CHECK_DIE(tagger.get()) << "cannot create tagger";
 

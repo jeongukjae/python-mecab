@@ -20,8 +20,6 @@ if(BUILD_COV AND CMAKE_BUILD_TYPE MATCHES Debug)
 endif()
 
 include_directories(./include)
-set(SOURCE_CODE
-      src/tagger.cc)
 set(TEST_CODE
       tests/test_iconv.cc
       tests/test_mmap.cc
@@ -30,9 +28,6 @@ set(TEST_CODE
       tests/utils/test_string_utils.cc)
 
 find_package(Iconv REQUIRED)
-
-add_library(mecab SHARED ${SOURCE_CODE})
-target_link_libraries(mecab ${Iconv_LIBRARIES})
 
 if(BUILD_TEST AND CMAKE_BUILD_TYPE MATCHES Debug)
   enable_testing()
@@ -43,7 +38,7 @@ if(BUILD_TEST AND CMAKE_BUILD_TYPE MATCHES Debug)
   include_directories(${gmock_SOURCE_DIR}/include)
 
   add_executable(run-test ${TEST_CODE})
-  target_link_libraries(run-test mecab)
+  target_link_libraries(run-test ${Iconv_LIBRARIES})
   target_link_libraries(run-test gtest gmock gtest_main)
 
   add_test(NAME run-test COMMAND ./run-test)

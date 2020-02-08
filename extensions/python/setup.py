@@ -1,16 +1,7 @@
 import os
-import platform
 from setuptools import setup, Extension
 
-
 BUILD_COVERAGE = os.environ.get("BUILD_COVERAGE", "") == "ON"
-
-
-def get_link_args():
-    if platform.system() == "Darwin":
-        return ["-Wl,-rpath,@loader_path/lib"]
-    if platform.system() == "Linux":
-        return ["-Wl,-rpath,$ORIGIN/lib"]
 
 
 def get_coverage_args_for_cc():
@@ -28,11 +19,10 @@ def get_coverage_args_for_ld():
 mecab = Extension(
     "mecab._C",
     sources=["mecab/_C/mecab.cc", "mecab/_C/tagger.cc", "mecab/_C/cli.cc",],
-    libraries=["mecab"],
-    library_dirs=["./mecab/lib/"],
+    libraries=["iconv"],
     include_dirs=["../../include"],
     extra_compile_args=["-std=c++11"] + get_coverage_args_for_cc(),
-    extra_link_args=get_link_args() + get_coverage_args_for_ld(),
+    extra_link_args=get_coverage_args_for_ld(),
     language="c++",
 )
 
@@ -52,7 +42,6 @@ setup(
             "mecab-system-eval=mecab.cli:run_mecab_system_eval",
         ],
     },
-    package_data={"mecab": ["lib/*.dylib", "lib/*.so"]},
     url="https://github.com/jeongukjae/python-mecab",
     author="Jeong Ukjae",
     author_email="jeongukjae@gmail.com",
