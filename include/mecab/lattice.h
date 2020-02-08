@@ -16,14 +16,13 @@ namespace MeCab {
  */
 class Lattice {
  public:
-  Lattice(const Writer* writer = 0)
+  // Lattice(const Writer* writer = 0)
+  Lattice()
       : sentence_(0),
         size_(0),
         theta_(DEFAULT_THETA),
         Z_(0.0),
         request_type_(MECAB_ONE_BEST),
-        writer_(writer),
-        ostrs_(0),
         allocator_(new Allocator<Node, Path>) {
     begin_nodes_.reserve(MIN_INPUT_BUFFER_SIZE);
     end_nodes_.reserve(MIN_INPUT_BUFFER_SIZE);
@@ -35,9 +34,6 @@ class Lattice {
    */
   void clear() {
     allocator_->free();
-    if (ostrs_.get()) {
-      ostrs_->clear();
-    }
     begin_nodes_.clear();
     end_nodes_.clear();
     feature_constraint_.clear();
@@ -218,70 +214,6 @@ class Lattice {
    * @return new node object
    */
   Node* newNode() { return allocator_->newNode(); }
-
-  /**
-   * Return string representation of the lattice.
-   * Returned object is managed by this instance. When clear/set_sentence() method
-   * is called, the returned buffer is initialized.
-   * @return string representation of the lattice
-   */
-  const char* toString() { return toStringInternal(stream()); }
-
-  /**
-   * Return string representation of the node.
-   * Returned object is managed by this instance. When clear/set_sentence() method
-   * is called, the returned buffer is initialized.
-   * @return string representation of the node
-   * @param node node object
-   */
-  const char* toString(const Node* node) { return toStringInternal(node, stream()); }
-
-  /**
-   * Return string representation of the N-best results.
-   * Returned object is managed by this instance. When clear/set_sentence() method
-   * is called, the returned buffer is initialized.
-   * @return string representation of the node
-   * @param N how many results you want to obtain
-   */
-  const char* enumNBestAsString(size_t N) { return enumNBestAsStringInternal(N, stream()); }
-
-  /**
-   * Return string representation of the lattice.
-   * Result is saved in the specified buffer.
-   * @param buf output buffer
-   * @param size output buffer size
-   * @return string representation of the lattice
-   */
-  const char* toString(char* buf, size_t size) {
-    StringBuffer os(buf, size);
-    return toStringInternal(&os);
-  }
-
-  /**
-   * Return string representation of the node.
-   * Result is saved in the specified buffer.
-   * @param node node object
-   * @param buf output buffer
-   * @param size output buffer size
-   * @return string representation of the lattice
-   */
-  const char* toString(const Node* node, char* buf, size_t size) {
-    StringBuffer os(buf, size);
-    return toStringInternal(node, &os);
-  }
-
-  /**
-   * Return string representation of the N-best result.
-   * Result is saved in the specified.
-   * @param N how many results you want to obtain
-   * @param buf output buffer
-   * @param size output buffer size
-   * @return string representation of the lattice
-   */
-  const char* enumNBestAsString(size_t N, char* buf, size_t size) {
-    StringBuffer os(buf, size);
-    return enumNBestAsStringInternal(N, &os);
-  }
 
   /**
    * Returns true if any parsing constraint is set
@@ -467,103 +399,7 @@ class Lattice {
   std::vector<Node*> begin_nodes_;
   std::vector<const char*> feature_constraint_;
   std::vector<unsigned char> boundary_constraint_;
-  const Writer* writer_;
-  scoped_ptr<StringBuffer> ostrs_;
   scoped_ptr<Allocator<Node, Path>> allocator_;
-
-  StringBuffer* stream() {
-    if (!ostrs_.get()) {
-      ostrs_.reset(new StringBuffer);
-    }
-    return ostrs_.get();
-  }
-
-  const char* toStringInternal(StringBuffer* os) {
-    os->clear();
-    if (writer_) {
-      if (!writer_->write(this, os)) {
-        return 0;
-      }
-    } else {
-      writeLattice(os);
-    }
-    *os << '\0';
-    if (!os->str()) {
-      set_what("output buffer overflow");
-      return 0;
-    }
-    return os->str();
-  }
-  const char* toStringInternal(const Node* node, StringBuffer* os) {
-    os->clear();
-    if (!node) {
-      set_what("node is NULL");
-      return 0;
-    }
-    if (writer_) {
-      if (!writer_->writeNode(this, node, os)) {
-        return 0;
-      }
-    } else {
-      os->write(node->surface, node->length);
-      *os << '\t' << node->feature;
-    }
-    *os << '\0';
-    if (!os->str()) {
-      set_what("output buffer overflow");
-      return 0;
-    }
-    return os->str();
-  }
-  const char* enumNBestAsStringInternal(size_t N, StringBuffer* os) {
-    os->clear();
-
-    if (N == 0 || N > NBEST_MAX) {
-      set_what("nbest size must be 1 <= nbest <= 512");
-      return 0;
-    }
-
-    for (size_t i = 0; i < N; ++i) {
-      if (!next()) {
-        break;
-      }
-      if (writer_) {
-        if (!writer_->write(this, os)) {
-          return 0;
-        }
-      } else {
-        writeLattice(os);
-      }
-    }
-
-    // make a dummy node for EON
-    if (writer_) {
-      Node eon_node;
-      memset(&eon_node, 0, sizeof(eon_node));
-      eon_node.stat = MECAB_EON_NODE;
-      eon_node.next = 0;
-      eon_node.surface = this->sentence() + this->size();
-      if (!writer_->writeNode(this, &eon_node, os)) {
-        return 0;
-      }
-    }
-    *os << '\0';
-
-    if (!os->str()) {
-      set_what("output buffer overflow");
-      return 0;
-    }
-
-    return os->str();
-  }
-  void writeLattice(StringBuffer* os) {
-    for (const Node* node = this->bos_node()->next; node->next; node = node->next) {
-      os->write(node->surface, node->length);
-      *os << '\t' << node->feature;
-      *os << '\n';
-    }
-    *os << "EOS\n";
-  }
 };
 
 }  // namespace MeCab

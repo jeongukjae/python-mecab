@@ -219,7 +219,8 @@ class TaggerImpl : public Tagger {
       set_what(lattice->what());
       return 0;
     }
-    const char* result = lattice->toString();
+    // const char* result = lattice->toString();
+    const char* result = model()->writer()->stringifyLattice(lattice);
     if (!result) {
       set_what(lattice->what());
       return 0;
@@ -234,7 +235,8 @@ class TaggerImpl : public Tagger {
       set_what(lattice->what());
       return 0;
     }
-    const char* result = lattice->toString(out, len2);
+    // const char* result = lattice->toString(out, len2);
+    const char* result = model()->writer()->stringifyLattice(lattice, out, len2);
     if (!result) {
       set_what(lattice->what());
       return 0;
@@ -265,7 +267,8 @@ class TaggerImpl : public Tagger {
       return 0;
     }
 
-    const char* result = lattice->enumNBestAsString(N);
+    const char* result = model()->writer()->stringifyLatticeNBest(lattice, N);
+    // const char* result = lattice->enumNBestAsString(N);
     if (!result) {
       set_what(lattice->what());
       return 0;
@@ -283,7 +286,8 @@ class TaggerImpl : public Tagger {
       return 0;
     }
 
-    const char* result = lattice->enumNBestAsString(N, out, len2);
+    const char* result = model()->writer()->stringifyLatticeNBest(lattice, N, out, len2);
+    // const char* result = lattice->enumNBestAsString(N, out, len2);
     if (!result) {
       set_what(lattice->what());
       return 0;
@@ -317,7 +321,8 @@ class TaggerImpl : public Tagger {
       lattice->set_what("no more results");
       return 0;
     }
-    const char* result = lattice->toString();
+    // const char* result = lattice->toString();
+    const char* result = model()->writer()->stringifyLattice(lattice);
     if (!result) {
       set_what(lattice->what());
       return 0;
@@ -330,7 +335,8 @@ class TaggerImpl : public Tagger {
       lattice->set_what("no more results");
       return 0;
     }
-    const char* result = lattice->toString(out, len2);
+    // const char* result = lattice->toString(out, len2);
+    const char* result = model()->writer()->stringifyLattice(lattice, out, len2);
     if (!result) {
       set_what(lattice->what());
       return 0;
@@ -339,7 +345,8 @@ class TaggerImpl : public Tagger {
   }
 
   const char* formatNode(const Node* node) {
-    const char* result = mutable_lattice()->toString(node);
+    // const char* result = mutable_lattice()->toString(node);
+    const char* result = model()->writer()->stringifyLattice(mutable_lattice(), node);
     if (!result) {
       set_what(mutable_lattice()->what());
       return 0;
@@ -347,7 +354,8 @@ class TaggerImpl : public Tagger {
     return result;
   }
   const char* formatNode(const Node* node, char* out, size_t len) {
-    const char* result = mutable_lattice()->toString(node, out, len);
+    // const char* result = mutable_lattice()->toString(node, out, len);
+    const char* result = model()->writer()->stringifyLattice(mutable_lattice(), node, out, len);
     if (!result) {
       set_what(mutable_lattice()->what());
       return 0;
@@ -453,7 +461,8 @@ Lattice* ModelImpl::createLattice() const {
     setGlobalError("Model is not available");
     return 0;
   }
-  return new Lattice(writer_.get());
+  // return new Lattice(writer_.get());
+  return new Lattice;
 }
 }  // namespace
 

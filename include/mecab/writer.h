@@ -10,12 +10,14 @@
 
 namespace MeCab {
 
-class Param;
-
 class Writer {
  public:
-  Writer() : write_(&Writer::writeLattice) {}
-  virtual ~Writer() {}
+  Writer() : write_(&Writer::writeLattice), temp_buffer(new StringBuffer) {}
+  virtual ~Writer() {
+    if (temp_buffer.get()) {
+      temp_buffer->clear();
+    }
+  }
   bool open(const Param& param) {
     const std::string ostyle = param.get<std::string>("output-format-type");
     write_ = &Writer::writeLattice;
@@ -43,16 +45,11 @@ class Writer {
       std::string eon_format_key = "eon-format";
 
       if (!ostyle.empty()) {
-        node_format_key += "-";
-        node_format_key += ostyle;
-        bos_format_key += "-";
-        bos_format_key += ostyle;
-        eos_format_key += "-";
-        eos_format_key += ostyle;
-        unk_format_key += "-";
-        unk_format_key += ostyle;
-        eon_format_key += "-";
-        eon_format_key += ostyle;
+        node_format_key += "-" + ostyle;
+        bos_format_key += "-" + ostyle;
+        eos_format_key += "-" + ostyle;
+        unk_format_key += "-" + ostyle;
+        eon_format_key += "-" + ostyle;
         const std::string tmp = param.get<std::string>(node_format_key);
         CHECK_FALSE(!tmp.empty()) << "unknown format type [" << ostyle << "]";
       }
@@ -96,6 +93,47 @@ class Writer {
     return true;
   }
   void close() { write_ = &Writer::writeLattice; }
+
+  const char* stringifyLattice(Lattice* lattice) const { return stringifyLatticeInternal(lattice, getStream()); }
+
+  const char* stringifyLattice(Lattice* lattice, const Node* node) const {
+    return stringifyLatticeInternal(lattice, node, getStream());
+  }
+
+  const char* stringifyLattice(Lattice* lattice, char* buf, size_t size) const {
+    StringBuffer os(buf, size);
+    return stringifyLatticeInternal(lattice, &os);
+  }
+
+  const char* stringifyLattice(Lattice* lattice, const Node* node, char* buf, size_t size) const {
+    StringBuffer os(buf, size);
+    return stringifyLatticeInternal(lattice, node, &os);
+  }
+
+  const char* stringifyLatticeNBest(Lattice* lattice, size_t N) const {
+    return stringifyLatticeNBestInternal(lattice, N, getStream());
+  }
+
+  const char* stringifyLatticeNBest(Lattice* lattice, size_t N, char* buf, size_t size) const {
+    StringBuffer os(buf, size);
+    return stringifyLatticeNBestInternal(lattice, N, &os);
+  }
+
+  bool writeNode(Lattice* lattice, const Node* node, StringBuffer* os) const {
+    switch (node->stat) {
+      case MECAB_BOS_NODE:
+        return writeNode(lattice, bos_format_.get(), node, os);
+      case MECAB_EOS_NODE:
+        return writeNode(lattice, eos_format_.get(), node, os);
+      case MECAB_UNK_NODE:
+        return writeNode(lattice, unk_format_.get(), node, os);
+      case MECAB_NOR_NODE:
+        return writeNode(lattice, node_format_.get(), node, os);
+      case MECAB_EON_NODE:
+        return writeNode(lattice, eon_format_.get(), node, os);
+    }
+    return true;
+  }
 
   bool writeNode(Lattice* lattice, const char* p, const Node* node, StringBuffer* os) const {
     scoped_fixed_array<char, BUF_SIZE> buf;
@@ -335,22 +373,6 @@ class Writer {
     return true;
   }
 
-  bool writeNode(Lattice* lattice, const Node* node, StringBuffer* os) const {
-    switch (node->stat) {
-      case MECAB_BOS_NODE:
-        return writeNode(lattice, bos_format_.get(), node, os);
-      case MECAB_EOS_NODE:
-        return writeNode(lattice, eos_format_.get(), node, os);
-      case MECAB_UNK_NODE:
-        return writeNode(lattice, unk_format_.get(), node, os);
-      case MECAB_NOR_NODE:
-        return writeNode(lattice, node_format_.get(), node, os);
-      case MECAB_EON_NODE:
-        return writeNode(lattice, eon_format_.get(), node, os);
-    }
-    return true;
-  }
-
   bool write(Lattice* lattice, StringBuffer* os) const {
     if (!lattice || !lattice->is_available()) {
       return false;
@@ -359,11 +381,85 @@ class Writer {
   }
 
  private:
+  bool (Writer::*write_)(Lattice* lattice, StringBuffer* s) const;
   scoped_string node_format_;
   scoped_string bos_format_;
   scoped_string eos_format_;
   scoped_string unk_format_;
   scoped_string eon_format_;
+  scoped_ptr<StringBuffer> temp_buffer;
+
+  StringBuffer* getStream() const { return temp_buffer.get(); }
+
+  const char* stringifyLatticeInternal(Lattice* lattice, StringBuffer* os) const {
+    os->clear();
+
+    if (!(this->*write_)(lattice, os)) {
+      return 0;
+    }
+
+    *os << '\0';
+    if (!os->str()) {
+      lattice->set_what("output buffer overflow");
+      return 0;
+    }
+
+    return os->str();
+  }
+
+  const char* stringifyLatticeInternal(Lattice* lattice, const Node* node, StringBuffer* os) const {
+    os->clear();
+    if (!node) {
+      lattice->set_what("node is NULL");
+      return 0;
+    }
+
+    if (!writeNode(lattice, node, os)) {
+      return 0;
+    }
+
+    *os << '\0';
+    if (!os->str()) {
+      lattice->set_what("output buffer overflow");
+      return 0;
+    }
+
+    return os->str();
+  }
+
+  const char* stringifyLatticeNBestInternal(Lattice* lattice, size_t N, StringBuffer* os) const {
+    if (N == 0 || N > NBEST_MAX) {
+      lattice->set_what("nbest size must be 1 <= nbest <= 512");
+      return 0;
+    }
+
+    for (size_t i = 0; i < N; ++i) {
+      if (!lattice->next()) {
+        break;
+      }
+
+      if (!write(lattice, os)) {
+        return 0;
+      }
+    }
+
+    Node eon_node;
+    memset(&eon_node, 0, sizeof(eon_node));
+    eon_node.stat = MECAB_EON_NODE;
+    eon_node.next = 0;
+    eon_node.surface = lattice->sentence() + lattice->size();
+    if (!writeNode(lattice, &eon_node, os)) {
+      return 0;
+    }
+    *os << '\0';
+
+    if (!os->str()) {
+      lattice->set_what("output buffer overflow");
+      return 0;
+    }
+
+    return os->str();
+  }
 
   bool writeLattice(Lattice* lattice, StringBuffer* os) const {
     for (const Node* node = lattice->bos_node()->next; node->next; node = node->next) {
@@ -452,8 +548,6 @@ class Writer {
     *os << "EOS\n";
     return true;
   }
-
-  bool (Writer::*write_)(Lattice* lattice, StringBuffer* s) const;
 };
 }  // namespace MeCab
 

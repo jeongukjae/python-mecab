@@ -330,7 +330,7 @@ class Viterbi {
 
     return true;
   }
-  static bool buildAllLattice(Lattice* lattice) { Lattice::buildAllLattice(lattice); }
+  static bool buildAllLattice(Lattice* lattice) { return Lattice::buildAllLattice(lattice); }
   static bool buildAlternative(Lattice* lattice) {
     Node** begin_node_list = lattice->begin_nodes();
 
