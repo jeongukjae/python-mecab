@@ -9,6 +9,7 @@
 #include "mecab/connector.h"
 #include "mecab/data_structure.h"
 #include "mecab/lattice.h"
+#include "mecab/tokenizer.h"
 #include "mecab/utils/scoped_ptr.h"
 #include "mecab/utils/thread.h"
 

@@ -11,95 +11,13 @@
 
 #include "mecab/data_structure.h"
 #include "mecab/lattice.h"
+#include "mecab/model.h"
 
 namespace MeCab {
 
 template <typename N, typename P>
 class Allocator;
-class Tagger;
 class Param;
-
-/**
- * Model class
- */
-class Model {
- public:
-  /**
-   * Return DictionaryInfo linked list.
-   * @return DictionaryInfo linked list
-   */
-  virtual const DictionaryInfo* dictionary_info() const = 0;
-
-  /**
-   * Return transtion cost from rcAttr to lcAttr.
-   * @return transtion cost
-   */
-  virtual int transition_cost(unsigned short rcAttr, unsigned short lcAttr) const = 0;
-
-  /**
-   * perform common prefix search from the range [begin, end).
-   * |lattice| takes the ownership of return value.
-   * @return node linked list.
-   */
-  virtual Node* lookup(const char* begin, const char* end, Lattice* lattice) const = 0;
-
-  /**
-   * Create a new Tagger object.
-   * All returned tagger object shares this model object as a parsing model.
-   * Never delete this model object before deleting tagger object.
-   * @return new Tagger object
-   */
-  virtual Tagger* createTagger() const = 0;
-
-  /**
-   * Create a new Lattice object.
-   * @return new Lattice object
-   */
-  virtual Lattice* createLattice() const = 0;
-
-  /**
-   * Swap the instance with |model|.
-   * The ownership of |model| always moves to this instance,
-   * meaning that passed |model| will no longer be accessible after calling this method.
-   * return true if new model is swapped successfully.
-   * This method is thread safe. All taggers created by
-   * Model::createTagger() method will also be updated asynchronously.
-   * No need to stop the parsing thread excplicitly before swapping model object.
-   * @return boolean
-   * @param model new model which is going to be swapped with the current model.
-   */
-  virtual bool swap(Model* model) = 0;
-
-  /**
-   * Return a version string
-   * @return version string
-   */
-  static const char* version();
-
-  virtual ~Model() {}
-
-  /**
-   * Factory method to create a new Model with a specified main's argc/argv-style parameters.
-   * Return NULL if new model cannot be initialized. Use MeCab::getLastError() to obtain the
-   * cause of the errors.
-   * @return new Model object
-   * @param argc number of parameters
-   * @param argv parameter list
-   */
-  static Model* create(int argc, char** argv);
-
-  /**
-   * Factory method to create a new Model with a string parameter representation, i.e.,
-   * "-d /user/local/mecab/dic/ipadic -Ochasen".
-   * Return NULL if new model cannot be initialized. Use MeCab::getLastError() to obtain the
-   * cause of the errors.
-   * @return new Model object
-   * @param arg single string representation of the argment.
-   */
-  static Model* create(const char* arg);
-
-  static Model* create(const Param& param);
-};
 
 /**
  * Tagger class
@@ -417,6 +335,8 @@ extern Tagger* createTagger(int argc, char** argv);
  * Alias of Tagger::create(arg)
  */
 extern Tagger* createTagger(const char* arg);
+
+extern Tagger* createTagger(const Model* model);
 
 /**
  * Return last error string.

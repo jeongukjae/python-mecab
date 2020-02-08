@@ -113,7 +113,7 @@ int mecab_main(int argc, char** argv) {
   MeCab::scoped_array<char> ibuf_data(new char[ibufsize]);
   char* ibuf = ibuf_data.get();
 
-  MeCab::scoped_ptr<MeCab::Tagger> tagger(model->createTagger());
+  MeCab::scoped_ptr<MeCab::Tagger> tagger(createTagger(model.get()));
 
   CHECK_DIE(tagger.get()) << "cannot create tagger";
 
