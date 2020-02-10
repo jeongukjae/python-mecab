@@ -1,12 +1,13 @@
 #ifndef _MECAB_UCS_H_
 #define _MECAB_UCS_H_
 
+#include <cstddef>
+
 namespace MeCab {
 
 // All internal codes are represented in UCS2,
 // if you want to use specific local codes, e.g, big5/euc-kr,
 // make a function which maps the local code to the UCS code.
-
 inline unsigned short utf8_to_ucs2(const char* begin, const char* end, size_t* mblen) {
   const size_t len = end - begin;
 
@@ -26,15 +27,12 @@ inline unsigned short utf8_to_ucs2(const char* begin, const char* end, size_t* m
   } else if (len >= 4 && (begin[0] & 0xf8) == 0xf0) {
     *mblen = 4;
     return 0;
-
   } else if (len >= 5 && (begin[0] & 0xfc) == 0xf8) {
     *mblen = 5;
     return 0;
-
   } else if (len >= 6 && (begin[0] & 0xfe) == 0xfc) {
     *mblen = 6;
     return 0;
-
   } else {
     *mblen = 1;
     return 0;
@@ -53,12 +51,11 @@ inline unsigned short utf16be_to_ucs2(const char* begin, const char* end, size_t
     return 0;
   }
   *mblen = 2;
-#if defined WORDS_BIGENDIAN
+#ifdef WORDS_BIGENDIAN
   return (begin[0] << 8 | begin[1]);
 #else
   return (begin[1] << 8 | begin[0]);
 #endif
-  return 0;
 }
 
 inline unsigned short utf16le_to_ucs2(const char* begin, const char* end, size_t* mblen) {
