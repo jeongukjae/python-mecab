@@ -49,6 +49,8 @@ jobs:
           pytest -v --cov mecab --cov-report=xml
 
       - name: Report code coverage in .
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
         run: |
           cd build
           lcov --directory . --capture --output-file coverage.info
@@ -57,6 +59,8 @@ jobs:
           codecov -f coverage.info -F "Cpp" -b ${GITHUB_REF#refs/heads/}
 
       - name: Report code coverage in extensions/python
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
         run: |
           cd extensions/python
           codecov -f coverage.xml -Xgcov -F "Python" -b ${GITHUB_REF#refs/heads/}
