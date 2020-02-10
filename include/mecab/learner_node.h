@@ -7,23 +7,25 @@
 #include "mecab/common.h"
 #include "mecab/utils.h"
 
-struct mecab_learner_path_t {
-  struct mecab_learner_node_t* rnode;
-  struct mecab_learner_path_t* rnext;
-  struct mecab_learner_node_t* lnode;
-  struct mecab_learner_path_t* lnext;
+namespace MeCab {
+
+struct LearnerPath {
+  struct LearnerNode* rnode;
+  struct LearnerPath* rnext;
+  struct LearnerNode* lnode;
+  struct LearnerPath* lnext;
   double cost;
   const int* fvector;
 };
 
-struct mecab_learner_node_t {
-  struct mecab_learner_node_t* prev;
-  struct mecab_learner_node_t* next;
-  struct mecab_learner_node_t* enext;
-  struct mecab_learner_node_t* bnext;
-  struct mecab_learner_path_t* rpath;
-  struct mecab_learner_path_t* lpath;
-  struct mecab_learner_node_t* anext;
+struct LearnerNode {
+  struct LearnerNode* prev;
+  struct LearnerNode* next;
+  struct LearnerNode* enext;
+  struct LearnerNode* bnext;
+  struct LearnerPath* rpath;
+  struct LearnerPath* lpath;
+  struct LearnerNode* anext;
   const char* surface;
   const char* feature;
   unsigned int id;
@@ -43,11 +45,6 @@ struct mecab_learner_node_t {
   const int* fvector;
   struct mecab_token_t* token;
 };
-
-namespace MeCab {
-
-typedef struct mecab_learner_path_t LearnerPath;
-typedef struct mecab_learner_node_t LearnerNode;
 
 template <class T1, class T2>
 T1 repeat_find_if(T1 b, T1 e, const T2& v, size_t n) {
