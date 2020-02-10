@@ -14,7 +14,6 @@
 #include "mecab/data_structure.h"
 #include "mecab/utils/fingerprint.h"
 #include "mecab/utils/io.h"
-#include "mecab/utils/param.h"
 #include "mecab/utils/string_utils.h"
 
 namespace MeCab {
@@ -29,43 +28,6 @@ template <class T>
 inline void read_static(const char** ptr, T& value) {
   const char* r = read_ptr(ptr, sizeof(T));
   memcpy(&value, r, sizeof(T));
-}
-
-inline int load_request_type(const Param& param) {
-  int request_type = MECAB_ONE_BEST;
-
-  if (param.get<bool>("allocate-sentence")) {
-    request_type |= MECAB_ALLOCATE_SENTENCE;
-  }
-
-  if (param.get<bool>("partial")) {
-    request_type |= MECAB_PARTIAL;
-  }
-
-  if (param.get<bool>("all-morphs")) {
-    request_type |= MECAB_ALL_MORPHS;
-  }
-
-  if (param.get<bool>("marginal")) {
-    request_type |= MECAB_MARGINAL_PROB;
-  }
-
-  const int nbest = param.get<int>("nbest");
-  if (nbest >= 2) {
-    request_type |= MECAB_NBEST;
-  }
-
-  // DEPRECATED:
-  const int lattice_level = param.get<int>("lattice-level");
-  if (lattice_level >= 1) {
-    request_type |= MECAB_NBEST;
-  }
-
-  if (lattice_level >= 2) {
-    request_type |= MECAB_MARGINAL_PROB;
-  }
-
-  return request_type;
 }
 
 inline double logsumexp(double x, double y, bool flg) {

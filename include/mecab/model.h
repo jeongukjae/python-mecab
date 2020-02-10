@@ -12,6 +12,34 @@
 
 namespace MeCab {
 
+namespace {
+inline int get_request_type(bool allocateSentence, bool partial, bool allMorphs, bool marginal, int nbest) {
+  int request_type = MECAB_ONE_BEST;
+
+  if (allocateSentence) {
+    request_type |= MECAB_ALLOCATE_SENTENCE;
+  }
+
+  if (partial) {
+    request_type |= MECAB_PARTIAL;
+  }
+
+  if (allMorphs) {
+    request_type |= MECAB_ALL_MORPHS;
+  }
+
+  if (marginal) {
+    request_type |= MECAB_MARGINAL_PROB;
+  }
+
+  if (nbest >= 2) {
+    request_type |= MECAB_NBEST;
+  }
+
+  return request_type;
+}
+}  // namespace
+
 const std::vector<MeCab::Option> mecab_options{
     {"rcfile", 'r', "", "FILE", "use FILE as resource file"},
     {"dicdir", 'd', "", "DIR", "set DIR  as a system dicdir"},
@@ -67,7 +95,9 @@ class Model {
   bool open(const Param& param) {
     CHECK_FALSE(writer_->open(param) && viterbi_->open(param));
 
-    request_type_ = load_request_type(param);
+    request_type_ =
+        get_request_type(param.get<bool>("allocate-sentence"), param.get<bool>("partial"),
+                         param.get<bool>("all-morphs"), param.get<bool>("marginal"), param.get<int>("nbest"));
     theta_ = param.get<double>("theta");
 
     return is_available();
