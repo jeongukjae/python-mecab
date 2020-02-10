@@ -48,25 +48,21 @@ jobs:
           cd extensions/python
           pytest -v --cov mecab --cov-report=xml
 
-      - name: Collect Code Coverage
+      - name: Report code coverage in .
         run: |
           cd build
           lcov --directory . --capture --output-file coverage.info
           lcov --remove coverage.info '**/usr/**' '**/tests/**' '**/third_party/**' --output-file coverage.info
           lcov --list coverage.info
+          codecov -f coverage.info -F "Cpp" -b ${GITHUB_REF#refs/heads/}
 
-      - name: Collect Code Coverage from extensions/python
+      - name: Report code coverage in extensions/python
         run: |
-          cd extensions/python/build
+          cd extensions/python
+          codecov -f coverage.xml -Xgcov -F "Python" -b ${GITHUB_REF#refs/heads/}
+
+          cd build
           lcov --directory . --capture --output-file coverage.info
           lcov --remove coverage.info '**/usr/**' '**/tests/**' '**/third_party/**' --output-file coverage.info
           lcov --list coverage.info
-
-      - name: Report Coverage
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-        run: |
-          codecov -f build/coverage.info -F "Cpp" -b ${GITHUB_REF#refs/heads/}
-          cd extensions/python
-          codecov -f coverage.xml -Xgcov -F "python" -b ${GITHUB_REF#refs/heads/}
-          codecov -f build/coverage.info -Xgcov -F "PythonExtension" -b ${GITHUB_REF#refs/heads/}
+          codecov -f coverage.info -Xgcov -F "PythonExtension" -b ${GITHUB_REF#refs/heads/}
