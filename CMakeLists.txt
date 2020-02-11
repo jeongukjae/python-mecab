@@ -26,10 +26,12 @@ set(TEST_CODE
       tests/test_param.cc
       tests/test_utils.cc
       tests/utils/test_string_utils.cc)
+set(INTEGRATION_TEST_CODE
+      tests-integration/test_cost_train.cc)
 
 find_package(Iconv REQUIRED)
 
-if(BUILD_TEST AND CMAKE_BUILD_TYPE MATCHES Debug)
+if(BUILD_TEST)
   enable_testing()
   add_subdirectory("${PROJECT_SOURCE_DIR}/third_party/googletest")
 
@@ -41,5 +43,10 @@ if(BUILD_TEST AND CMAKE_BUILD_TYPE MATCHES Debug)
   target_link_libraries(run-test ${Iconv_LIBRARIES})
   target_link_libraries(run-test gtest gmock gtest_main)
 
+  add_executable(run-integration ${INTEGRATION_TEST_CODE})
+  target_link_libraries(run-integration ${Iconv_LIBRARIES})
+  target_link_libraries(run-integration gtest gmock gtest_main)
+
   add_test(NAME run-test COMMAND ./run-test)
+  add_test(NAME run-integration COMMAND ./run-integration)
 endif()
