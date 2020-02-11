@@ -55,7 +55,7 @@ jobs:
         run: |
           cd build
           lcov --directory . --capture --output-file coverage.info
-          lcov --remove coverage.info '**/usr/**' '**/tests/**' '**/third_party/**' --output-file coverage.info
+          lcov --remove coverage.info '**/usr/**' '**/tests/**' '**/tests-integration/**' '**/third_party/**' --output-file coverage.info
           lcov --list coverage.info
           codecov -f coverage.info -F "Cpp" -b ${GITHUB_REF#refs/heads/}
 
@@ -68,6 +68,6 @@ jobs:
 
           cd build
           lcov --directory . --capture --output-file coverage.info
-          lcov --remove coverage.info '**/usr/**' '**/tests/**' '**/third_party/**' --output-file coverage.info
+          lcov --remove coverage.info '**/usr/**' '**/tests/**' '**/tests-integration/**' '**/third_party/**' --output-file coverage.info
           lcov --list coverage.info
           codecov -f coverage.info -Xgcov -F "PythonExtension" -b ${GITHUB_REF#refs/heads/}
