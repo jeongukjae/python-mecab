@@ -28,7 +28,8 @@ set(TEST_CODE
       tests/utils/test_string_utils.cc)
 set(INTEGRATION_TEST_CODE
       tests-integration/test_cost_train.cc
-      tests-integration/test_dics.cc)
+      tests-integration/test_dics.cc
+      tests-integration/test_eval.cc)
 
 find_package(Iconv REQUIRED)
 
