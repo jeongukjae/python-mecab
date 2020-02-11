@@ -16,7 +16,7 @@ bool is_exists(std::string path) {
   return stat(path.c_str(), &info) == 0;
 }
 
-int removeFiles(const char* pathname, const struct stat* sbuf, int type, struct FTW* ftwb) {
+int remove_file(const char* pathname, const struct stat* sbuf, int type, struct FTW* ftwb) {
   if (remove(pathname) < 0) {
     // ERROR;
     return -1;
@@ -42,7 +42,7 @@ class TmpDir {
       throw new std::runtime_error("Cannot create tmp folder");
     }
   }
-  ~TmpDir() { nftw(path.c_str(), removeFiles, 10, FTW_DEPTH | FTW_MOUNT | FTW_PHYS); }
+  ~TmpDir() { nftw(path.c_str(), remove_file, 10, FTW_DEPTH | FTW_MOUNT | FTW_PHYS); }
   const std::string getPath() const { return path; }
   const std::string createPath(std::string path) const {
     auto expectedPath = this->path + "/" + path;
