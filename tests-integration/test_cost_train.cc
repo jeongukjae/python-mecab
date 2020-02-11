@@ -26,11 +26,13 @@ void copy_file(std::string from, std::string to) {
 }
 }  // namespace
 
+class mecab_cost_train_test : public testing::TestWithParam<size_t> {};
+
 /**
  * equivalent test of run-cost-train.sh in
  * https://github.com/taku910/mecab/blob/master/mecab/tests/run-cost-train.sh
  */
-TEST(mecab_integration_test, cost_train) {
+TEST_P(mecab_cost_train_test, run_with_thread_num) {
   fixture::TmpDir tmpdir;
 
   const std::string trainingResult =
@@ -62,8 +64,8 @@ TEST(mecab_integration_test, cost_train) {
     mecab_dict_index(mecab_dict_index_args.size(), mecab_dict_index_args.data());
   }
   {
-    MAKE_ARGS(mecab_cost_train_args, "mecab-cost-train", "-c", "1.0", "-p", "1", "-d", tmpdir.getPath(), "-f", "1",
-              corpusPath, modelPath);
+    MAKE_ARGS(mecab_cost_train_args, "mecab-cost-train", "-c", "1.0", "-p", std::to_string(GetParam()), "-d",
+              tmpdir.getPath(), "-f", "1", corpusPath, modelPath);
     mecab_cost_train(mecab_cost_train_args.size(), mecab_cost_train_args.data());
   }
   {
@@ -90,3 +92,5 @@ TEST(mecab_integration_test, cost_train) {
   std::string captured = testing::internal::GetCapturedStdout();
   ASSERT_THAT(captured, ::testing::HasSubstr(trainingResult));
 }
+
+INSTANTIATE_TEST_SUITE_P(ThreadNum, mecab_cost_train_test, testing::Values(1, 4));
