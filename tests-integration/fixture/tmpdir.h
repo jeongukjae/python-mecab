@@ -1,6 +1,7 @@
 #ifndef __TEST_INTEGRATION_TMPDIR_H__
 #define __TEST_INTEGRATION_TMPDIR_H__
 
+#include <ftw.h>
 #include <sys/stat.h>
 #include <unistd.h>
 
@@ -13,6 +14,14 @@ namespace {
 bool is_exists(std::string path) {
   struct stat info;
   return stat(path.c_str(), &info) == 0;
+}
+
+int removeFiles(const char* pathname, const struct stat* sbuf, int type, struct FTW* ftwb) {
+  if (remove(pathname) < 0) {
+    // ERROR;
+    return -1;
+  }
+  return 0;
 }
 }  // namespace
 
@@ -33,7 +42,7 @@ class TmpDir {
       throw new std::runtime_error("Cannot create tmp folder");
     }
   }
-  ~TmpDir() { rmdir(path.c_str()); }
+  ~TmpDir() { nftw(path.c_str(), removeFiles, 10, FTW_DEPTH | FTW_MOUNT | FTW_PHYS); }
   const std::string getPath() const { return path; }
   const std::string createPath(std::string path) const {
     auto expectedPath = this->path + "/" + path;
