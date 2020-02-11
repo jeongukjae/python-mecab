@@ -17,7 +17,7 @@
 
 namespace MeCab {
 
-void copy(const char* src, const char* dst) {
+inline void copy(const char* src, const char* dst) {
   std::cout << "copying " << src << " to " << dst << std::endl;
   Mmap<char> mmap;
   CHECK_DIE(mmap.open(src));

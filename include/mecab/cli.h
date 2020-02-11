@@ -35,7 +35,7 @@ const std::vector<MeCab::Option> mecab_options{
     {"cost-factor", 'c', "700", "INT", "set cost factor (default 700)"},
     {"output", 'o', "", "FILE", "set the output file name"}};
 
-int mecab_main(int argc, char** argv) {
+inline int mecab_main(int argc, char** argv) {
   MeCab::Param param;
   if (!param.parse(argc, argv, mecab_options)) {
     return EXIT_FAILURE;
@@ -158,23 +158,23 @@ int mecab_main(int argc, char** argv) {
 }
 
 // exports
-int mecab_system_eval(int argc, char** argv) {
+inline int mecab_system_eval(int argc, char** argv) {
   return MeCab::Eval::eval(argc, argv);
 }
 
-int mecab_test_gen(int argc, char** argv) {
+inline int mecab_test_gen(int argc, char** argv) {
   return MeCab::TestSentenceGenerator::run(argc, argv);
 }
 
-int mecab_dict_gen(int argc, char** argv) {
+inline int mecab_dict_gen(int argc, char** argv) {
   return MeCab::DictionaryGenerator::run(argc, argv);
 }
 
-int mecab_dict_index(int argc, char** argv) {
+inline int mecab_dict_index(int argc, char** argv) {
   return MeCab::DictionaryComplier::run(argc, argv);
 }
 
-int mecab_cost_train(int argc, char** argv) {
+inline int mecab_cost_train(int argc, char** argv) {
   return MeCab::Learner::run(argc, argv);
 }
 

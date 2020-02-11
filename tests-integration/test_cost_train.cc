@@ -59,6 +59,7 @@ TEST_P(mecab_cost_train_test, run_with_thread_num) {
   }
 
   testing::internal::CaptureStdout();
+  testing::internal::CaptureStderr();
   {
     MAKE_ARGS(mecab_dict_index_args, "mecab-dict-index", "-d", costTrainSeedPath, "-o", tmpdir.getPath());
     mecab_dict_index(mecab_dict_index_args.size(), mecab_dict_index_args.data());
@@ -89,6 +90,7 @@ TEST_P(mecab_cost_train_test, run_with_thread_num) {
     mecab_system_eval(mecab_system_eval_args.size(), mecab_system_eval_args.data());
   }
 
+  testing::internal::GetCapturedStderr();  // remove stdout
   std::string captured = testing::internal::GetCapturedStdout();
   ASSERT_THAT(captured, ::testing::HasSubstr(trainingResult));
 }
