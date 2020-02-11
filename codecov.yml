@@ -1,0 +1,4 @@
+fixes:
+  - "mecab/::extensions/python/mecab/"
+  - "python-mecab/include/::include/"
+  - "python-mecab/extensions/::extensions/"
