@@ -35,6 +35,7 @@ jobs:
           cd build
           ninja
           ./run-test
+          ./run-integration
 
       - name: Install Python Dependencies and Package
         run: |
