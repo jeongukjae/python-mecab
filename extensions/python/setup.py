@@ -26,7 +26,7 @@ def get_coverage_args_for_ld():
 
 mecab = Extension(
     "mecab._C",
-    sources=["mecab/_C/mecab.cc", "mecab/_C/tagger.cc", "mecab/_C/cli.cc",],
+    sources=["mecab/_C/mecab.cc", "mecab/_C/tagger.cc"],
     libraries=get_libraries(),
     include_dirs=["../../include"],
     extra_compile_args=["-std=c++11"] + get_coverage_args_for_cc(),

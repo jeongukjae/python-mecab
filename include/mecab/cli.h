@@ -1,4 +1,5 @@
-#include "cli.h"
+#ifndef __MECAB_CLI_H__
+#define __MECAB_CLI_H__
 
 #include "mecab/cost_trainer.h"
 #include "mecab/dictionary_compiler.h"
@@ -176,3 +177,5 @@ int mecab_dict_index(int argc, char** argv) {
 int mecab_cost_train(int argc, char** argv) {
   return MeCab::Learner::run(argc, argv);
 }
+
+#endif  // __MECAB_CLI_H__
