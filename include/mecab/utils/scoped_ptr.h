@@ -15,7 +15,6 @@ class scoped_ptr {
   typedef scoped_ptr<T> this_type;
 
  public:
-  typedef T element_type;
   explicit scoped_ptr(T* p = 0) : ptr_(p) {}
   virtual ~scoped_ptr() { delete ptr_; }
   void reset(T* p = 0) {
@@ -36,7 +35,6 @@ class scoped_array {
   typedef scoped_array<T> this_type;
 
  public:
-  typedef T element_type;
   explicit scoped_array(T* p = 0) : ptr_(p) {}
   virtual ~scoped_array() { delete[] ptr_; }
   void reset(T* p = 0) {
@@ -59,7 +57,6 @@ class scoped_fixed_array {
   typedef scoped_fixed_array<T, N> this_type;
 
  public:
-  typedef T element_type;
   explicit scoped_fixed_array() : ptr_(new T[N]), size_(N) {}
   virtual ~scoped_fixed_array() { delete[] ptr_; }
   size_t size() const { return size_; }
