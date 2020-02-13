@@ -208,7 +208,7 @@ class DictionaryGenerator {
     const int factor = param.get<int>("cost-factor");
 
     std::vector<std::string> dic;
-    enum_csv_dictionaries(dicdir.c_str(), &dic);
+    get_all_csvs_in_directory(dicdir.c_str(), dic);
 
     {
       CHECK_DIE(dicdir != outdir) << "output directory = dictionary directory! "

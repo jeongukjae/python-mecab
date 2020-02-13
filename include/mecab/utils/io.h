@@ -57,8 +57,8 @@ inline bool load_dictionary_resource(Param* param) {
   return param->parseFile(dicrc);
 }
 
-inline void enum_csv_dictionaries(const char* path, std::vector<std::string>* dics) {
-  dics->clear();
+inline void get_all_csvs_in_directory(const char* path, std::vector<std::string>& dics) {
+  dics.clear();
 
   DIR* dir = opendir(path);
   CHECK_DIE(dir) << "no such directory: " << path;
@@ -68,7 +68,7 @@ inline void enum_csv_dictionaries(const char* path, std::vector<std::string>* di
     if (tmp.size() >= 5) {
       std::string ext = tmp.substr(tmp.size() - 4, 4);
       if (to_lower(ext) == ".csv") {
-        dics->push_back(create_filename(path, tmp));
+        dics.push_back(create_filename(path, tmp));
       }
     }
   }

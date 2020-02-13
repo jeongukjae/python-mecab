@@ -76,7 +76,7 @@ class DictionaryComplier {
 
     std::vector<std::string> dic;
     if (userdic.empty()) {
-      enum_csv_dictionaries(dicdir.c_str(), &dic);
+      get_all_csvs_in_directory(dicdir.c_str(), dic);
     } else {
       dic = param.getRestParameters();
     }
