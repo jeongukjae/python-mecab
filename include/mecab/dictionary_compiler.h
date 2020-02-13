@@ -14,6 +14,14 @@
 
 namespace MeCab {
 
+inline bool file_exists(const char* filename) {
+  std::ifstream ifs(filename);
+  if (!ifs) {
+    return false;
+  }
+  return true;
+}
+
 class DictionaryComplier {
  public:
   static int run(int argc, char** argv) {

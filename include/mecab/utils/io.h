@@ -8,14 +8,6 @@
 
 namespace MeCab {
 
-inline bool file_exists(const char* filename) {
-  std::ifstream ifs(filename);
-  if (!ifs) {
-    return false;
-  }
-  return true;
-}
-
 inline bool load_dictionary_resource(Param* param) {
   std::string rcfile = param->get<std::string>("rcfile");
 
