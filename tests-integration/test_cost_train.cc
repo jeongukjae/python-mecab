@@ -3,7 +3,7 @@
 #include "fixture/tmpdir.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
-#include "mecab/cli.h"
+#include "mecab/cli/entrypoints.h"
 
 #define MAKE_ARGS(arg_name, ...)                                   \
   std::vector<std::string> __arguments{__VA_ARGS__};               \

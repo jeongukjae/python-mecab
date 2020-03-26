@@ -1,10 +1,10 @@
 #ifndef __MECAB_CLI_H__
 #define __MECAB_CLI_H__
 
-#include "mecab/cost_trainer.h"
-#include "mecab/dictionary_compiler.h"
-#include "mecab/dictionary_generator.h"
-#include "mecab/eval.h"
+#include "mecab/cli/cost_trainer.h"
+#include "mecab/cli/dictionary_compiler.h"
+#include "mecab/cli/dictionary_generator.h"
+#include "mecab/cli/eval.h"
 #include "mecab/utils.h"
 #include "mecab/utils/param.h"
 #include "mecab/utils/scoped_ptr.h"

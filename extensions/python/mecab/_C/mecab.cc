@@ -1,7 +1,7 @@
 #include <iostream>
 
 #include "PythonCommon.h"
-#include "mecab/cli.h"
+#include "mecab/cli/entrypoints.h"
 #include "tagger.h"
 
 #define ADD_MECAB_CLI(function_name, function_to_run)                            \
