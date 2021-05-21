@@ -1,3 +1,7 @@
+# This project has been moved to <https://github.com/jeongukjae/mecab-bind>
+
+---
+
 # python-mecab
 
 ![Run Test Status](https://github.com/jeongukjae/python-mecab/workflows/Run%20Test/badge.svg)
